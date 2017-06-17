@@ -3,6 +3,9 @@ import App from '../App'
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
+const article = r => require.ensure([], () => r(require('../page/article/list')), 'article')
+const articleDetail = r => require.ensure([], () => r(require('../page/article/detail')), 'articleDetail')
+
 
 export default [{
     path: '/',
@@ -27,6 +30,16 @@ export default [{
         {
             path: '/search',
             component: search
+        },
+        //文章页
+        {
+            path: '/article',
+            component: article,
+        },
+        //文章详情页
+        {
+            path: '/article/detail/:id',
+            component: articleDetail
         }
     ]
 }]

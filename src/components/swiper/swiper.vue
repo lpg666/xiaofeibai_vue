@@ -1,7 +1,7 @@
 <template>
     <swiper :options="swiperOption">
         <swiper-slide v-for="slide in swiperSlides" :key="slide">
-            <router-link to="/article/detail/:id">
+            <router-link :to="slide.url">
                 <img :src="slide.pic">
             </router-link>
         </swiper-slide>
@@ -31,19 +31,27 @@
             swiperSlide
         },
         methods:{
+            flash:function () {
+                this.axios.get('/v3/home/flash')
+                .then(res => {
+                    this.swiperSlides = res.data.data;
+                    for(let i=0; i<res.data.data.length; i++){
+                        console.log(res.data.data[i].url);
+                    }
+
+                })
+                .catch(err =>{
+                    console.log(err);
+                })
+            }
 
         },
         created() {
-            this.axios.get('/v3/home/flash')
-            .then(res => {
-                this.swiperSlides = res.data.data;
-            })
-            .catch(err =>{
-                console.log(err);
-            })
+            console.log(2);
         },
         mounted() {
-
+            this.flash();
+            console.log(3);
         }
     }
 </script>

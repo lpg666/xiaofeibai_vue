@@ -24,6 +24,7 @@ Vue.use(VueAwesomeSwiper)
 
 
 const router = new VueRouter({
+    mode: 'history',
     routes
 });
 
