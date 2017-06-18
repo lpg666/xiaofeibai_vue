@@ -2,7 +2,7 @@
     <swiper :options="swiperOption">
         <swiper-slide v-for="slide in swiperSlides" :key="slide">
             <router-link :to="slide.url">
-                <img :src="slide.pic">
+                <img :src="slide.pic+'!/fh/230'">
             </router-link>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
@@ -30,28 +30,33 @@
             swiper,
             swiperSlide
         },
+        computed:{
+
+        },
         methods:{
-            flash:function () {
-                this.axios.get('/v3/home/flash')
-                .then(res => {
-                    this.swiperSlides = res.data.data;
-                    for(let i=0; i<res.data.data.length; i++){
-                        console.log(res.data.data[i].url);
-                    }
 
-                })
-                .catch(err =>{
-                    console.log(err);
-                })
-            }
-
+        },
+        beforeCreate() {
+            console.log(1);
         },
         created() {
+            this.axios.get('/v3/home/flash')
+            .then(res => {
+                this.swiperSlides = res.data.data;
+                for(let i=0; i<res.data.data.length; i++){
+                    this.swiperSlides[i].url = res.data.data[i].url.substr(res.data.data[i].url.indexOf('com')+3);
+                }
+            })
+            .catch(err =>{
+                console.log(err);
+            });
             console.log(2);
         },
-        mounted() {
-            this.flash();
+        beforeMount() {
             console.log(3);
+        },
+        mounted() {
+            console.log(4);
         }
     }
 </script>
