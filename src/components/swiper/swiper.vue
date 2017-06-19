@@ -61,11 +61,31 @@
     }
 </script>
 
-<style lang="less" scoped>
-    .swiper-slide{
-        img{
-            width: 100%;
-            display: block;
-        }
+<style lang="less">
+    .swiper-container{
+        padding-bottom: .2rem;
+    }
+    .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets{
+        bottom: 0;
+        height: .15rem;
+        width: 1.2rem;
+        left: 50%;
+        margin-left: -.6rem;
+    }
+    .swiper-pagination-bullet{
+        width: .12rem;
+        height: .12rem;
+        float: left;
+        background: #EAEAEA;
+        opacity: 1;
+        margin: 0 .06rem !important;
+    }
+    .swiper-pagination-bullet-active {
+        opacity: 1;
+        background: #37C078;
+    }
+    .swiper-slide img{
+        width: 100%;
+        display: block;
     }
 </style>

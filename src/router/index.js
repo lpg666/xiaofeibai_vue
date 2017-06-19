@@ -1,5 +1,6 @@
 import App from '../App'
 
+const login = r => require.ensure([], () => r(require('../page/login/login')), 'login')
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
@@ -15,6 +16,11 @@ export default [{
         {
             path: '',
             redirect: '/home'
+        },
+        //登陆
+        {
+            path: '/login',
+            component: login
         },
         //首页
         {

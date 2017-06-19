@@ -1,12 +1,17 @@
-(function(doc, win) {
-    var docEl = doc.documentElement,
-        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
-        recalc = function() {
-            var clientWidth = docEl.clientWidth;
-            if (!clientWidth) return;
-            docEl.style.fontSize = 20 * (clientWidth / 350) + 'px';
-        };
-    if (!doc.addEventListener) return;
-    win.addEventListener(resizeEvt, recalc, false);
-    doc.addEventListener('DOMContentLoaded', recalc, false);
-})(document, window);
+!function(window){
+    var win=window,
+        doc=win.document,
+        docEle=doc.documentElement,
+        objhtml=doc.getElementsByTagName('html')[0],
+        width=docEle.clientWidth,
+        size='fontSize',
+        html=function(obj,key,value){return obj.style[key]=value+'px';};
+    html(objhtml,size,width/7.5);
+    win.onresize=function(){
+        var objDoc=win.document,
+            objDocEle=objDoc.documentElement,
+            objHtml=objDoc.getElementsByTagName('html')[0],
+            objWidth=objDocEle.clientWidth;
+        html(objHtml,size,objWidth/7.5);
+    };
+}(window);

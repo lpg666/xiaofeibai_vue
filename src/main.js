@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './router/index'
+import store from './store'
 import FastClick from 'fastclick'
 import './config/rem'
 import axios from 'axios'
@@ -22,7 +23,6 @@ Vue.use(VueRouter)
 Vue.use(VueAxios,axios)
 Vue.use(VueAwesomeSwiper)
 
-
 const router = new VueRouter({
     mode: 'history',
     routes
@@ -30,5 +30,6 @@ const router = new VueRouter({
 
 /* eslint-disable no-new */
 new Vue({
-    router
+    router,
+    store
 }).$mount('#app')
