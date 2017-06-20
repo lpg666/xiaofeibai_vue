@@ -37,6 +37,8 @@
         border-bottom: 1px solid #cccccc;
         left: 0;
         top: 0;
+        background: #fff;
+        z-index: 99;
         position: fixed;
         .user_info{
             font-size: .26rem;
