@@ -61,7 +61,7 @@
     }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     .swiper-container{
         padding-bottom: .2rem;
     }

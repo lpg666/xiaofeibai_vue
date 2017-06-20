@@ -1,10 +1,10 @@
 <template>
     <header id="head-top">
-        <router-link to="/login" v-if="userInfo==null?true:false" class="user_portrait"></router-link>
+        <router-link to="/login" v-if="userInfo==null?true:false" class="user_portrait"><img src="../../images/default_portrait.png"></router-link>
         <router-link to="/member" v-else class="user_info">152****77</router-link>
         <slot name="title_text"></slot>
-        <router-link to="/search" class="head_search"><img src="http://m.xfb315.com/mobile/img/index/logo_share.png"></router-link>
-        <router-link to="/news" class="head_news"></router-link>
+        <router-link to="/search" class="head_search"><img src="../../images/default_portrait.png"></router-link>
+        <router-link to="/news" class="head_news"><img src="../../images/default_portrait.png"><span>1</span></router-link>
     </header>
 </template>
 
@@ -57,6 +57,10 @@
         left: .24rem;
         top: .26rem;
         border-radius: 100%;
+        img{
+            width: 100%;
+            display: block;
+        }
     }
     .head_search{
         width: .5rem;
@@ -73,6 +77,29 @@
         }
     }
     .head_news{
-
+        width: .42rem;
+        height: .42rem;
+        position: absolute;
+        left: 1.65rem;
+        top: .29rem;
+        span{
+            position: absolute;
+            right: -.16rem;
+            top: -.16rem;
+            width: .32rem;
+            line-height: .32rem;
+            height: .32rem;
+            text-align: center;
+            display: block;
+            background: #FC303D;
+            color: #fff;
+            font-size: .2rem;
+            border-radius: 100%;
+            font-family:Helvetica;
+        }
+        img{
+            width: 100%;
+            display: block;
+        }
     }
 </style>
