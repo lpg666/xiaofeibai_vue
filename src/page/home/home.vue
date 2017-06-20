@@ -161,6 +161,7 @@ export default {
             height: calc(~'100vh - 3rem');
             > .swiper-slide{
                 overflow-y:scroll;
+                -webkit-overflow-scrolling: touch;
             }
         }
     }
