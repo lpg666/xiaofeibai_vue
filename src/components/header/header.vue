@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import {mapState,mapMutations} from 'vuex'
 
     export default {
         data(){
@@ -22,7 +22,19 @@
                 'userInfo'
             ])
         },
+        methods:{
+            ...mapMutations([
+                'RECORD_USERINFO'
+            ]),
+            abc(){
+                console.log('aaa');
+                this.ADD_ADDRESS({
+                    name:'abc'
+                });
+            }
+        },
         mounted() {
+            this.abc;
             console.log(this.userInfo);
         }
     }

@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './router/index'
-import store from './store'
+import store from './store/'
 import FastClick from 'fastclick'
 import './config/rem'
 import axios from 'axios'
@@ -22,6 +22,14 @@ if('addEventListener' in document){                           //document.addEven
 Vue.use(VueRouter)
 Vue.use(VueAxios,axios)
 Vue.use(VueAwesomeSwiper)
+
+/*设置线上环境api前缀*/
+if (process.env.NODE_ENV == 'development') {
+
+}else if(process.env.NODE_ENV == 'production'){
+     baseUrl = 'http://api.xfb315.com';
+}
+
 
 const router = new VueRouter({
     mode: 'history',

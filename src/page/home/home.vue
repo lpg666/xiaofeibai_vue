@@ -62,10 +62,31 @@
                 </section>
             </swiper-slide>
             <swiper-slide class="lis">
-                2
+                <section class="result_list">
+                    <div class="list" v-for="result in resultData">
+                        <div class="list_left" :style="{'width':result.default_pic==null ? '100%' : false}">
+                            <p class="p1">{{result.title}}</p>
+                            <p class="p2"><span class="sp1">网友回音：</span>{{result.recommend_result.content}}</p>
+                            <p class="p3">{{result.add_time}}</p>
+                        </div>
+                        <div v-if="result.default_pic" class="list_right">
+                            <img :src="result.default_pic.pic+'!/fh/230'">
+                        </div>
+                    </div>
+                </section>
             </swiper-slide>
             <swiper-slide class="lis">
-                3
+                <section class="cechoice_list">
+                    <div class="list">
+                        <div class="list_left">
+                            <p class="p1">“小蚯蚓”杨紫—戏内蠢萌戏外女汉子 期待AR杂志的出现</p>
+                            <p class="p2"><span class="cechoice_tag">人物</span><span>明星潮人</span><span>15分钟前</span></p>
+                        </div>
+                        <div class="list_right">
+                            <img src="../../images/default_portrait.png">
+                        </div>
+                    </div>
+                </section>
             </swiper-slide>
             <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
@@ -83,6 +104,7 @@ export default {
         return{
             swiperNav: {
                 notNextTick: true,
+                touchAngle:30,
                 onTransitionStart:swiper => {
                     switch (swiper.activeIndex){
                         case 0:
@@ -93,14 +115,20 @@ export default {
                             break;
                         default:
                             this.hover='cechoice';
-
                     }
-                    console.log(swiper.activeIndex)
                 }
             },
-            userInfo:false,
             titleText:false,
             hover:'recommend',
+            recommendData:'',
+            resultData:'',
+            cechoiceData:'',
+            recommendRepeat:false,
+            resultRepeat:false,
+            cechoiceRepeat:false,
+            recommendI:0,
+            resultI:0,
+            cechoiceI:0,
             scrollA: '',
             scrollB: '',
             scrollC: ''
@@ -125,28 +153,59 @@ export default {
                     break;
                 case 'result':
                     this.swiper.slideTo(1);
+                    if(this.resultData == '' && this.resultRepeat == false){
+                        this.resultRepeat = true;
+                        this.resultAjax();
+                    }
                     break;
                 default:
                     this.swiper.slideTo(2);
             }
         },
+        resultAjax(){
+            this.axios.get('v3/home/list-result?page='+this.resultI)
+                .then(res => {
+                    if(this.resultI==0){
+                        this.resultData = res.data.data;
+                    }else{
+                        this.resultData = this.resultData.concat(res.data.data);
+                    }
+                    this.resultRepeat = false;
+                    console.log(this.resultData);
+                })
+                .catch(err => {
+                    this.resultRepeat = false;
+                    console.log(err);
+                })
+        },
         menuA() {
             this.scrollA = document.querySelectorAll('.lis')[0].scrollTop;
-            console.log(this.scrollA)
         },
         menuB() {
             this.scrollB = document.querySelectorAll('.lis')[1].scrollTop;
-            console.log(this.scrollB)
+            if(document.querySelector('.lis').clientHeight + this.scrollB >= document.querySelector('.result_list').offsetHeight){
+                this.resultI += 1;
+                this.resultAjax();
+                console.log(this.resultI);
+            }
         },
         menuC() {
             this.scrollC = document.querySelectorAll('.lis')[2].scrollTop;
-            console.log(this.scrollC)
         }
     },
     mounted(){
         document.querySelectorAll('.lis')[0].addEventListener('scroll', this.menuA);
         document.querySelectorAll('.lis')[1].addEventListener('scroll', this.menuB);
         document.querySelectorAll('.lis')[2].addEventListener('scroll', this.menuC);
+        document.querySelector('header').addEventListener("touchmove", function (event) {
+            event.preventDefault();
+        },false);
+        document.querySelector('nav').addEventListener("touchmove", function (event) {
+            event.preventDefault();
+        },false);
+        document.querySelector('#tar').addEventListener("touchmove", function (event) {
+            event.preventDefault();
+        },false);
     },
     created(){
 
@@ -162,6 +221,102 @@ export default {
             > .swiper-slide{
                 overflow-y:scroll;
                 -webkit-overflow-scrolling: touch;
+            }
+        }
+    }
+    .cechoice_list{
+        .list{
+            width: calc(~'100% - .44rem');
+            overflow: hidden;
+            padding: .26rem 0;
+            border-bottom: 1px solid #ccc;
+            margin: 0 auto;
+            .list_left{
+                width: 4.96rem;
+                height: auto;
+                float: left;
+                .p1{
+                    font-size: .32rem;
+                    line-height: .45rem;
+                    margin-bottom: .2rem;
+                    overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+                }
+                .p2{
+                    height:.3rem;
+                    span{
+                        font-size: .24rem;
+                        color: #999;
+                        margin-right: .23rem;
+                        float: left;
+                    }
+                    .cechoice_tag{
+                        float: left;
+                        width: 1.42rem;
+                        height: .4rem;
+                        border-radius: .1rem;
+                        border: 1px solid #999;
+                        display: block;
+                        text-align: center;
+                        margin-top: -.05rem;
+                    }
+                }
+            }
+            .list_right{
+                width: 1.67rem;
+                height: 1.4rem;
+                float: right;
+                overflow: hidden;
+                img{
+                    width: 100%;
+                    display: block;
+                }
+            }
+        }
+    }
+    .result_list{
+        .list{
+            width: calc(~'100% - .44rem');
+            overflow: hidden;
+            padding: .28rem 0;
+            border-bottom: 1px solid #ccc;
+            margin: 0 auto;
+            .list_left{
+                width: 4.96rem;
+                height: auto;
+                float: left;
+                .p1{
+                    font-size: .32rem;
+                    line-height: .45rem;
+                    margin-bottom: .15rem;
+                    overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+                }
+                .p2{
+                    overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+                    color: #6B6B6B;
+                    font-size: .28rem;
+                    margin-bottom: .15rem;
+                    line-height: .38rem;
+                    span.sp1{
+                        color: #37C078;
+                    }
+                    span.sp2{
+                        color: #FEB10D;
+                    }
+                }
+                .p3{
+                    font-size: .24rem;
+                    color: #999;
+                }
+            }
+            .list_right{
+                width: 1.67rem;
+                height: 1.4rem;
+                float: right;
+                overflow: hidden;
+                img{
+                    width: 100%;
+                    display: block;
+                }
             }
         }
     }

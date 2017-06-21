@@ -21,7 +21,7 @@
                     pagination : '.swiper-pagination',
                     paginationClickable :true,
                     mousewheelControl : true,
-                    observeParents:true,
+                    observeParents:true
                 },
                 swiperSlides:''
             }
@@ -41,15 +41,15 @@
         },
         created() {
             this.axios.get('/v3/home/flash')
-            .then(res => {
-                this.swiperSlides = res.data.data;
-                for(let i=0; i<res.data.data.length; i++){
-                    this.swiperSlides[i].url = res.data.data[i].url.substr(res.data.data[i].url.indexOf('com')+3);
-                }
-            })
-            .catch(err =>{
-                console.log(err);
-            });
+                .then(res => {
+                    this.swiperSlides = res.data.data;
+                    for(let i=0; i<res.data.data.length; i++){
+                        this.swiperSlides[i].url = res.data.data[i].url.substr(res.data.data[i].url.indexOf('com')+3);
+                    }
+                })
+                .catch(err =>{
+                    console.log(err);
+                });
             console.log(2);
         },
         beforeMount() {
