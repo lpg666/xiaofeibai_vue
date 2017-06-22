@@ -30,7 +30,6 @@ if (process.env.NODE_ENV == 'development') {
      baseUrl = 'http://api.xfb315.com';
 }
 
-
 const router = new VueRouter({
     mode: 'history',
     routes

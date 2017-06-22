@@ -8,6 +8,7 @@
             <div class="result" :class="{hover: hover=='result'}" @click="navClick('result')">动态<span></span></div>
             <div class="cechoice" :class="{hover: hover=='cechoice'}" @click="navClick('cechoice')">消费电子<span></span></div>
         </nav>
+        <router-link to="/tousu/create" id="ts_btn"><span>一键<br/>投诉</span></router-link>
         <swiper id="swiper-nav" :options="swiperNav" ref="mySwiper">
             <swiper-slide class="lis">
                 <swiper-l></swiper-l>
@@ -62,8 +63,8 @@
                 </section>
             </swiper-slide>
             <swiper-slide class="lis">
-                <section class="result_list">
-                    <div class="list" v-for="result in resultData">
+                <section class="result_list" v-if="resultData.length">
+                    <div class="list" v-for="result in resultData" :key="result">
                         <div class="list_left" :style="{'width':result.default_pic==null ? '100%' : false}">
                             <p class="p1">{{result.title}}</p>
                             <p class="p2"><span class="sp1">网友回音：</span>{{result.recommend_result.content}}</p>
@@ -72,6 +73,17 @@
                         <div v-if="result.default_pic" class="list_right">
                             <img :src="result.default_pic.pic+'!/fh/230'">
                         </div>
+                    </div>
+                    <p v-if="showLoading" class="loading">正在加载更多数据...</p>
+                </section>
+                <section class="seat_list" v-else>
+                    <div class="result_seat" v-for="item in 10" :key="item">
+                        <div class="seat_left">
+                            <p class="p1"></p>
+                            <p class="p2"></p>
+                            <p class="p3"></p>
+                        </div>
+                        <div class="seat_right"></div>
                     </div>
                 </section>
             </swiper-slide>
@@ -118,9 +130,10 @@ export default {
                     }
                 }
             },
+            showLoading:false,
             titleText:false,
             hover:'recommend',
-            recommendData:'',
+            recommendData:[],
             resultData:'',
             cechoiceData:'',
             recommendRepeat:false,
@@ -163,6 +176,7 @@ export default {
             }
         },
         resultAjax(){
+            this.showLoading = true;
             this.axios.get('v3/home/list-result?page='+this.resultI)
                 .then(res => {
                     if(this.resultI==0){
@@ -170,10 +184,12 @@ export default {
                     }else{
                         this.resultData = this.resultData.concat(res.data.data);
                     }
+                    this.showLoading = false;
                     this.resultRepeat = false;
                     console.log(this.resultData);
                 })
                 .catch(err => {
+                    this.showLoading = false;
                     this.resultRepeat = false;
                     console.log(err);
                 })
@@ -183,7 +199,8 @@ export default {
         },
         menuB() {
             this.scrollB = document.querySelectorAll('.lis')[1].scrollTop;
-            if(document.querySelector('.lis').clientHeight + this.scrollB >= document.querySelector('.result_list').offsetHeight){
+            if(document.querySelector('.lis').clientHeight + this.scrollB >= document.querySelector('.result_list').offsetHeight && this.resultRepeat==false){
+                this.resultRepeat = true;
                 this.resultI += 1;
                 this.resultAjax();
                 console.log(this.resultI);
@@ -214,6 +231,23 @@ export default {
 </script>
 
 <style lang="less">
+    #ts_btn{
+        display: table;
+        position: fixed;
+        right: .32rem;
+        bottom: 1.4rem;
+        background: #000;
+        z-index: 999;
+        width: 1.1rem;
+        height: 1.1rem;
+        span{
+            text-align: center;
+            font-size: .24rem;
+            color: #fff;
+            vertical-align: middle;
+            display: table-cell;
+        }
+    }
     #swiper-nav{
         width: 100%;
         > .swiper-wrapper{
@@ -223,6 +257,15 @@ export default {
                 -webkit-overflow-scrolling: touch;
             }
         }
+    }
+    .loading{
+        width: 100%;
+        height: .6rem;
+        line-height: .6rem;
+        font-size: .26rem;
+        color: #333;
+        text-align: center;
+        background: rgba(153,153,153,.2);
     }
     .cechoice_list{
         .list{
@@ -273,7 +316,43 @@ export default {
             }
         }
     }
+    .seat_list{
+        .result_seat{
+            width: calc(~'100% - .44rem');
+            overflow: hidden;
+            padding: .28rem 0;
+            margin: 0 auto;
+            .seat_left{
+                width: 4.96rem;
+                height: auto;
+                float: left;
+                .p1{
+                    background: #f6f6f6;
+                    height: .5rem;
+                    margin-bottom: .15rem;
+                }
+                .p2{
+                    background: #f6f6f6;
+                    margin-bottom: .15rem;
+                    height: .35rem;
+                }
+                .p3{
+                    background: #f6f6f6;
+                    height: .25rem;
+                }
+            }
+            .seat_right{
+                background: #f6f6f6;
+                width: 1.67rem;
+                height: 1.4rem;
+                float: right;
+            }
+        }
+    }
     .result_list{
+        .list:nth-last-child(2){
+            border-bottom: none;
+        }
         .list{
             width: calc(~'100% - .44rem');
             overflow: hidden;

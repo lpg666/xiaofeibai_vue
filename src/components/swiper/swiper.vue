@@ -37,7 +37,7 @@
 
         },
         beforeCreate() {
-            console.log(1);
+
         },
         created() {
             this.axios.get('/v3/home/flash')
@@ -50,13 +50,11 @@
                 .catch(err =>{
                     console.log(err);
                 });
-            console.log(2);
         },
         beforeMount() {
-            console.log(3);
         },
         mounted() {
-            console.log(4);
+
         }
     }
 </script>

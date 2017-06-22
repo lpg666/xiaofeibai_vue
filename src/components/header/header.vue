@@ -20,18 +20,18 @@
         computed:{
             ...mapState([
                 'userInfo'
-            ])
+            ]),
+            abc(){
+                console.log('aaa');
+                this.RECORD_USERINFO({
+                    name:'abc'
+                });
+            }
         },
         methods:{
             ...mapMutations([
                 'RECORD_USERINFO'
-            ]),
-            abc(){
-                console.log('aaa');
-                this.ADD_ADDRESS({
-                    name:'abc'
-                });
-            }
+            ])
         },
         mounted() {
             this.abc;

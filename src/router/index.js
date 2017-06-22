@@ -6,6 +6,7 @@ const news = r => require.ensure([], () => r(require('../page/news/news')), 'new
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
 const article = r => require.ensure([], () => r(require('../page/article/list')), 'article')
 const articleDetail = r => require.ensure([], () => r(require('../page/article/detail')), 'articleDetail')
+const tousuCreate = r => require.ensure([], () => r(require('../page/tousu/create')), 'tousuCreate')
 
 
 export default [{
@@ -46,6 +47,11 @@ export default [{
         {
             path: '/article/detail/:id',
             component: articleDetail
+        },
+        //
+        {
+            path: '/tousu/create',
+            component: tousuCreate
         }
     ]
 }]
