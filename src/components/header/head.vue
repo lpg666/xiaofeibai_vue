@@ -24,6 +24,7 @@
         width: 100%;
         height: 1rem;
         border-bottom: 1px solid #cccccc;
+        background: #fff;
         #head_go{
             float: left;
             width: 1rem;

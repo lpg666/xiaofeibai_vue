@@ -1,6 +1,5 @@
 <template>
     <div style="padding-top: 1rem;">
-        <div style="background: #000; width: 100%; height: 500px;" :class="tank ? 'tanT' : 'tanB'"></div>
         <transition name="fade">
             <div class="tank" v-if="tank">
                 <div class="declare" v-if="declare">
@@ -18,6 +17,15 @@
         <head-i>
             <span class="head_title" slot="title_text" @click="tankK">填写投诉</span>
         </head-i>
+        <div style="width: 100%; height: 800px; background: #999" :class="{'tanT':tanc,'tanB':tans}">
+            伤害都是看机会都是看家爱护都是看家爱护都是看家
+            <p>111</p>
+            <p>111</p>
+            <p>111</p>
+            <p>111</p>
+            <p>111</p>
+            <p>111</p>
+        </div>
         <div></div>
     </div>
 </template>
@@ -28,7 +36,10 @@ import headI from '../../components/header/head'
 export default {
     data(){
         return {
+            tani:false,
             tank:false,
+            tans:false,
+            tanc:false,
             declare:false
         }
     },
@@ -37,12 +48,19 @@ export default {
     },
     methods:{
         tankG(){
+            this.tans=true;
             this.tank=false;
+            this.tanc=false;
             this.declare=false;
         },
         tankK(){
-            this.tank=true;
-            this.declare=true;
+            this.tani=true;
+            if(this.tani==true){
+                this.tanc=true;
+                this.tans=false;
+                this.tank=true;
+                this.declare=true;
+            }
         }
     }
 }
@@ -63,10 +81,10 @@ export default {
 
     @keyframes boxT{
         0%   { transform:translateY(0)}
-        100% { transform:translateY(-100%)}
+        100% { transform:translateY(-50%)}
     }
     @keyframes boxB{
-        0%   { transform:translateY(-100%)}
+        0%   { transform:translateY(-50%)}
         100% { transform:translateY(0)}
     }
 
