@@ -1,2 +1,3 @@
 export const RECORD_USERINFO = 'RECORD_USERINFO'
+export const RECORD_DECLARE = 'RECORD_DECLARE'
 

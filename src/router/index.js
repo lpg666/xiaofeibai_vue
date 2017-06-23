@@ -26,7 +26,8 @@ export default [{
         //首页
         {
             path: '/home',
-            component: home
+            component: home,
+            meta: { keepAlive: true },
         },
         //信息页
         {

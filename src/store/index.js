@@ -5,7 +5,8 @@ import mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
-    userInfo:null
+    userInfo:localStorage.getItem('userInfo'),
+    isDeclare:localStorage.getItem('isDeclare'),
 }
 
 export default new Vuex.Store({

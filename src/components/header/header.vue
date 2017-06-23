@@ -22,9 +22,8 @@
                 'userInfo'
             ]),
             abc(){
-                console.log('aaa');
                 this.RECORD_USERINFO({
-                    name:'abc'
+                    userInfo:'aaaa'
                 });
             }
         },
@@ -34,8 +33,7 @@
             ])
         },
         mounted() {
-            this.abc;
-            console.log(this.userInfo);
+
         }
     }
 </script>

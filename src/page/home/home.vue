@@ -8,7 +8,7 @@
             <div class="result" :class="{hover: hover=='result'}" @click="navClick('result')">动态<span></span></div>
             <div class="cechoice" :class="{hover: hover=='cechoice'}" @click="navClick('cechoice')">消费电子<span></span></div>
         </nav>
-        <router-link to="/tousu/create" id="ts_btn"><span>一键<br/>投诉</span></router-link>
+        <router-link :to="userInfo ? '/tousu/create' : '/login' " id="ts_btn"><span>一键<br/>投诉</span></router-link>
         <swiper id="swiper-nav" :options="swiperNav" ref="mySwiper">
             <swiper-slide class="lis">
                 <swiper-l></swiper-l>
@@ -110,6 +110,7 @@
 import headTop from '../../components/header/header'
 import swiperL from '../../components/swiper/swiper'
 import tar from '../../components/tar/tar'
+import {mapState,mapMutations} from 'vuex'
 
 export default {
     data(){
@@ -153,6 +154,9 @@ export default {
         tar
     },
     computed:{
+        ...mapState([
+            'userInfo'
+        ]),
         swiper() {
             return this.$refs.mySwiper.swiper
         }

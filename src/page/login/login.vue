@@ -3,13 +3,29 @@
 </template>
 
 <script>
-    export default {
-        data(){
-            return{
+import {mapState,mapMutations} from 'vuex'
 
-            }
+export default {
+    data(){
+        return{
+
         }
+    },
+    computed:{
+        a(){
+            this.RECORD_USERINFO(1);
+        }
+    },
+    methods:{
+        ...mapMutations([
+            'RECORD_USERINFO'
+        ])
+    },
+    mounted() {
+
     }
+
+}
 </script>
 
 <style></style>
