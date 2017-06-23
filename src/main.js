@@ -27,7 +27,7 @@ Vue.use(VueAwesomeSwiper)
 if (process.env.NODE_ENV == 'development') {
 
 }else if(process.env.NODE_ENV == 'production'){
-     baseUrl = 'http://api.xfb315.com';
+    axios.defaults.baseURL = 'http://api.xfb315.com';
 }
 
 const router = new VueRouter({
