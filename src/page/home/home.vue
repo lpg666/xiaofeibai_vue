@@ -8,7 +8,7 @@
             <div class="result" :class="{hover: hover=='result'}" @click="navClick('result')">动态<span></span></div>
             <div class="cechoice" :class="{hover: hover=='cechoice'}" @click="navClick('cechoice')">消费电子<span></span></div>
         </nav>
-        <router-link :to="userInfo ? '/tousu/create' : '/login' " id="ts_btn"><span>一键<br/>投诉</span></router-link>
+        <router-link to="/tousu/create" id="ts_btn"><span>一键<br/>投诉</span></router-link>
         <swiper id="swiper-nav" :options="swiperNav" ref="mySwiper">
             <swiper-slide class="lis">
                 <swiper-l></swiper-l>
@@ -203,7 +203,7 @@ export default {
         },
         menuB() {
             this.scrollB = document.querySelectorAll('.lis')[1].scrollTop;
-            if(document.querySelector('.lis').clientHeight + this.scrollB >= document.querySelector('.result_list').offsetHeight && this.resultRepeat==false){
+            if(document.querySelector('.lis').clientHeight + this.scrollB +2 >= document.querySelector('.result_list').offsetHeight && this.resultRepeat==false){
                 this.resultRepeat = true;
                 this.resultI += 1;
                 this.resultAjax();

@@ -1,6 +1,7 @@
 import {
     RECORD_USERINFO,
-    RECORD_DECLARE
+    RECORD_DECLARE,
+    AUTO_ROUTE
 } from './mutation-types.js'
 
 import {setStore,getStore} from '../config/mUtils'
@@ -16,5 +17,10 @@ export default {
     [RECORD_DECLARE](state, info) {
         state.isDeclare = info;
         setStore('isDeclare', info);
+    },
+    //
+    [AUTO_ROUTE](state, info){
+        state.autoRoute = info;
+        setStore('autoRoute', info);
     }
 }

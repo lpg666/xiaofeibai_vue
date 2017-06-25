@@ -2,6 +2,7 @@
     <header id="headI">
         <div id="head_go" @click="$router.go(-1)"><</div>
         <slot name="title_text"></slot>
+        <slot name="head_a"></slot>
     </header>
 </template>
 
@@ -40,6 +41,14 @@
             line-height: 1rem;
             font-size: .34rem;
             color: #37C078;
+        }
+        .head_a{
+            float: right;
+            width: 1rem;
+            height: 1rem;
+            line-height: 1rem;
+            color: #37C078;
+            font-size: .3rem;
         }
 
     }

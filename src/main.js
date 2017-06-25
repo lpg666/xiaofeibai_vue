@@ -32,7 +32,20 @@ if (process.env.NODE_ENV == 'development') {
 
 const router = new VueRouter({
     mode: 'history',
-    routes
+    routes,
+});
+
+router.beforeEach((to, from, next) => {
+    if(to.meta.abc){
+        if(store.state.userInfo){
+            next();
+        }else{
+            store.commit('AUTO_ROUTE',to.path);
+            next("/login");
+        }
+    }else{
+        next();
+    }
 });
 
 /* eslint-disable no-new */

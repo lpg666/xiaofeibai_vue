@@ -2,6 +2,7 @@ import App from '../App'
 
 const login = r => require.ensure([], () => r(require('../page/login/login')), 'login')
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
+const member = r => require.ensure([], () => r(require('../page/member/member')), 'member')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
 const article = r => require.ensure([], () => r(require('../page/article/list')), 'article')
@@ -29,6 +30,11 @@ export default [{
             component: home,
             meta: { keepAlive: true },
         },
+        //个人信息页
+        {
+            path: '/member',
+            component: member,
+        },
         //信息页
         {
             path: '/news',
@@ -52,7 +58,10 @@ export default [{
         //
         {
             path: '/tousu/create',
-            component: tousuCreate
+            component: tousuCreate,
+            meta:{
+                abc:1
+            }
         }
     ]
 }]
