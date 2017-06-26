@@ -36,12 +36,12 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if(to.meta.abc){
+    if(to.meta.aR){
         if(store.state.userInfo){
             next();
         }else{
             store.commit('AUTO_ROUTE',to.path);
-            next("/login");
+            next("/login?id=1");
         }
     }else{
         next();

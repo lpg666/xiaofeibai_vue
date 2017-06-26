@@ -49,6 +49,7 @@
             line-height: 1rem;
             color: #37C078;
             font-size: .3rem;
+            text-align: center;
         }
 
     }

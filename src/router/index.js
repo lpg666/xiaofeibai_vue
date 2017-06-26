@@ -60,7 +60,7 @@ export default [{
             path: '/tousu/create',
             component: tousuCreate,
             meta:{
-                abc:1
+                aR:true
             }
         }
     ]

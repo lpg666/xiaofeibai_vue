@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="head">
+        <div class="head" v-if="userInfo==null?true:false">
             <div class="top">
                 <div id="head_go" @click="$router.go(-1)"><</div>
                 <div class="title_text">我</div>
@@ -8,6 +8,23 @@
             <img class="pic1" src="../../images/default_portrait.png">
             <router-link to="/login" class="login">登录/注册</router-link>
         </div>
+        <div v-else>
+            <div class="head" style="height: 3.3rem;">
+                <div class="top">
+                    <div id="head_go" @click="$router.go(-1)"><</div>
+                    <div class="title_text">我</div>
+                </div>
+                <img class="pic2" :src="userInfo.avatar?userInfo.avatar:'../../images/default_portrait.png'">
+                <p class="name">{{userInfo.name}}</p>
+                <p class="mobile">{{userInfo.mobile}}</p>
+            </div>
+            <div class="top_box">
+                <span></span>
+                <router-link to="">编辑资料</router-link>
+                <router-link to="">我的投诉</router-link>
+            </div>
+        </div>
+
         <router-link to="" class="box" style="font-weight: bold;"><img src="../../images/default_portrait.png">我的服务管家</router-link>
         <div class="box1">
             <router-link to="" class="das"><img src="../../images/default_portrait.png">维权志愿者联盟</router-link>
@@ -34,8 +51,16 @@ export default {
     },
     computed:{
         ...mapState([
-            'autoRoute'
+            'autoRoute',
+            'userInfo'
         ]),
+        /*mobile(){
+            let m = this.userInfo.mobile;
+            //let x = m.substr(2,5);
+            //m.replace(x,'*****');
+            console.log(m);
+            return m;
+        },*/
         a(){
             this.RECORD_USERINFO(1);
         }
@@ -46,7 +71,7 @@ export default {
         ])
     },
     mounted() {
-        console.log(this.autoRoute);
+        console.log(this.autoRoute,this.userInfo);
     }
 
 }
@@ -54,6 +79,7 @@ export default {
 
 <style lang="less">
     .head{
+        position: relative;
         width: 100%;
         background: #000;
         padding-bottom: .001rem;
@@ -81,6 +107,29 @@ export default {
             margin: .35rem auto;
             display: block;
         }
+        .pic2{
+            width: 1.4rem;
+            height: 1.4rem;
+            border-radius: 100%;
+            display: block;
+            position: absolute;
+            left: .4rem;
+            bottom: .45rem;
+        }
+        .name{
+            font-size: .3rem;
+            color: #fff;
+            position: absolute;
+            left: 2.1rem;
+            top: 1.7rem;
+        }
+        .mobile{
+            font-size: .28rem;
+            color: #fff;
+            position: absolute;
+            top: 2.2rem;
+            left: 2.1rem;
+        }
         .login{
             width: 1.65rem;
             height: .6rem;
@@ -92,6 +141,29 @@ export default {
             font-size: .28rem;
             color: #fff;
             display: block;
+        }
+    }
+    .top_box{
+        position: relative;
+        width: 100%;
+        border-bottom: 1px solid #ccc;
+        height: .88rem;
+        span{
+            width: auto;
+            height: .65rem;
+            border-left: 1px solid #ccc;
+            position: absolute;
+            left: 50%;
+            top: .115rem;
+        }
+        a{
+            width: 50%;
+            height: .88rem;
+            line-height: .88rem;
+            text-align: center;
+            font-size: .28rem;
+            display: block;
+            float: left;
         }
     }
     .box{
