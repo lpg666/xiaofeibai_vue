@@ -33,5 +33,6 @@
         font-size: .3rem;
         padding: .1rem .3rem;
         border-radius: .05rem;
+        z-index: 9999;
     }
 </style>

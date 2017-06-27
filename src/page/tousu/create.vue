@@ -59,9 +59,9 @@
                     <div class="gb" @click="tanG">X</div>
                     <div class="but" @click="tanG">确定</div>
                 </div>
-                <div v-if="tkData.name=='type'" v-for="data in tkData.data" :key="data">
+                <div class="type" v-if="tkData.name=='type'">
                     <ul>
-                        <li>{{data.name}}</li>
+                        <li v-for="data in tkData.data" :key="data" :class="{'hover':from.types==data.id}" :value="data.id" @click="radio('types',data.id)">{{from.types}}{{data.name}}</li>
                     </ul>
                 </div>
                 <div class="brand" v-if="tkData.name=='brand'">
@@ -90,11 +90,13 @@
                 </div>
             </div>
         </transition>
+        <alert-box v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-box>
     </div>
 </template>
 
 <script>
 import headI from '../../components/header/head'
+import alertBox from '../../components/common/alertBox.vue'
 import {mapState,mapMutations} from 'vuex'
 
 export default {
@@ -111,7 +113,9 @@ export default {
             declare:true,
             declareSp:false,
             tk:false,
-            tkinp:false
+            tkinp:false,
+            showAlert: false, //显示提示组件
+            alertText: null, //提示的内容
         }
     },
     computed:{
@@ -137,24 +141,36 @@ export default {
         }
     },
     components:{
-        headI
+        headI,
+        alertBox
     },
     methods:{
         ...mapMutations([
             'RECORD_DECLARE'
         ]),
+        closeTip(){
+            this.showAlert = false;
+        },
+        radio(name,id){
+            if (name) {
+                this.$set(this.from,'types',id);
+            }
+            console.log(this.from);
+        },
         ajaxTypes(){
             this.axios.get('/v3/tousu/types')
                 .then(res => {
                     this.types=res.data.data;
+                    this.tkData={'name':'type','data':res.data.data};
+                    this.closeTip();
                     console.log(res.data.data);
                 })
                 .catch(err => {
                     console.log(err);
                 })
         },
-        ajaxBrands(){
-            this.axios.get('/v3/tousu/brands?subtype_id=2')
+        ajaxBrands(id){
+            this.axios.get('/v3/tousu/brands',{subtype_id:id})
                 .then(res => {
                     this.brands=res.data.data;
                     console.log(res.data.data);
@@ -163,8 +179,8 @@ export default {
 
                 })
         },
-        ajaxProblems(){
-            this.axios.get('/v3/tousu/problems?subtype_id=2')
+        ajaxProblems(id){
+            this.axios.get('/v3/tousu/problems',{subtype_id:id})
                 .then(res => {
                     this.problems=res.data.data;
                     console.log(res.data.data);
@@ -173,8 +189,8 @@ export default {
 
                 })
         },
-        ajaxSuqius(){
-            this.axios.get('/v3/tousu/suqius?subtype_id=2')
+        ajaxSuqius(id){
+            this.axios.get('/v3/tousu/suqius',{subtype_id:id})
                 .then(res => {
                     this.suqius=res.data.data;
                     console.log(res.data.data);
@@ -183,8 +199,8 @@ export default {
 
                 })
         },
-        ajaxProperties(){
-            this.axios.get('/v3/tousu/properties?subtype_id=2')
+        ajaxProperties(id){
+            this.axios.get('/v3/tousu/properties',{subtype_id:id})
                 .then(res => {
                     this.properties=res.data.data;
                     console.log(res.data.data);
@@ -246,11 +262,15 @@ export default {
     },
     created(){
         this.show;
+        this.tk=true;
+        this.showAlert=true;
+        this.alertText='加载中...';
         this.ajaxTypes();
-        this.ajaxBrands();
+
+        /*this.ajaxBrands();
         this.ajaxProblems();
         this.ajaxSuqius();
-        this.ajaxProperties();
+        this.ajaxProperties();*/
     },
     mounted() {
 
@@ -391,6 +411,11 @@ export default {
                     margin-top: .4rem;
                     margin-right: .35rem;
                 }
+            }
+        }
+        .type{
+            .hover{
+                color: #2dc177;
             }
         }
     }
