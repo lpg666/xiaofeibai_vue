@@ -3,6 +3,7 @@ import App from '../App'
 const login = r => require.ensure([], () => r(require('../page/login/login')), 'login')
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
 const member = r => require.ensure([], () => r(require('../page/member/member')), 'member')
+const setting = r => require.ensure([], () => r(require('../page/member/setting')), 'setting')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
 const article = r => require.ensure([], () => r(require('../page/article/list')), 'article')
@@ -34,6 +35,10 @@ export default [{
         {
             path: '/member',
             component: member,
+        },
+        {
+            path:'/member/setting',
+            component:setting
         },
         //信息页
         {

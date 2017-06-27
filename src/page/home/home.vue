@@ -125,6 +125,10 @@ export default {
                             break;
                         case 1:
                             this.hover='result';
+                            if(this.resultData == '' && this.resultRepeat == false){
+                                this.resultRepeat = true;
+                                this.resultAjax();
+                            }
                             break;
                         default:
                             this.hover='cechoice';

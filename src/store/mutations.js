@@ -1,10 +1,11 @@
 import {
     RECORD_USERINFO,
     RECORD_DECLARE,
-    AUTO_ROUTE
+    AUTO_ROUTE,
+    OUT_LOGIN
 } from './mutation-types.js'
 
-import {setStore,getStore} from '../config/mUtils'
+import {setStore,getStore,removeStore} from '../config/mUtils'
 
 export default {
     //记录用户信息
@@ -22,5 +23,12 @@ export default {
     [AUTO_ROUTE](state, info){
         state.autoRoute = info;
         setStore('autoRoute', info);
+    },
+    //
+    [OUT_LOGIN](state){
+        state.userInfo = null;
+        state.isDeclare = null;
+        removeStore('userInfo');
+        removeStore('isDeclare');
     }
 }

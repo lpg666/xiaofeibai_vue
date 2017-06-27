@@ -4,7 +4,7 @@
             <span class="head_title" slot="title_text">登录</span>
             <router-link to="" class="head_a" slot="head_a">注册</router-link>
         </head-i>
-        <form action="">
+        <form>
             <div class="inp" style="margin-top: .6rem;"><img src="../../images/default_portrait.png"><input name="mobile" type="text" v-model="mobile" placeholder="手机号码" maxlength="11"></div>
             <span class="xian"></span>
             <div class="inp"><img src="../../images/default_portrait.png"><input name="password" type="password" v-model="password" placeholder="密码"></div>
@@ -84,7 +84,12 @@ export default {
                             this.showAlert=true;
                             this.alertText=res.data.msg;
                             setTimeout(this.closeTip,2000);
-                            this.$router.go(-1);
+                            if(this.$route.query){
+                                this.$router.replace(this.autoRoute);
+                            }else{
+                                this.$router.go(-1);
+                            }
+
                         }
 
                     })

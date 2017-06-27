@@ -36,7 +36,7 @@
             <span class="xian"></span>
             <router-link to="" class="das"><img src="../../images/default_portrait.png">收藏</router-link>
         </div>
-        <router-link to="" class="box"><img src="../../images/default_portrait.png">设置</router-link>
+        <router-link to="/member/setting" class="box"><img src="../../images/default_portrait.png">设置</router-link>
     </div>
 </template>
 
