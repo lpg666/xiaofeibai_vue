@@ -18,20 +18,23 @@
             <span class="head_title" slot="title_text">填写投诉</span>
         </head-i>
         <div class="inp" :class="tki">
-            <div class="text" v-if="userInfo.real_name" @click="qh">
-                <p class="p1">真实姓名</p>
-                <p class="p2">{{userInfo.real_name}}</p>
+            <div class="text" v-if="userInfo.real_name">
+                <label>真实姓名</label>
+                <input type="text" :value="userInfo.real_name" readonly>
             </div>
             <div class="text" v-if="userInfo.mobile">
-                <p class="p1">手机号码</p>
-                <p class="p2">{{userInfo.mobile}}</p>
+                <label>手机号码</label>
+                <input type="text" :value="userInfo.mobile" readonly>
             </div>
             <div class="select" @click="tanK(1)">所在地区</div>
             <div class="select" @click="tanK('type')">
-                <p class="p1">行业分类</p>
-                <p class="p2">天猫</p>
+                <label>行业分类</label>
+                <div class="xs">{{from.name.type_id}} {{from.name.subtype_id}}</div>
             </div>
-            <div class="select" @click="tanK('brand')">被投诉企业／品牌</div>
+            <div class="select" @click="tanK('brand')">
+                <label style="line-height: .35rem; margin-top: .15rem">被投诉企业／品牌</label>
+                <div class="xs">{{from.name.brand_id}}</div>
+            </div>
             <div class="select" @click="tanK('problem')">投诉问题</div>
             <div class="select" @click="tanK('suqiu')">投诉诉求</div>
             <div v-for="data in properties">
@@ -57,18 +60,21 @@
             <div class="select_tk" v-if="tk" style="overflow-y: scroll">
                 <div class="title">
                     <div class="gb" @click="tanG">X</div>
-                    <div class="but" @click="tanG">确定</div>
+                    <div class="but" @click="queRen">确定</div>
                 </div>
                 <div class="type" v-if="tkData.name=='type'">
-                    <ul>
-                        <li v-for="data in tkData.data" :key="data" :class="{'hover':from.types==data.id}" :value="data.id" @click="radio('types',data.id)">{{from.types}}{{data.name}}</li>
-                    </ul>
+                    <div v-for="data in tkData.data" :key="data" :value="data.id">
+                        <p>{{data.name}}</p>
+                        <ul>
+                            <li v-for="list in data.sub_type" :class="{'hover':from.value.subtype_id==list.id}" @click="radio('subtype_id',list.id,list.name,data)">{{list.name}}</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="brand" v-if="tkData.name=='brand'">
                     <div>
                         <p>品牌</p>
                         <ul>
-                            <li v-for="data in tkData.data">{{data.name}}</li>
+                            <li v-for="data in tkData.data" :class="{'hover':from.value.brand_id==data.id}" @click="radio('brand_id',data.id,data.name)">{{data.name}}</li>
                         </ul>
                     </div>
                 </div>
@@ -76,7 +82,7 @@
                     <div v-for="(data,key) in tkData.data.types" :key="data">
                         <p>{{data}}<span>(多选)</span></p>
                         <ul>
-                            <li v-for="item in tkData.data.lists" v-if="item.problem_type_id==key+1">{{item.name}}</li>
+                            <li v-for="item in tkData.data.lists" v-if="item.problem_type_id==key+1" :class="each('problems',item.id)" @click="check('problems',item.id,item.name)">{{item.name}}</li>
                         </ul>
                     </div>
                 </div>
@@ -108,7 +114,11 @@ export default {
             suqius:'',
             properties:'',
             tkData:{},
-            from:{},
+            from:{
+                name:{},
+                value:{},
+            },
+            checkD:'',
             isShow:true,
             declare:true,
             declareSp:false,
@@ -148,14 +158,44 @@ export default {
         ...mapMutations([
             'RECORD_DECLARE'
         ]),
+        each(id,value){
+            if(id=='problems'){
+                if(!isNaN(this.checkD)){
+                    if(this.checkD==value){
+                        return 'hover';
+                    }else{
+                        return false;
+                    }
+                }else{
+                    let arr = this.checkD.split('|||');
+                    for (let i in arr) {
+                        if (arr[i] == value) return 'hover';
+                    }
+                    return false;
+                }
+            }
+        },
         closeTip(){
             this.showAlert = false;
         },
-        radio(name,id){
-            if (name) {
-                this.$set(this.from,'types',id);
+        radio(id,value,name,parent){
+            if(parent){
+                this.$set(this.from.value,'type_id',parent.id);
+                this.$set(this.from.name,'type_id',parent.name);
             }
-            console.log(this.from);
+            if(id){
+                this.$set(this.from.value,''+id+'',value);
+                this.$set(this.from.name,''+id+'',name);
+            }
+        },
+        check(id,value,name){
+            if(id && this.checkD==''){
+                this.checkD = value;
+            }else {
+                this.checkD = this.checkD +　'|||' + value;
+            }
+            this.$set(this.from.value,''+id+'',this.checkD);
+            console.log(this.checkD);
         },
         ajaxTypes(){
             this.axios.get('/v3/tousu/types')
@@ -163,47 +203,27 @@ export default {
                     this.types=res.data.data;
                     this.tkData={'name':'type','data':res.data.data};
                     this.closeTip();
-                    console.log(res.data.data);
                 })
                 .catch(err => {
                     console.log(err);
                 })
         },
         ajaxBrands(id){
-            this.axios.get('/v3/tousu/brands',{subtype_id:id})
+            console.log(id);
+            this.axios.get('/v3/tousu/brands?subtype_id='+id+'')
                 .then(res => {
                     this.brands=res.data.data;
-                    console.log(res.data.data);
                 })
                 .catch(err => {
 
                 })
         },
-        ajaxProblems(id){
-            this.axios.get('/v3/tousu/problems',{subtype_id:id})
+        ajaxQita(id){
+            this.axios.get('/v3/tousu/get-problems-suqius-properties-by-subtype?subtype_id='+id+'')
                 .then(res => {
-                    this.problems=res.data.data;
-                    console.log(res.data.data);
-                })
-                .catch(err => {
-
-                })
-        },
-        ajaxSuqius(id){
-            this.axios.get('/v3/tousu/suqius',{subtype_id:id})
-                .then(res => {
-                    this.suqius=res.data.data;
-                    console.log(res.data.data);
-                })
-                .catch(err => {
-
-                })
-        },
-        ajaxProperties(id){
-            this.axios.get('/v3/tousu/properties',{subtype_id:id})
-                .then(res => {
-                    this.properties=res.data.data;
-                    console.log(res.data.data);
+                    this.problems=res.data.data.problems;
+                    this.suqius=res.data.data.suqius;
+                    this.properties=res.data.data.properties;
                 })
                 .catch(err => {
 
@@ -244,8 +264,40 @@ export default {
 
         },
         tanG(){
-            document.querySelector('body').style.overflow='';
-            this.tk=false;
+            if(this.tkData.name=='type'){
+                document.querySelector('body').style.overflow='';
+                this.tk=false;
+                this.showAlert=false;
+                this.$router.go(-1);
+            }else{
+                document.querySelector('body').style.overflow='';
+                this.tk=false;
+                this.showAlert=false;
+            }
+
+        },
+        queRen(){
+            if(this.tkData.name=='type'){
+                if(this.from.value.subtype_id){
+                    this.ajaxBrands(this.from.value.subtype_id);
+                    this.ajaxQita(this.from.value.subtype_id);
+
+                    document.querySelector('body').style.overflow='';
+                    this.tk=false;
+                }else{
+                    this.showAlert=true;
+                    this.alertText='确定你妹哦，你都没选';
+                    setTimeout(this.closeTip,2000);
+                }
+            }else if(this.tkData.name=='brand'){
+                if(this.from.value.brand_id){
+                    document.querySelector('body').style.overflow='';
+                    this.tk=false;
+                }else{
+                    this.showAlert=true;
+                    this.alertText='确定你妹哦，你都没选';
+                }
+            }
         },
         qh(el){
             console.log(el);
@@ -333,15 +385,26 @@ export default {
         width:100%;
         .select,.text,.data{
             width: calc(~'100% - .2rem');
-            height: 1.28rem;
-            line-height: 1.28rem;
+            height: 1rem;
+            line-height: 1rem;
             float: right;
             border-bottom: 1px solid rgba(204,204,204,.5);
             color: #999;
             font-size: .3rem;
             label{
-                display: inline-block;
-                line-height: 1.28rem;
+                width: 1.4rem;
+                text-align: left;
+                float: left;
+                display:block;
+                line-height: 1rem;
+            }
+            input[type='text']{
+                float: right;
+                width: calc(~'100% - 1.4rem');
+                display:block;
+                height: 100%;
+                line-height: 100%;
+                font-size: .3rem;
             }
         }
         .p1{
@@ -411,9 +474,26 @@ export default {
                     margin-top: .4rem;
                     margin-right: .35rem;
                 }
+                .hover{
+                    border: 1px solid #39C17A;
+                    color: #fff;
+                    background: #39C17A;
+                }
             }
         }
         .type{
+            p{
+                font-size: .4rem;
+                font-weight: bold;
+            }
+            ul{
+                overflow: hidden;
+                li{
+                    font-size: .34rem;
+                    margin-right: .4rem;
+                    float: left;
+                }
+            }
             .hover{
                 color: #2dc177;
             }
