@@ -35,7 +35,10 @@
                 <label style="line-height: .35rem; margin-top: .15rem">被投诉企业／品牌</label>
                 <div class="xs">{{from.name.brand_id}}</div>
             </div>
-            <div class="select" @click="tanK('problem')">投诉问题</div>
+            <div class="select" @click="tanK('problem')">
+                <label>投诉问题</label>
+                <div class="xs">{{from.name.problems}}</div>
+            </div>
             <div class="select" @click="tanK('suqiu')">投诉诉求</div>
             <div v-for="data in properties">
                 <div class="select" v-if="data.show_type=='select'">
@@ -119,6 +122,7 @@ export default {
                 value:{},
             },
             checkD:'',
+            checkF:'',
             isShow:true,
             declare:true,
             declareSp:false,
@@ -158,6 +162,7 @@ export default {
         ...mapMutations([
             'RECORD_DECLARE'
         ]),
+        //多选样式显示
         each(id,value){
             if(id=='problems'){
                 if(!isNaN(this.checkD)){
@@ -178,6 +183,7 @@ export default {
         closeTip(){
             this.showAlert = false;
         },
+        //投诉单选
         radio(id,value,name,parent){
             if(parent){
                 this.$set(this.from.value,'type_id',parent.id);
@@ -188,14 +194,34 @@ export default {
                 this.$set(this.from.name,''+id+'',name);
             }
         },
+        //投诉多选
         check(id,value,name){
             if(id && this.checkD==''){
                 this.checkD = value;
+                this.checkF = name;
             }else {
-                this.checkD = this.checkD +　'|||' + value;
+                if(this.checkD==value){
+                    this.checkD='';
+                    this.checkF='';
+                }else{
+                    this.checkD=this.checkD.toString();
+                    if(this.checkD.indexOf(value) > 0){
+                        this.checkD = this.checkD.replace('|||'+value,'');
+                    }else{
+                        this.checkD = this.checkD +　'|||' + value;
+                    }
+                    //
+                    if(this.checkF.indexOf(name) > 0){
+                        this.checkF = this.checkF.replace('、'+name,'');
+                    }else{
+                        this.checkF = this.checkF +　'、' + name;
+                    }
+                }
             }
             this.$set(this.from.value,''+id+'',this.checkD);
-            console.log(this.checkD);
+            this.$set(this.from.name,''+id+'',this.checkF);
+            //
+            console.log(this.from.name.problems);
         },
         ajaxTypes(){
             this.axios.get('/v3/tousu/types')
@@ -209,7 +235,6 @@ export default {
                 })
         },
         ajaxBrands(id){
-            console.log(id);
             this.axios.get('/v3/tousu/brands?subtype_id='+id+'')
                 .then(res => {
                     this.brands=res.data.data;
@@ -229,14 +254,17 @@ export default {
 
                 })
         },
+        //投诉须知是否不再提示
         Declare(){
             this.declareSp=!this.declareSp;
         },
+        //关闭投诉须知
         declareG(){
             this.declare=false;
             this.isShow=false;
             this.RECORD_DECLARE(this.declareSp);
         },
+        //点击选项弹出
         tanK(data){
             document.querySelector('body').style.overflow='hidden';
             this.tkinp=true;
@@ -263,6 +291,7 @@ export default {
             }
 
         },
+        //关闭弹框按钮
         tanG(){
             if(this.tkData.name=='type'){
                 document.querySelector('body').style.overflow='';
@@ -276,6 +305,7 @@ export default {
             }
 
         },
+        //弹框确认按钮
         queRen(){
             if(this.tkData.name=='type'){
                 if(this.from.value.subtype_id){
@@ -297,17 +327,13 @@ export default {
                     this.showAlert=true;
                     this.alertText='确定你妹哦，你都没选';
                 }
-            }
-        },
-        qh(el){
-            console.log(el);
-        }
-    },
-    directives: {
-        focus: {
-            inserted: function (el, {value}) {
-                if (value) {
-                    el.focus();
+            }else if(this.tkData.name=='problem'){
+                if(this.from.value.problems){
+                    document.querySelector('body').style.overflow='';
+                    this.tk=false;
+                }else{
+                    this.showAlert=true;
+                    this.alertText='确定你妹哦，你都没选';
                 }
             }
         }
@@ -318,11 +344,6 @@ export default {
         this.showAlert=true;
         this.alertText='加载中...';
         this.ajaxTypes();
-
-        /*this.ajaxBrands();
-        this.ajaxProblems();
-        this.ajaxSuqius();
-        this.ajaxProperties();*/
     },
     mounted() {
 
@@ -405,6 +426,9 @@ export default {
                 height: 100%;
                 line-height: 100%;
                 font-size: .3rem;
+            }
+            .xs{
+                overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;
             }
         }
         .p1{
