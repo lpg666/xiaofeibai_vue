@@ -39,16 +39,18 @@
                 <label>投诉问题</label>
                 <div class="xs">{{from.name.problems}}</div>
             </div>
-            <div class="select" @click="tanK('suqiu')">投诉诉求</div>
+            <div class="select" @click="tanK('suqiu')">
+                <label>投诉诉求</label>
+                <div class="xs">{{from.name.suqius}}</div>
+            </div>
             <div v-for="data in properties">
                 <div class="select" v-if="data.show_type=='select'">
                     select
                 </div>
-                <div class="data" v-else-if="data.show_type=='date'">
-                    data
-                </div>
+                <div class="data" v-else-if="data.show_type=='date'" @click="setDate"></div>
                 <div class="text" v-else>
-                    text
+                    <label :style="{'line-height':data.name.length>4?'.35rem':'','margin-top':data.name.length>4?'.15rem':''}">{{data.name}}</label>
+                    <input type="text" value="" @change="textSr($event,data.id)">
                 </div>
             </div>
             <div>
@@ -56,7 +58,7 @@
                 <textarea placeholder="请详细描述事情经过"></textarea>
             </div>
             <div>
-                <div class="fromBut">提交</div>
+                <div class="fromBut" @click="fromBut">提交</div>
             </div>
         </div>
         <transition name="fade">
@@ -93,19 +95,37 @@
                     <div>
                         <p>投诉诉求<span>(多选)</span></p>
                         <ul>
-                            <li v-for="data in tkData.data">{{data.name}}</li>
+                            <li v-for="data in tkData.data" :class="each('suqius',data.id)" @click="check('suqius',data.id,data.name)">{{data.name}}</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </transition>
         <alert-box v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-box>
+
+        <transition name="fade1">
+            <div v-show="dataShow">
+                <com-calendar
+                        :startYear="startYear"
+                        :endYear="endYear"
+                        :month="month"
+                        :year="year"
+                        :day="day"
+                        :onOk="onOk"
+                        :onCancel="onCancel"
+                        v-on:hide="hide"
+                ></com-calendar>
+                <div  class='mark'></div>
+                <p></p>
+            </div>
+        </transition>
     </div>
 </template>
 
 <script>
 import headI from '../../components/header/head'
-import alertBox from '../../components/common/alertBox.vue'
+import alertBox from '../../components/common/alertBox'
+import calendarComponent from '../../components/common/calendar'
 import {mapState,mapMutations} from 'vuex'
 
 export default {
@@ -123,6 +143,8 @@ export default {
             },
             checkD:'',
             checkF:'',
+            checkG:'',
+            checkH:'',
             isShow:true,
             declare:true,
             declareSp:false,
@@ -130,6 +152,14 @@ export default {
             tkinp:false,
             showAlert: false, //显示提示组件
             alertText: null, //提示的内容
+            //
+            data:'日期',
+            dataShow:false,
+            startYear:1988,
+            endYear:2050,
+            year:(new Date).getFullYear(),
+            month:((new Date).getMonth()+1),
+            day:(new Date).getDate(),
         }
     },
     computed:{
@@ -156,12 +186,44 @@ export default {
     },
     components:{
         headI,
-        alertBox
+        alertBox,
+        comCalendar:calendarComponent
     },
     methods:{
         ...mapMutations([
             'RECORD_DECLARE'
         ]),
+        //
+        fromBut(){
+            console.log(this.from.value);
+        },
+        //
+        setDate(){
+            this.dataShow=true;
+            let yY = -((new Date).getFullYear() - this.startYear - 3)*34;
+            let mY = -((new Date).getMonth()+1 -4)*34;
+            let dY = -((new Date).getDate() -4)*34;
+            console.log(yY,mY,dY);
+        },
+        hide(){
+            this.dataShow =false;
+        },
+        onOk(data) {
+            this.data= data.year+'-'+data.month+'-'+data.day;
+            console.log('确定')
+        },
+        onCancel(){
+            console.log('取消')
+        },
+        //附加text属性
+        textSr(el,id){
+            if(!this.from.value.properties){
+                this.from.value.properties = id +'###'+ el.target.value;
+            }else{
+                this.from.value.properties = this.from.value.properties + '|||' + id +'###'+ el.target.value;
+            }
+            console.log(el,this.from.value.properties);
+        },
         //多选样式显示
         each(id,value){
             if(id=='problems'){
@@ -178,6 +240,20 @@ export default {
                     }
                     return false;
                 }
+            }else if(id=='suqius'){
+                if(!isNaN(this.checkG)){
+                    if(this.checkG==value){
+                        return 'hover';
+                    }else{
+                        return false;
+                    }
+                }else{
+                    let arr = this.checkG.split('|||');
+                    for (let i in arr) {
+                        if (arr[i] == value) return 'hover';
+                    }
+                    return false;
+                }
             }
         },
         closeTip(){
@@ -186,6 +262,8 @@ export default {
         //投诉单选
         radio(id,value,name,parent){
             if(parent){
+                this.from.name={};
+                this.from.value={};
                 this.$set(this.from.value,'type_id',parent.id);
                 this.$set(this.from.name,'type_id',parent.name);
             }
@@ -196,32 +274,59 @@ export default {
         },
         //投诉多选
         check(id,value,name){
-            if(id && this.checkD==''){
-                this.checkD = value;
-                this.checkF = name;
-            }else {
-                if(this.checkD==value){
-                    this.checkD='';
-                    this.checkF='';
-                }else{
-                    this.checkD=this.checkD.toString();
-                    if(this.checkD.indexOf(value) > 0){
-                        this.checkD = this.checkD.replace('|||'+value,'');
+            if(id=='problems'){
+                if(id && this.checkD==''){
+                    this.checkD = value;
+                    this.checkF = name;
+                }else {
+                    if(this.checkD==value){
+                        this.checkD='';
+                        this.checkF='';
                     }else{
-                        this.checkD = this.checkD +　'|||' + value;
-                    }
-                    //
-                    if(this.checkF.indexOf(name) > 0){
-                        this.checkF = this.checkF.replace('、'+name,'');
-                    }else{
-                        this.checkF = this.checkF +　'、' + name;
+                        this.checkD=this.checkD.toString();
+                        if(this.checkD.indexOf(value) > 0){
+                            this.checkD = this.checkD.replace('|||'+value,'');
+                        }else{
+                            this.checkD = this.checkD +　'|||' + value;
+                        }
+                        //
+                        if(this.checkF.indexOf(name) > 0){
+                            this.checkF = this.checkF.replace('、'+name,'');
+                        }else{
+                            this.checkF = this.checkF +　'、' + name;
+                        }
                     }
                 }
+                this.$set(this.from.value,''+id+'',this.checkD);
+                this.$set(this.from.name,''+id+'',this.checkF);
+                console.log(this.from.name.problems);
+            }else if(id=='suqius'){
+                if(id && this.checkG==''){
+                    this.checkG = value;
+                    this.checkH = name;
+                }else {
+                    if(this.checkG==value){
+                        this.checkG='';
+                        this.checkH='';
+                    }else{
+                        this.checkG=this.checkG.toString();
+                        if(this.checkG.indexOf(value) > 0){
+                            this.checkG = this.checkG.replace('|||'+value,'');
+                        }else{
+                            this.checkG = this.checkG +　'|||' + value;
+                        }
+                        //
+                        if(this.checkH.indexOf(name) > 0){
+                            this.checkH = this.checkH.replace('、'+name,'');
+                        }else{
+                            this.checkH = this.checkH +　'、' + name;
+                        }
+                    }
+                }
+                this.$set(this.from.value,''+id+'',this.checkG);
+                this.$set(this.from.name,''+id+'',this.checkH);
+                console.log(this.from.name.suqius);
             }
-            this.$set(this.from.value,''+id+'',this.checkD);
-            this.$set(this.from.name,''+id+'',this.checkF);
-            //
-            console.log(this.from.name.problems);
         },
         ajaxTypes(){
             this.axios.get('/v3/tousu/types')
@@ -249,6 +354,7 @@ export default {
                     this.problems=res.data.data.problems;
                     this.suqius=res.data.data.suqius;
                     this.properties=res.data.data.properties;
+                    this.closeTip();
                 })
                 .catch(err => {
 
@@ -309,6 +415,8 @@ export default {
         queRen(){
             if(this.tkData.name=='type'){
                 if(this.from.value.subtype_id){
+                    this.showAlert=true;
+                    this.alertText='加载中...';
                     this.ajaxBrands(this.from.value.subtype_id);
                     this.ajaxQita(this.from.value.subtype_id);
 
@@ -335,6 +443,14 @@ export default {
                     this.showAlert=true;
                     this.alertText='确定你妹哦，你都没选';
                 }
+            }else if(this.tkData.name=='suqiu'){
+                if(this.from.value.suqius){
+                    document.querySelector('body').style.overflow='';
+                    this.tk=false;
+                }else{
+                    this.showAlert=true;
+                    this.alertText='确定你妹哦，你都没选';
+                }
             }
         }
     },
@@ -346,7 +462,7 @@ export default {
         this.ajaxTypes();
     },
     mounted() {
-
+        this.from.value.sign=this.userInfo.sign;
     }
 }
 </script>
@@ -386,6 +502,13 @@ export default {
     }
     .fade-leave-active{
         animation:boxBottom .4s linear;
+    }
+
+    .fade1-enter-active, .fade1-leave-active {
+        transition: opacity .3s
+    }
+    .fade1-enter, .fade1-leave-active {
+        opacity: 0
     }
 
     .fromBut{
