@@ -43,6 +43,9 @@
             }
         },
         props:{
+            dataId:{
+
+            },
             startYear:{
                 type:Number
             },
@@ -63,7 +66,7 @@
             },
             onCancel:{
                 type:Function
-            },
+            }
         },
         components:{
             comDateScroll:dateScroll
@@ -79,7 +82,7 @@
                 this.onOk({
                     year:vm.curYear||vm.year,
                     month:vm.curMonth||vm.month,
-                    day:vm.curDay||vm.day,
+                    day:vm.curDay||vm.day
                 })
             },
             hiddenCalendar:function () {
@@ -93,6 +96,8 @@
                     case 'day':this.sDay = v;break;
                 }
             }
+        },
+        mounted(){
         }
     }
 

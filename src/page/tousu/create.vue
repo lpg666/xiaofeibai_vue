@@ -47,7 +47,7 @@
                 <div class="select" v-if="data.show_type=='select'">
                     select
                 </div>
-                <div class="data" v-else-if="data.show_type=='date'" @click="setDate"></div>
+                <div class="data" v-else-if="data.show_type=='date'" @click="setDate(data.id)"></div>
                 <div class="text" v-else>
                     <label :style="{'line-height':data.name.length>4?'.35rem':'','margin-top':data.name.length>4?'.15rem':''}">{{data.name}}</label>
                     <input type="text" value="" @change="textSr($event,data.id)">
@@ -159,6 +159,7 @@ export default {
             year:(new Date).getFullYear(),
             month:((new Date).getMonth()+1),
             day:(new Date).getDate(),
+            dataId:'',
         }
     },
     computed:{
@@ -199,17 +200,25 @@ export default {
             console.log(this.from.value);
         },
         //
-        setDate(){
+        setDate(id){
             this.dataShow=true;
-            let yY = -((new Date).getFullYear() - this.startYear - 3)*34;
-            let mY = -((new Date).getMonth()+1 -4)*34;
-            let dY = -((new Date).getDate() -4)*34;
-            console.log(yY,mY,dY);
+            this.dataId=id;
+            console.log(id);
         },
         hide(){
             this.dataShow =false;
         },
         onOk(data) {
+            if(this.tousuData==''){
+                if(!this.from.value.properties){
+                    this.from.value.properties = this.dataId +'###'+ data.year+'-'+data.month+'-'+data.day;
+                }else{
+                    this.from.value.properties = this.from.value.properties + '|||' + this.dataId +'###'+ data.year+'-'+data.month+'-'+data.day;
+                }
+            }else{
+                this.from.value.properties = this.from.value.properties.replace(this.dataId +'###'+ this.tousuData,this.dataId +'###'+ data.year+'-'+data.month+'-'+data.day);
+            }
+            console.log(this.from.value.properties);
             this.TOUSU_DATA(data.year+'-'+data.month+'-'+data.day);
             console.log('确定')
         },
@@ -300,7 +309,6 @@ export default {
                 }
                 this.$set(this.from.value,''+id+'',this.checkD);
                 this.$set(this.from.name,''+id+'',this.checkF);
-                console.log(this.from.name.problems);
             }else if(id=='suqius'){
                 if(id && this.checkG==''){
                     this.checkG = value;

@@ -192,7 +192,7 @@ import {mapState} from 'vuex'
                             vm.styleObject.transform  = "translate(0,"+vm.Y+"px)";
                         }
 
-                    }else if(this.dType =="day"){
+                    }else if(this.dType =="day"&&vm.t.length==0){
                         s = 1;e = this.dayLength;
                         vm.t = [];
                         vm.cNum = e -s+1;
