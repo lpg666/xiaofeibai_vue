@@ -153,7 +153,6 @@ export default {
             showAlert: false, //显示提示组件
             alertText: null, //提示的内容
             //
-            data:'日期',
             dataShow:false,
             startYear:1988,
             endYear:2050,
@@ -165,7 +164,8 @@ export default {
     computed:{
         ...mapState([
             'isDeclare',
-            'userInfo'
+            'userInfo',
+            'tousuData'
         ]),
         tki(){
             if(this.tkinp){
@@ -191,7 +191,8 @@ export default {
     },
     methods:{
         ...mapMutations([
-            'RECORD_DECLARE'
+            'RECORD_DECLARE',
+            'TOUSU_DATA'
         ]),
         //
         fromBut(){
@@ -209,7 +210,7 @@ export default {
             this.dataShow =false;
         },
         onOk(data) {
-            this.data= data.year+'-'+data.month+'-'+data.day;
+            this.TOUSU_DATA(data.year+'-'+data.month+'-'+data.day);
             console.log('确定')
         },
         onCancel(){

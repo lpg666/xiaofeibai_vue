@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 
     export default{
         data: function(){
@@ -39,9 +40,6 @@
             }
         },
         props:{
-            cs:{
-
-            },
             dType:{
                 type:String
             },
@@ -53,6 +51,9 @@
             },
             endTime:{
                 type:Number
+            },
+            dataS:{
+
             }
         },
         methods: {
@@ -154,7 +155,6 @@
                 }
 
                 vm.Y = -((cur-4) *34);
-
                 vm.styleObject.transform  = "translate(0,"+vm.Y+"px)";
 
                 vm.isMoving = true;
@@ -164,6 +164,9 @@
             }
         },
         computed:{
+            ...mapState([
+                'tousuData'
+            ]),
             all: {
                 get:function(){
                     let vm = this,s =  vm.startTime,e = vm.endTime;
@@ -172,7 +175,10 @@
                         for( ;s<=e;s++){
                             vm.t.push(s+'年');
                         }
-                        console.log(this.cs);
+                        if(this.tousuData==''){
+                            vm.Y = -((new Date).getFullYear() - 1988 - 3)*34;
+                            vm.styleObject.transform  = "translate(0,"+vm.Y+"px)";
+                        }
 
                     }else if(this.dType =="month"&&vm.t.length==0){
                         s = 1;e = 12;
@@ -181,6 +187,11 @@
                         for( ;s<=e;s++){
                             vm.t.push(s+'月');
                         }
+                        if(this.tousuData==''){
+                            vm.Y = -((new Date).getMonth()+1 -4)*34;
+                            vm.styleObject.transform  = "translate(0,"+vm.Y+"px)";
+                        }
+
                     }else if(this.dType =="day"){
                         s = 1;e = this.dayLength;
                         vm.t = [];
@@ -188,6 +199,11 @@
                         for( ;s<=e;s++){
                             vm.t.push(s+'日');
                         }
+                        if(this.tousuData==''){
+                            vm.Y = -((new Date).getDate() -4)*34;
+                            vm.styleObject.transform  = "translate(0,"+vm.Y+"px)";
+                        }
+
                     }
 
                     if(vm.t[Math.abs(vm.d-3 )]!=undefined){

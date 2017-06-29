@@ -8,6 +8,7 @@ const state = {
     userInfo:JSON.parse(localStorage.getItem('userInfo')),
     isDeclare:localStorage.getItem('isDeclare'),
     autoRoute:localStorage.getItem('autoRoute'),
+    tousuData:'',
 }
 
 export default new Vuex.Store({

@@ -30,7 +30,7 @@
 </style>
 
 <script>
-   import dateScroll from './dateScroll.vue';
+   import dateScroll from './dateScroll';
     export default {
         data:function () {
             return{
@@ -40,7 +40,6 @@
                 curYear:'',
                 curMonth:'',
                 curDay:'',
-                cs:this.startYear
             }
         },
         props:{
@@ -93,11 +92,7 @@
                     case 'month':this.sMonth = v;break;
                     case 'day':this.sDay = v;break;
                 }
-                console.log(this.sYear,this.sMonth,this.sDay);
             }
-        },
-        created(){
-            console.log(this.cs+'1');
         }
     }
 

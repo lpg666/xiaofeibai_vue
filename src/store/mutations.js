@@ -2,7 +2,8 @@ import {
     RECORD_USERINFO,
     RECORD_DECLARE,
     AUTO_ROUTE,
-    OUT_LOGIN
+    OUT_LOGIN,
+    TOUSU_DATA
 } from './mutation-types.js'
 
 import {setStore,getStore,removeStore} from '../config/mUtils'
@@ -30,5 +31,9 @@ export default {
         state.isDeclare = null;
         removeStore('userInfo');
         removeStore('isDeclare');
+    },
+    //
+    [TOUSU_DATA](state,info){
+        state.tousuData = info;
     }
 }
