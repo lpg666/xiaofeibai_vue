@@ -1,6 +1,6 @@
 <template>
     <header id="headI">
-        <div id="head_go" @click="$router.go(-1)"><</div>
+        <div id="head_go" @click="$router.go(-1)"></div>
         <slot name="title_text"></slot>
         <slot name="head_a"></slot>
     </header>
@@ -30,7 +30,8 @@
             float: left;
             width: 1rem;
             height: 1rem;
-            background: #000;
+            background: url("../../images/head_jt.png") no-repeat left .1rem center;
+            background-size: .4rem;
         }
         span.head_title{
             float: left;

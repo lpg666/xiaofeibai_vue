@@ -1,10 +1,10 @@
 <template>
     <header id="head-top">
-        <router-link to="/member" v-if="userInfo==null?true:false" class="user_portrait"><img src="../../images/default_portrait.png"></router-link>
+        <router-link to="/member" v-if="userInfo==null?true:false" class="user_portrait"><img src="../../images/icon_gerenzhongxin@2x.png"></router-link>
         <router-link to="/member" v-else class="user_info">152****77</router-link>
         <slot name="title_text"></slot>
         <router-link to="/search" class="head_search"><img src="../../images/default_portrait.png"></router-link>
-        <router-link to="/news" class="head_news"><img src="../../images/default_portrait.png"><span>1</span></router-link>
+        <router-link to="/news" class="head_news"><img src="../../images/icon_xiaoxi@2x.png"><span>1</span></router-link>
     </header>
 </template>
 

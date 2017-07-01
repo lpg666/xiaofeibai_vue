@@ -242,9 +242,10 @@ export default {
     #ts_btn{
         display: table;
         position: fixed;
-        right: .32rem;
-        bottom: 1.4rem;
-        background: #000;
+        right: .2rem;
+        bottom: 1.2rem;
+        background: url("../../images/FAB@2x.png") no-repeat center;
+        background-size: 100%;
         z-index: 999;
         width: 1.1rem;
         height: 1.1rem;
@@ -408,6 +409,9 @@ export default {
         }
     }
     .recommend_list{
+        .list:last-child{
+            border-bottom: none;
+        }
         .list{
             overflow: hidden;
             margin-left: .23rem;

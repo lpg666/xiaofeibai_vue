@@ -2,6 +2,7 @@ import App from '../App'
 
 const login = r => require.ensure([], () => r(require('../page/login/login')), 'login')
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
+const help = r => require.ensure([], () => r(require('../page/help/help')), 'help')
 const member = r => require.ensure([], () => r(require('../page/member/member')), 'member')
 const setting = r => require.ensure([], () => r(require('../page/member/setting')), 'setting')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
@@ -31,11 +32,18 @@ export default [{
             component: home,
             meta: { keepAlive: true },
         },
+        //求助
+        {
+            path: '/help',
+            component: help,
+            meta: { keepAlive: true },
+        },
         //个人信息页
         {
             path: '/member',
             component: member,
         },
+        //个人信息设置页
         {
             path:'/member/setting',
             component:setting
@@ -60,7 +68,7 @@ export default [{
             path: '/article/detail/:id',
             component: articleDetail
         },
-        //
+        //填写投诉
         {
             path: '/tousu/create',
             component: tousuCreate,

@@ -70,13 +70,15 @@
             </div>
         </div>
         <transition name="fade">
-            <div class="select_tk" v-if="tk" style="overflow-y: scroll">
+            <div class="select_tk" v-if="tk" style="overflow-y: scroll" :class="tkData.name=='type'?'type_bg':null">
                 <div class="title">
-                    <div class="gb" @click="tanG">X</div>
+                    <div class="gb" @click="tanG"></div>
                     <div class="but" @click="queRen">确定</div>
                 </div>
                 <div class="type" v-if="tkData.name=='type'">
+                    <div class="mbl"></div>
                     <div v-for="data in tkData.data" :key="data" :value="data.id">
+                        <img :src="require('../../images/icon_'+data.id+'.png')">
                         <p>{{data.name}}</p>
                         <ul>
                             <li v-for="list in data.sub_type" :class="{'hover':from.value.subtype_id==list.id}" @click="radio('subtype_id',list.id,list.name,data)">{{list.name}}</li>
@@ -221,10 +223,15 @@ export default {
             this.$set(this.textId,''+id+'',el.target.value);
             console.log(this.textId);
         },
+        //
         fg(data){
             let array = data.split('|||');
             console.log(array);
             return array;
+        },
+        //
+        typeImg(id){
+            return '../../images/icon_'+id+'.png';
         },
         //
         setDate(id){
@@ -622,6 +629,9 @@ export default {
             }
         }
     }
+    .type_bg{
+        background: none !important;
+    }
     .select_tk{
         .wh(100%,100%);
         position: fixed;
@@ -641,7 +651,8 @@ export default {
             .gb{
                 float: left;
                 .wh(1rem,1rem);
-                background: #2dc177;
+                background: url("../../images/icon_x@2x.png") no-repeat center left .2rem;
+                background-size: .37rem .37rem;
             }
             .but{
                 float: right;
@@ -686,20 +697,51 @@ export default {
             }
         }
         .type{
+            padding-top:.4rem;
+            background: rgba(255,255,255,.95);
+            >div{
+                width: 100%;
+                height: 2rem;
+                img{
+                    width: .92rem;
+                    height: .92rem;
+                    display: block;
+                    float: left;
+                    margin-left: .2rem;
+                    margin-right: .3rem;
+                }
+            }
             p{
-                font-size: .4rem;
+                font-size: .32rem;
                 font-weight: bold;
             }
             ul{
                 overflow: hidden;
                 li{
-                    font-size: .34rem;
-                    margin-right: .4rem;
+                    font-size: .3rem;
+                    margin-right: .3rem;
                     float: left;
+                    margin-top: .1rem;
+                    padding-right: .25rem;
+                    background: url("../../images/icon_next@2x.png") no-repeat center right;
+                    background-size: .14rem;
                 }
             }
             .hover{
                 color: #2dc177;
+            }
+            .mbl{
+                background:#fff;
+                -webkit-filter: blur(100px);
+                -moz-filter: blur(100px);
+                -ms-filter: blur(100px);
+                filter: blur(100px);
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                left:0;
+                top: 0;
+                z-index: -1;
             }
         }
     }

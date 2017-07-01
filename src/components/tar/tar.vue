@@ -1,9 +1,9 @@
 <template>
     <ul id="tar">
-        <li><router-link to="/home"><img src="../../images/default_portrait.png"><span>首页</span></router-link></li>
-        <li><router-link to="/help"><img src="../../images/default_portrait.png"><span>求助</span></router-link></router-link></li>
-        <li><router-link to="/activity"><img src="../../images/default_portrait.png"><span>活动</span></router-link></router-link></li>
-        <li><router-link to="/product"><img src="../../images/default_portrait.png"><span>管家</span></router-link></router-link></li>
+        <li><router-link to="/home"><i class="ic1"></i><span>首页</span></router-link></li>
+        <li><router-link to="/help"><i class="ic2"></i><span>求助</span></router-link></router-link></li>
+        <li><router-link to="/activity"><i class="ic3"></i><span>活动</span></router-link></router-link></li>
+        <li><router-link to="/product"><i class="ic4"></i><span>管家</span></router-link></router-link></li>
     </ul>
 </template>
 
@@ -17,7 +17,7 @@
     }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     #tar{
         width: 100%;
         height: 1rem;
@@ -38,20 +38,45 @@
                 position: relative;
                 text-align: center;
                 display: block;
-                img{
+                i{
                     width: .44rem;
-                    height: .44rem;
+                    height: .43rem;
                     display: block;
                     position: absolute;
                     left: 50%;
                     margin-left: -.22rem;
                     top: .12rem;
                     margin-bottom: .11rem;
+                    background-position: center top
+                }
+                .ic1{
+                    background: url("../../images/tabbar_home_normal@2x.png") no-repeat;
+                    background-size: .44rem;
+                }
+                .ic2{
+                    background: url("../../images/tabbar_tousu_normal@2x.png") no-repeat;
+                    background-size: .44rem;
+                }
+                .ic3{
+                    background: url("../../images/tab_huodong@2x.png") no-repeat;
+                    background-size: .44rem;
+                }
+                .ic4{
+                    background: url("../../images/tab_guanjia@2x.png") no-repeat;
+                    background-size: .44rem;
                 }
                 span{
                     width: 100%;
                     line-height: 1.5rem;
                     display:block;
+                }
+            }
+            .router-link-active{
+                i{
+                    background-position: center bottom !important;
+                }
+                span{
+                    color: #37C078;
                 }
             }
         }
