@@ -132,6 +132,18 @@
                         </ul>
                     </div>
                 </div>
+                <div class="provinces" v-if="tkData.name=='provinces'">
+                    <div>
+                        <p>省份</p>
+                        <ul>
+                            <li v-for="data in tkData.data" :class="{'hover':from.value.provinces==data.id}" @click="radio('provinces',data.id,data.name)">{{data.name}}</li>
+                        </ul>
+                        <p>城市</p>
+                        <ul>
+                            <li>11</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </transition>
         <alert-box v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-box>
@@ -437,6 +449,24 @@ export default {
 
                 })
         },
+        ajaxProvinces(){
+            this.axios.get('/v3/home/provinces')
+                .then(res => {
+                    this.provinces=res.data.data;
+                })
+                .catch(err => {
+
+                })
+        },
+        ajaxCities(id){
+            this.axios.get('/v3/home/cities?province_code='+id+'')
+                .then(res => {
+                    this.cities=res.data.data;
+                })
+                .catch(err => {
+
+                })
+        },
         //投诉须知是否不再提示
         Declare(){
             this.declareSp=!this.declareSp;
@@ -564,6 +594,7 @@ export default {
         this.showAlert=true;
         this.alertText='加载中...';
         this.ajaxTypes();
+        this.ajaxProvinces();
         this.TOUSU_DATA('');
     },
     mounted() {
@@ -807,7 +838,7 @@ export default {
                 .sc(.32rem,#39C17A);
             }
         }
-        .problem,.suqiu,.brand,.propertie{
+        .problem,.suqiu,.brand,.propertie,.provinces{
             padding-bottom: .4rem;
             width:100%;
             p{
