@@ -28,7 +28,7 @@
                 <input :class="userInfo.mobile?'lp1':'lp2'" type="text" :value="userInfo.mobile" v-model="userInfo.mobile">
             </div>
             <!-- -->
-            <div class="select" @click="tanK(1)">所在地区</div>
+            <div class="select" @click="tanK('provinces')">所在地区</div>
             <div class="select" @click="tanK('type')">
                 <p :class="from.value.type_id?'p1':'p2'">行业分类</p>
                 <div :class="from.value.type_id?'lp1':'lp2'">{{from.name.type_id}} {{from.name.subtype_id}}</div>
@@ -168,6 +168,7 @@ export default {
             problems:'',
             suqius:'',
             properties:'',
+            provinces:'',
             tkData:{},
             from:{
                 name:{},
@@ -233,7 +234,7 @@ export default {
         ]),
         //
         fromBut(){
-            console.log(this.from.value,this.dataId,this.tousuData,this.textId);
+            console.log(this.from.value,this.dataId,this.tousuData,this.textId,this.picList);
         },
         //图片上传
         picShow(key){
@@ -474,6 +475,9 @@ export default {
                     }
                     this.tkData={'name':data,'data':pro};
                     console.log(this.tkData.data);
+                    break;
+                case 'provinces':
+                    this.tkData={'name':data,'data':this.provinces};
                     break;
                 default:
                     this.tkData={};
@@ -872,11 +876,11 @@ export default {
                 color: #2dc177;
             }
             .mbl{
-                background:#fff;
+                /*background:#fff;
                 -webkit-filter: blur(100px);
                 -moz-filter: blur(100px);
                 -ms-filter: blur(100px);
-                filter: blur(100px);
+                filter: blur(100px);*/
                 position: fixed;
                 width: 100%;
                 height: 100%;
