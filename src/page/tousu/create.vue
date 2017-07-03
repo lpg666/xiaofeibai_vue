@@ -66,6 +66,20 @@
                 </div>
             </div>
             <div style="width: 100%; float: left;">
+                <div class="upload_box">
+                    <ul class="pic">
+                        <li v-for="data,key in picList">
+                            <i class="dl" @click="delPic(key)"></i>
+                            <img :src="'http://xiaofeibao.b0.upaiyun.com'+data.src.data">
+                            <div class="lk" @click="picShow(key)">
+                                <i :class="data.show==1?'hover':''"></i>
+                                <span>公开</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div id="upload"><input @change="onFileChange" type="file" multiple></div>
+                </div>
+                <div class="tousuInfo">*投诉时，请注意保护个人隐私，涉及个人隐私或者敏感照片请选择不公开。</div>
                 <div class="fromBut" @click="fromBut">提交</div>
             </div>
         </div>
@@ -178,7 +192,9 @@ export default {
             day:(new Date).getDate(),
             dataId:'',
             textId:{},
-            hc:''
+            hc:'',
+            //
+            picList:[]
         }
     },
     computed:{
@@ -217,6 +233,54 @@ export default {
         //
         fromBut(){
             console.log(this.from.value,this.dataId,this.tousuData,this.textId);
+        },
+        //图片上传
+        picShow(key){
+            this.picList[key].show=!this.picList[key].show;
+            console.log(this.picList[key].show);
+        },
+        delPic(key){
+            this.picList.splice(key,1);
+            console.log(this.picList);
+        },
+        onFileChange(e){
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length) return;
+            this.createImage(files);
+        },
+        createImage(file) {
+            if(typeof FileReader==='undefined'){
+                alert('您的浏览器不支持图片上传，请升级您的浏览器');
+                return false;
+            }
+            const image = new Image();
+            const vm = this;
+            const leng=file.length;
+            const gs = ['image/jpeg','image/jpg','image/png'];
+            for(let i=0;i<leng;i++){
+                let isLt2M = file[i].size / 1024 / 1024 < 2;
+                if(gs.indexOf(file[i].type)<0){
+                    console.log('文件类型不对');
+                }else if(!isLt2M){
+                    console.log('图片过大');
+                }else{
+                    console.log('上传中...');
+                    let reader = new FileReader();
+                    reader.readAsDataURL(file[i]);
+                    reader.onload =function(e){
+                        vm.axios.post('/v3/tousu/upload-pic',{'pic':e.target.result})
+                            .then(res =>{
+                                vm.picList.push({'src':res.data,'show':'1'});
+                                console.log(res,vm.picList);
+                                console.log('上传成功');
+                            })
+                            .catch(err =>{
+
+                            })
+                    };
+                }
+
+            }
         },
         //附加text属性
         textSr(el,id){
@@ -558,6 +622,82 @@ export default {
         font-size: .32rem;
         background-image:-webkit-linear-gradient(to right, #37C078, #5BDC99);
         background-image:linear-gradient(to right,#37C078,#5BDC99);
+    }
+    .tousuInfo{
+        font-size: .26rem;
+        color: #fd9c33;
+        margin:.56rem 1.5rem .42rem 1.5rem;
+    }
+    .upload_box{
+        overflow: hidden;
+        width: auto;
+        margin-left: .2rem;
+        .pic{
+            width: 100%;
+            height: auto;
+            li{
+                position: relative;
+                width: 1.4rem;
+                height: auto;
+                float: left;
+                margin-top: .5rem;
+                margin-right: .4rem;
+                img{
+                    width: 1.4rem;
+                    height: 1.4rem;
+                    display: block;
+                }
+                >i{
+                    position: absolute;
+                    right: -.2rem;
+                    top: -.2rem;
+                    width: .4rem;
+                    height: .4rem;
+                    background: url("../../images/icon_shantupian.png") no-repeat;
+                    background-size: 100%;
+                }
+                 .lk{
+                     font-size: .28rem;
+                     overflow: hidden;
+                     height: .74rem;
+                     line-height: .74rem;
+                     text-align: center;
+                     width: 100%;
+                     i{
+                         float: left;
+                         margin-top: .2rem;
+                         margin-left: .1rem;
+                         display: block;
+                         width: .35rem;
+                         height: .35rem;
+                         background: url("../../images/icon_tixing_n.png") no-repeat;
+                         background-size:.35rem;
+                     }
+                     .hover{
+                         background: url("../../images/icon_tixing_s.png") no-repeat;
+                         background-size:.35rem;
+                     }
+                     span{
+                         display: inline-block;
+                     }
+                 }
+            }
+        }
+    }
+    #upload{
+        float: left;
+        margin-top: .5rem;
+        width: 1.4rem;
+        height: 1.4rem;
+        display: block;
+        background: url("../../images/tianjiatupian.png") no-repeat;
+        background-size: 100%;
+        input{
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            display: block;
+        }
     }
 
     .inp{

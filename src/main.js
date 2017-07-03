@@ -9,6 +9,8 @@ import './config/rem'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false
 
@@ -22,6 +24,7 @@ if('addEventListener' in document){                           //document.addEven
 Vue.use(VueRouter)
 Vue.use(VueAxios,axios)
 Vue.use(VueAwesomeSwiper)
+Vue.use(ElementUI)
 
 /*设置线上环境api前缀*/
 if (process.env.NODE_ENV == 'development') {
