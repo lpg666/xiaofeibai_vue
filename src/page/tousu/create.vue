@@ -73,7 +73,8 @@
                             <img :src="'http://xiaofeibao.b0.upaiyun.com'+data.src.data">
                             <div class="lk" @click="picShow(key)">
                                 <i :class="data.show==1?'hover':''"></i>
-                                <span>公开</span>
+                                <span v-if="data.show==1">公开</span>
+                                <span v-else>不公开</span>
                             </div>
                         </li>
                     </ul>
@@ -666,7 +667,7 @@ export default {
                      i{
                          float: left;
                          margin-top: .2rem;
-                         margin-left: .1rem;
+                         margin-left: .05rem;
                          display: block;
                          width: .35rem;
                          height: .35rem;
