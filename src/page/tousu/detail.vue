@@ -7,8 +7,8 @@
                 <div class="tx"><img :src="detail.member!=null?detail.member.avatar:require('../../images/default_portrait.png')"></div>
                 <div><span class="sp_name">{{detail.name}}</span> <span>发于&nbsp;&nbsp;{{detail.add_time}}</span></div>
                 <div class="client">来自{{detail.client}}</div>
-                <div class="guanzhu">+关注</div>
-                <div class="guanzhu1">已关注</div>
+                <div class="guanzhu1" v-if="detail.is_collect">已关注</div>
+                <div class="guanzhu" v-else>+关注</div>
             </div>
             <div style="background: #fff; padding-bottom: .24rem;">
                 <div class="info">
@@ -28,8 +28,67 @@
                     </ul>
                 </div>
             </div>
+            <div class="content" style="background: #fff;">
+                <div class="c_title"><img src="../../images/dealTime.png"><span><div>处理动态</div></span></div>
+                <div class="c_dt" v-if="detail.status==0">
+                    <img src="../../images/deal_progress01.png">
+                    <ul style="margin: .38rem 7% 0 8%;">
+                        <li class="p-status">投诉受理</li>
+                        <li>企业处理</li>
+                        <li>结果审核</li>
+                        <li>完成</li>
+                    </ul>
+                </div>
+                <div class="c_dt" v-else-if="detail.status==1">
+                    <img src="../../images/deal_progress01.png">
+                    <ul style="margin: .38rem 7% 0 8%;">
+                        <li class="p-status">投诉受理</li>
+                        <li>企业处理</li>
+                        <li>结果审核</li>
+                        <li>完成</li>
+                    </ul>
+                </div>
+                <div class="c_dt" v-else-if="detail.status==2">
+                    <img src="../../images/deal_progress02.png">
+                    <ul>
+                        <li class="p_gray">投诉受理</li>
+                        <li class="p-status">企业处理</li>
+                        <li>结果审核</li>
+                        <li>完成</li>
+                    </ul>
+                </div>
+                <div class="c_dt" v-else-if="detail.status==3">
+                    <img src="../../images/deal_progress03.png">
+                    <ul>
+                        <li class="p_gray">投诉受理</li>
+                        <li class="p_gray">企业处理</li>
+                        <li class="p-status">结果审核</li>
+                        <li>完成</li>
+                    </ul>
+                </div>
+                <div class="c_dt" v-else-if="detail.status==4">
+                    <img src="../../images/deal_progress04.png">
+                    <ul style="margin: .38rem 9% 0 6%; width: 85%;">
+                        <li class="p_gray">投诉受理</li>
+                        <li class="p_gray">企业处理</li>
+                        <li class="p_gray">结果审核</li>
+                        <li class="p-status">完成</li>
+                    </ul>
+                </div>
+                <div class="result" v-if="detail.default_result">
+                    <p>{{detail.default_result.content}}</p>
+                    <span>{{detail.default_result.add_time}}</span>
+                </div>
+                <div class="good" v-if="detail.status==3">
+                    <img v-if="!userInfo" src="../../images/lightGood.png">
+                    <img v-else-if="!detail.default_result.is_favour" class="1" src="../../images/lightGood.png">
+                    <img src="../../images/good.png" v-else>
+                    <p>已有<span>{{detail.stat.favours}}</span>人点赞</p>
+                </div>
+            </div>
         </div>
-        <comment :comment="comment" :detail="detail" :type="type"></comment>
+        <comment style="margin-bottom: .2rem;" :comment="comment" :detail="detail" :type="type"></comment>
+        <similars v-if="detail.similars" :detail="detail"></similars>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadText="loadText"></loading>
     </div>
 </template>
@@ -38,6 +97,8 @@
     import headI from '../../components/header/head'
     import loading from '../../components/common/loading'
     import comment from '../../components/common/comment'
+    import similars from '../../components/common/similars'
+    import {mapState,mapMutations} from 'vuex'
 
     export default {
         data(){
@@ -53,8 +114,12 @@
             headI,
             comment,
             loading,
+            similars
         },
         computed:{
+            ...mapState([
+                'userInfo'
+            ]),
             problems(){
                 var text = '';
                 for(let i in this.detail.problem){
@@ -88,6 +153,9 @@
             close(){
                 this.showLoad = false;
             },
+            fanhui(){
+                document.body.scrollTop=0;
+            },
             commentData(){
                 this.axios.get('/v3/tousu/comments?id='+this.$route.params.id+'')
                     .then(res =>{
@@ -104,6 +172,7 @@
                     .then(res =>{
                         this.showLoad=false;
                         this.detail=res.data.data;
+                        this.fanhui();
                         console.log(this.detail);
                     })
                     .catch(err =>{
@@ -149,5 +218,18 @@
     .content .c_pic ul li{float: left; width: 2.24rem; height: 2.24rem; overflow: hidden; margin-right: .12rem; margin-bottom: .12rem;}
     .content .c_pic ul li:nth-child(3n){margin-right: 0;}
     .content .c_pic ul li img{width: 100%; display: block; margin: 0 auto;}
+    .c_dt{padding-bottom: .4rem;}
+    .c_dt img{ width:calc(~'100% - 2.16rem'); margin: .64rem auto 0 auto; display:block;}
+    .c_dt ul{font-size: .28rem; color: #bfbfbf; overflow: hidden; width: 85%; margin: .38rem auto 0 auto;}
+    .c_dt ul li{ width: 25%; float: left; text-align: center;}
+    .result{ overflow: hidden; padding-bottom: .4rem;}
+    .result p{padding: 0 .22rem; font-size: .26rem; color: #feb535; line-height: .5rem; text-align: justify;}
+    .result span{font-size: .22rem; color: #feb535; float: right; margin-right: .25rem;}
+    .good{padding-bottom: .36rem; margin-bottom: .15rem;}
+    .good img{ width: .88rem; height: .88rem; margin: 0 auto; display: block;}
+    .good p{font-size: .22rem; color: #999; text-align: center; margin-top: .1rem;}
+    .good p span{color: #19d688;}
+    .p_gray{color: #19D688;}
+    .p-status{color: #ff9d1f;}
 }
 </style>

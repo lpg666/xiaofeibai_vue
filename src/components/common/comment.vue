@@ -51,16 +51,16 @@
         .title{
             width:auto;
             margin-left: .2rem;
-            height: .66rem;
-            line-height: .66rem;
+            height: .68rem;
+            line-height: .68rem;
             border-bottom: 1px solid rgba(204,204,204,.5);
             font-size: .32rem;
             i{
-                width: .4rem;
-                height: .4rem;
+                width: .32rem;
+                height: .32rem;
                 display: block;
                 float: left;
-                margin-top: .13rem;
+                margin-top: .17rem;
                 margin-right: .15rem;
                 background: url("../../images/peopleComment.png") no-repeat center;
                 background-size: 100%;
