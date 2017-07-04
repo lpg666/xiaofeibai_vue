@@ -13,7 +13,7 @@
             <swiper-slide class="lis">
                 <swiper-l></swiper-l>
                 <section class="recommend_list">
-                    <div class="list">
+                    <router-link to="/tousu/detail/1985" class="list">
                         <div class="list_left">
                             <p class="p1">啊手机卡就是卡就是卡就是卡就是卡就是卡机</p>
                             <p class="p2"><span class="hot">热</span><span>绿瘦</span><span>15分钟</span><span class="status">企业处理</span></p>
@@ -21,7 +21,7 @@
                         <div class="list_right">
                             <img src="../../images/default_portrait.png">
                         </div>
-                    </div>
+                    </router-link>
                     <div class="list">
                         <div class="list_left" style="width: 100%">
                             <p class="p1">啊手机卡就是卡就是卡就是卡就是卡就是卡机</p>
@@ -103,11 +103,13 @@
             <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
         <tar></tar>
+        <alert-box v-if="tanQ" :showHide="tanQ" :alertText="tanQzi"></alert-box>
     </div>
 </template>
 
 <script>
 import headTop from '../../components/header/header'
+import alertBox from '../../components/common/alertBox'
 import swiperL from '../../components/swiper/swiper'
 import tar from '../../components/tar/tar'
 import {mapState,mapMutations} from 'vuex'
@@ -155,11 +157,14 @@ export default {
     components:{
         headTop,
         swiperL,
-        tar
+        tar,
+        alertBox
     },
     computed:{
         ...mapState([
-            'userInfo'
+            'userInfo',
+            'tanQ',
+            'tanQzi'
         ]),
         swiper() {
             return this.$refs.mySwiper.swiper
@@ -278,6 +283,7 @@ export default {
     }
     .cechoice_list{
         .list{
+            display: block;
             width: calc(~'100% - .44rem');
             overflow: hidden;
             padding: .26rem 0;
@@ -363,6 +369,7 @@ export default {
             border-bottom: none;
         }
         .list{
+            display: block;
             width: calc(~'100% - .44rem');
             overflow: hidden;
             padding: .28rem 0;
@@ -413,6 +420,7 @@ export default {
             border-bottom: none;
         }
         .list{
+            display: block;
             overflow: hidden;
             margin-left: .23rem;
             padding: .23rem 0;
@@ -446,28 +454,29 @@ export default {
                     margin-bottom: .11rem;
                 }
                 .p2{
+                    font-size: .26rem;
                     .hot{
                         border: 1px solid #FC405B;
                         border-radius: .04rem;
                         width: .33rem;
                         height: .32rem;
-                        line-height: .32rem;
+                        line-height: .26rem;
                         font-size: .2rem;
                         color: #FC405B;
                         text-align: center;
                         display: inline-block;
                         float: left;
+                        margin-top: .025rem;
                     }
-                    font-size: .26rem;
                     span{
                         color: #999;
                         margin-right: .22rem;
                     }
                     .status{
                         float: right;
-                        font-size: .2rem;
+                        font-size: .22rem;
                         color: #FEB10D;
-                        margin-top: .05rem;
+                        margin-top: .025rem;
                     }
                 }
             }

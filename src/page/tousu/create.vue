@@ -24,11 +24,14 @@
             </div>
             <!-- -->
             <div class="text">
-                <p :class="userInfo.mobile?'p1':'p2'">真实姓名</p>
+                <p :class="userInfo.mobile?'p1':'p2'">手机号码</p>
                 <input :class="userInfo.mobile?'lp1':'lp2'" type="text" :value="userInfo.mobile" v-model="userInfo.mobile">
             </div>
             <!-- -->
-            <div class="select" @click="tanK('provinces')">所在地区</div>
+            <div class="select" @click="tanK('provinces')">
+                <p :class="from.value.province?'p1':'p2'">所在地区</p>
+                <div :class="from.value.province?'lp1':'lp2'">{{from.name.province}} {{from.name.city}}</div>
+            </div>
             <div class="select" @click="tanK('type')">
                 <p :class="from.value.type_id?'p1':'p2'">行业分类</p>
                 <div :class="from.value.type_id?'lp1':'lp2'">{{from.name.type_id}} {{from.name.subtype_id}}</div>
@@ -61,8 +64,8 @@
             </div>
             <div class="texta">
                 <div style="background: #fff; width: 100%; overflow: hidden; border-top: 1px solid rgba(204, 204, 204, 0.5); border-bottom: 1px solid rgba(204, 204, 204, 0.5);">
-                    <input type="text" placeholder="一句话说清投诉企业／品牌与事件（不超过30字）">
-                    <textarea placeholder="请详细描述事情经过"></textarea>
+                    <input type="text" placeholder="一句话说清投诉企业／品牌与事件（不超过30字）" v-model="from.value.title">
+                    <textarea placeholder="请详细描述事情经过" v-model="from.value.content"></textarea>
                 </div>
             </div>
             <div style="width: 100%; float: left;">
@@ -136,16 +139,17 @@
                     <div>
                         <p>省份</p>
                         <ul>
-                            <li v-for="data in tkData.data" :class="{'hover':from.value.provinces==data.id}" @click="radio('provinces',data.id,data.name)">{{data.name}}</li>
+                            <li v-for="data in tkData.data" :class="{'hover':from.value.province==data.code}" @click="address('province',data.code,data.name)">{{data.name}}</li>
                         </ul>
-                        <p>城市</p>
+                        <p v-if="city.length>0">城市</p>
                         <ul>
-                            <li>11</li>
+                            <li v-for="data in city" :class="{'hover':from.value.city==data.code}" @click="address('city',data.code,data.name)">{{data.name}}</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </transition>
+        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadText="loadText"></loading>
         <alert-box v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-box>
         <transition name="fade1">
             <div v-show="dataShow">
@@ -170,6 +174,7 @@
 import headI from '../../components/header/head'
 import alertBox from '../../components/common/alertBox'
 import calendarComponent from '../../components/common/calendar'
+import loading from '../../components/common/loading'
 import {mapState,mapMutations} from 'vuex'
 
 export default {
@@ -181,11 +186,13 @@ export default {
             suqius:'',
             properties:'',
             provinces:'',
+            city:'',
             tkData:{},
             from:{
                 name:{},
                 value:{},
             },
+            re:false,
             checkD:[],
             checkF:[],
             checkG:[],
@@ -208,7 +215,9 @@ export default {
             textId:{},
             hc:'',
             //
-            picList:[]
+            picList:[],
+            showLoad:false,
+            loadText:null
         }
     },
     computed:{
@@ -237,6 +246,7 @@ export default {
     components:{
         headI,
         alertBox,
+        loading,
         comCalendar:calendarComponent
     },
     methods:{
@@ -246,7 +256,106 @@ export default {
         ]),
         //
         fromBut(){
-            console.log(this.from.value,this.dataId,this.tousuData,this.textId,this.picList);
+            //验证规则
+            const reg = /^1[3|4|5|7|8][0-9]{9}$/;
+            const reg1 = /^[\u4e00-\u9fa5]+$/;
+            const arr = [];
+            for(let i in this.textId){
+                if(this.textId[i]==''){
+                    arr.push(1);
+                }
+            }
+            if(this.userInfo.real_name.length<=0 || !reg1.test(this.userInfo.real_name)){
+                this.showAlert=true;
+                this.alertText='真实姓名不能为空';
+                setTimeout(this.closeTip,2000);
+            }else if(this.userInfo.mobile.length!==11 || !reg.test(this.userInfo.mobile)){
+                this.showAlert=true;
+                this.alertText='手机格式错误';
+                setTimeout(this.closeTip,2000);
+            }else if(!this.from.value.province || !this.from.value.city){
+                this.showAlert=true;
+                this.alertText='地址不能为空';
+                setTimeout(this.closeTip,2000);
+            }else if(this.from.value.type_id=='' || this.from.value.subtype_id==''){
+                this.showAlert=true;
+                this.alertText='行业分类不能为空';
+                setTimeout(this.closeTip,2000);
+            }else if(this.from.value.brand_id=='' || !this.from.value.brand_id){
+                this.showAlert=true;
+                this.alertText='被投诉企业/品牌不能为空';
+                setTimeout(this.closeTip,2000);
+            }else if(this.from.value.problems=='' || !this.from.value.problems){
+                this.showAlert=true;
+                this.alertText='投诉问题不能为空';
+                setTimeout(this.closeTip,2000);
+            }else if(this.from.value.suqius=='' || !this.from.value.suqius){
+                this.showAlert=true;
+                this.alertText='投诉诉求不能为空';
+                setTimeout(this.closeTip,2000);
+            }else if(arr.length>0){
+                this.showAlert=true;
+                this.alertText='附加属性不能为空';
+                setTimeout(this.closeTip,2000);
+            }else if(this.from.value.title=='' || !this.from.value.title){
+                this.showAlert=true;
+                this.alertText='投诉标题不能为空';
+                setTimeout(this.closeTip,2000);
+            }else if(this.from.value.title.length<5 || this.from.value.title.length>30){
+                this.showAlert=true;
+                this.alertText='投诉标题不能小于5或大于30字符';
+                setTimeout(this.closeTip,2000);
+            }else if(this.from.value.content=='' || !this.from.value.content){
+                this.showAlert=true;
+                this.alertText='投诉内容不能为空';
+                setTimeout(this.closeTip,2000);
+            }else if(this.from.value.content.length<20){
+                this.showAlert=true;
+                this.alertText='投诉内容不能小于20字符';
+                setTimeout(this.closeTip,2000);
+            }else if(this.re==false){
+                this.closeTip();
+                var text = '';
+                var text1 = [];
+                for(let i in this.textId){
+                    text += i+'###'+this.textId[i] + '|||';
+                }
+                this.from.value.properties = text.substring(0,text.lastIndexOf('|||'));
+                if(this.picList.length>0){
+                    for(let i=0;i<this.picList.length;i++){
+                        console.log(this.picList[i]);
+                    }
+                }
+                if(this.picList.length>0){
+                    for(let i=0;i<this.picList.length;i++){
+                        text1[i] = 'http://xiaofeibao.b0.upaiyun.com'+this.picList[i].src.data+'###'+this.picList[i].show;
+                    }
+                    this.from.value.pics = text1.join('|||');
+                }
+                this.from.value.address = this.from.name.province + this.from.name.city;
+                this.from.value.sign = this.userInfo.sign;
+                this.from.value.client = 'ios';
+
+                this.showLoad=true;
+                this.loadText='正在提交';
+
+                this.axios.post('/v3/tousu/create',this.from.value)
+                    .then(res => {
+                        this.close();
+                        console.log(res.data);
+                        if(res.data.msg_type==200){
+                            this.$router.push({path:'/tousu/success/'+res.data.data.tousu.id});
+                        }else{
+                            this.showAlert=true;
+                            this.alertText=res.data.msg;
+                            setTimeout(this.closeTip,2000);
+                        }
+                    })
+                    .catch(err =>{
+
+                    })
+            }
+            console.log(this.from.value);
         },
         //图片上传
         picShow(key){
@@ -264,36 +373,46 @@ export default {
         },
         createImage(file) {
             if(typeof FileReader==='undefined'){
-                alert('您的浏览器不支持图片上传，请升级您的浏览器');
-                return false;
-            }
-            const image = new Image();
-            const vm = this;
-            const leng=file.length;
-            const gs = ['image/jpeg','image/jpg','image/png'];
-            for(let i=0;i<leng;i++){
-                let isLt2M = file[i].size / 1024 / 1024 < 2;
-                if(gs.indexOf(file[i].type)<0){
-                    console.log('文件类型不对');
-                }else if(!isLt2M){
-                    console.log('图片过大');
-                }else{
-                    console.log('上传中...');
-                    let reader = new FileReader();
-                    reader.readAsDataURL(file[i]);
-                    reader.onload =function(e){
-                        vm.axios.post('/v3/tousu/upload-pic',{'pic':e.target.result})
-                            .then(res =>{
-                                vm.picList.push({'src':res.data,'show':'1'});
-                                console.log(res,vm.picList);
-                                console.log('上传成功');
-                            })
-                            .catch(err =>{
+                this.showAlert=true;
+                this.alertText='您的浏览器不支持图片上传，请升级您的浏览器';
+                setTimeout(this.closeTip,2000);
+            }else{
+                const image = new Image();
+                const vm = this;
+                const leng=file.length;
+                const gs = ['image/jpeg','image/jpg','image/png'];
+                for(let i=0;i<leng;i++){
+                    let isLt2M = file[i].size / 1024 / 1024 < 2;
+                    if(gs.indexOf(file[i].type)<0){
+                        this.showAlert=true;
+                        this.alertText='文件类型不对';
+                        setTimeout(this.closeTip,2000);
+                    }else if(!isLt2M){
+                        this.showAlert=true;
+                        this.alertText='图片过大';
+                        setTimeout(this.closeTip,2000);
+                    }else{
+                        this.showAlert=true;
+                        this.alertText='上传中...';
+                        let reader = new FileReader();
+                        reader.readAsDataURL(file[i]);
+                        reader.onload =function(e){
+                            vm.axios.post('/v3/tousu/upload-pic',{'pic':e.target.result})
+                                .then(res =>{
+                                    vm.picList.push({'src':res.data,'show':'1'});
+                                    console.log(res,vm.picList);
+                                    console.log('上传成功');
+                                    vm.showAlert=true;
+                                    vm.alertText='上传成功';
+                                    setTimeout(vm.closeTip,2000);
+                                })
+                                .catch(err =>{
 
-                            })
-                    };
+                                })
+                        };
+                    }
+
                 }
-
             }
         },
         //附加text属性
@@ -321,6 +440,7 @@ export default {
         },
         onOk(data) {
             this.TOUSU_DATA(data.year+'-'+data.month+'-'+data.day);
+            this.textId[this.dataId] = this.tousuData;
             console.log(this.dataId,this.tousuData);
             console.log('确定')
         },
@@ -344,6 +464,9 @@ export default {
         closeTip(){
             this.showAlert = false;
         },
+        close(){
+            this.showLoad = false;
+        },
         //投诉单选
         radio(id,value,name,parent){
             if(parent){
@@ -363,6 +486,19 @@ export default {
                     this.$set(this.from.name,''+id+'',name);
                 }
             }
+        },
+        address(id,value,name){
+            if(id){
+                if(id=='province'){
+                    this.$set(this.from.value,''+id+'',value);
+                    this.$set(this.from.name,''+id+'',name);
+                    this.ajaxCities(value);
+                }else if(id=='city'){
+                    this.$set(this.from.value,''+id+'',value);
+                    this.$set(this.from.name,''+id+'',name);
+                }
+            }
+            console.log(this.from);
         },
         //投诉多选
         check(id,value,name){
@@ -439,9 +575,7 @@ export default {
                     this.suqius=res.data.data.suqius;
                     this.properties=res.data.data.properties;
                     for(let i=0;i<this.properties.length;i++){
-                        if(this.properties[i].show_type=='text' || this.properties[i].show_type=='select'){
-                            this.$set(this.textId,''+this.properties[i].id+'','');
-                        }
+                        this.$set(this.textId,''+this.properties[i].id+'','');
                     }
                     this.closeTip();
                 })
@@ -461,7 +595,7 @@ export default {
         ajaxCities(id){
             this.axios.get('/v3/home/cities?province_code='+id+'')
                 .then(res => {
-                    this.cities=res.data.data;
+                    this.city=res.data.data;
                 })
                 .catch(err => {
 
@@ -585,6 +719,16 @@ export default {
                     this.alertText='确定你妹哦，你都没选';
                     setTimeout(this.closeTip,2000);
                 }
+            }else if(this.tkData.name=='provinces'){
+                if(this.from.value.province && this.from.value.city){
+                    this.showAlert=false;
+                    document.querySelector('body').style.overflow='';
+                    this.tk=false;
+                }else{
+                    this.showAlert=true;
+                    this.alertText='确定你妹哦，你都没选';
+                    setTimeout(this.closeTip,2000);
+                }
             }
         }
     },
@@ -596,9 +740,6 @@ export default {
         this.ajaxTypes();
         this.ajaxProvinces();
         this.TOUSU_DATA('');
-    },
-    mounted() {
-        this.from.value.sign=this.userInfo.sign;
     }
 }
 </script>
@@ -771,11 +912,12 @@ export default {
             height: .64rem;
         }
         .lp1{
-            width: 100%;
+            width: calc(~'100% - .2rem');
             .sc(.3rem,#1C2733);
-            height: .64rem;
+            height: .44rem;
             line-height: .44rem;
-            padding-bottom: .2rem;
+            margin-bottom: .2rem;
+            margin-right: .2rem;
             float: left;
             margin-top: -1px;
             overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;
@@ -838,7 +980,7 @@ export default {
                 .sc(.32rem,#39C17A);
             }
         }
-        .problem,.suqiu,.brand,.propertie,.provinces{
+        .problem,.suqiu,.brand,.propertie{
             padding-bottom: .4rem;
             width:100%;
             p{
@@ -869,6 +1011,37 @@ export default {
                     border: 1px solid #39C17A;
                     color: #fff;
                     background: #39C17A;
+                }
+            }
+        }
+        .provinces{
+            padding-bottom: .4rem;
+            width:100%;
+            p{
+                font-size: .32rem;
+                font-weight: bold;
+                margin:.4rem .22rem 0 .22rem;
+                span{
+                font-weight: normal;
+                font-size: .24rem;
+                color: #999;
+                margin-left: .5rem;
+            }
+            }
+            ul{
+                width: auto;
+                margin: 0 .22rem;
+                overflow: hidden;
+            li{
+                text-align: justify;
+                float: left;
+                border-radius: .04rem;
+                font-size: .26rem;
+                margin-top: .2rem;
+                margin-right: .35rem;
+            }
+                .hover{
+                    color: #39C17A;
                 }
             }
         }

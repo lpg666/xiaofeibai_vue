@@ -1,5 +1,5 @@
 <template>
-    <div class="tanchu">{{alertText}}</div>
+    <div class="loading_box"><img class="load" src="../../images/loading.png"><p>{{loadText}}</p></div>
 </template>
 
 <script>
@@ -13,17 +13,17 @@
         mounted(){
 
         },
-        props: ['alertText'],
+        props: ['loadText'],
         methods: {
-            closeTip(){
-                this.$emit('closeTip')
+            close(){
+                this.$emit('close')
             }
         }
     }
 </script>
 
 <style lang="less" scoped>
-    .alert_box{
+    .loading_box{
         position: fixed;
         left: 50%;
         top: 50%;
@@ -31,7 +31,25 @@
         color: #fff;
         background: rgba(0,0,0,.75);
         font-size: .3rem;
-        padding: .1rem .3rem;
-        border-radius: .05rem;
+        width: 4.8rem;
+        height: 2.2rem;
+        border-radius: .2rem;
+        img{
+            width: .88rem;
+            height: .88rem;
+            margin: .3rem auto;
+            display: block;
+        }
+        p{
+            text-align: center;
+            color: #fff;
+        }
+    }
+    @keyframes load{
+        0%   { transform:rotate(0deg);}
+        100% { transform:rotate(360deg);}
+    }
+    .load{
+        animation:load 1.2s linear infinite;
     }
 </style>

@@ -9,7 +9,9 @@ const news = r => require.ensure([], () => r(require('../page/news/news')), 'new
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
 const article = r => require.ensure([], () => r(require('../page/article/list')), 'article')
 const articleDetail = r => require.ensure([], () => r(require('../page/article/detail')), 'articleDetail')
+const tousuDetail = r => require.ensure([], () => r(require('../page/tousu/detail')), 'tousuDetail')
 const tousuCreate = r => require.ensure([], () => r(require('../page/tousu/create')), 'tousuCreate')
+const tousuSuccess = r => require.ensure([], () => r(require('../page/tousu/success')), 'tousuSuccess')
 
 
 export default [{
@@ -75,6 +77,16 @@ export default [{
             meta:{
                 aR:true
             }
+        },
+        //投诉成功
+        {
+            path: '/tousu/success/:id',
+            component: tousuSuccess
+        },
+        //投诉详情页
+        {
+            path: '/tousu/detail/:id',
+            component: tousuDetail
         }
     ]
 }]

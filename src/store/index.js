@@ -9,6 +9,8 @@ const state = {
     isDeclare:localStorage.getItem('isDeclare'),
     autoRoute:localStorage.getItem('autoRoute'),
     tousuData:'',
+    tanQ:false,
+    tanQzi:''
 }
 
 export default new Vuex.Store({

@@ -3,7 +3,9 @@ import {
     RECORD_DECLARE,
     AUTO_ROUTE,
     OUT_LOGIN,
-    TOUSU_DATA
+    TOUSU_DATA,
+    QUANJU_TAN,
+    QUANJU_BUTAN
 } from './mutation-types.js'
 
 import {setStore,getStore,removeStore} from '../config/mUtils'
@@ -35,5 +37,15 @@ export default {
     //
     [TOUSU_DATA](state,info){
         state.tousuData = info;
+    },
+    //
+    [QUANJU_TAN](state,info){
+        state.tanQ = true;
+        state.tanQzi = info;
+    },
+    //
+    [QUANJU_BUTAN](state){
+        state.tanQ = false;
+        state.tanQzi = '';
     }
 }
