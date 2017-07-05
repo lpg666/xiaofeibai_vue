@@ -108,7 +108,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     form{
         padding-top: 1rem;
         width: auto;

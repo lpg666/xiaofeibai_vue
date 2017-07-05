@@ -56,8 +56,8 @@
             border-bottom: 1px solid rgba(204,204,204,.5);
             font-size: .32rem;
             i{
-                width: .32rem;
-                height: .32rem;
+                width: .35rem;
+                height: .34rem;
                 display: block;
                 float: left;
                 margin-top: .17rem;

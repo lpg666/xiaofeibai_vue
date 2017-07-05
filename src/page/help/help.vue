@@ -8,10 +8,11 @@
             <div class="box">
                 <router-link to="" class="box_top">律师<span>查看全部</span></router-link>
                 <div class="box_info">
-                    <img src="">
+                    <div class="img" :style="{backgroundImage:'url('+lawyer.avatar+'!/fh/230)'}"></div>
+                    <!--<img :src="lawyer.avatar">-->
                     <div class="box_x">
-                        <p class="name">杨河</p>
-                        <p class="dw">广东格林律师事务所</p>
+                        <p class="name">{{lawyer.name}}</p>
+                        <p class="dw">{{lawyer.organization}}</p>
                         <p class="dt">3分钟前回复了Kelly</p>
                         <router-link to="">向Ta咨询</router-link>
                     </div>
@@ -20,10 +21,11 @@
             <div class="box">
                 <router-link to="" class="box_top">记者<span>查看全部</span></router-link>
                 <div class="box_info" style="border-bottom: none;">
-                    <img src="">
+                    <div class="img" :style="{backgroundImage:'url('+reporter.avatar+'!/fh/230)'}"></div>
+                    <!--<img :src="reporter.avatar">-->
                     <div class="box_x">
-                        <p class="name">媛媛</p>
-                        <p class="dw">媒体志愿者</p>
+                        <p class="name">{{reporter.name}}</p>
+                        <p class="dw">{{reporter.organization}}</p>
                         <p class="dt">3分钟前回复了Kelly</p>
                         <router-link to="">向Ta爆料</router-link>
                     </div>
@@ -32,12 +34,14 @@
         </div>
         <div class="js">
             <router-link to="/article" class="title">消费警示<span>实用消费警示，远离消费陷阱</span></router-link>
-            <router-link to="/article/detail/666" class="box">
-                <div class="box_top">警惕网购新警惕网购新骗局，对到付包裹要先核查或拒收。</div>
+            <router-link :to="'/article/detail/'+article.id" class="box" v-if="article.default_pic.length<=0">
+                <div class="box_pic1 img" :style="{backgroundImage:'url('+article.thumb+'!/fh/230)'}"></div>
+                <div class="box_top">{{article.title}}</div>
+            </router-link>
+            <router-link :to="'/article/detail/'+article.id" class="box" v-else>
+                <div class="box_top">{{article.title}}</div>
                 <ul class="box_pic">
-                    <li></li>
-                    <li></li>
-                    <li></li>
+                    <li class="img" v-for="data in article.default_pic" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
                 </ul>
             </router-link>
         </div>
@@ -54,9 +58,9 @@
         </div>
         <div class="tongj">
             <router-link to="" class="title">行业统计<span>消各行业投诉数据</span></router-link>
-            <router-link to="" class="box">
-                <div class="box_pic"></div>
-                <div class="box_top">2017年第一季度消费舆情分析报告分析报告</div>
+            <router-link :to="'/article/detail/'+hanye.id" class="box">
+                <div class="box_pic img" :style="{backgroundImage:'url('+hanye.thumb+'!/fh/230)'}"></div>
+                <div class="box_top">{{hanye.title}}</div>
             </router-link>
         </div>
         <tar></tar>
@@ -69,16 +73,75 @@
 
     export default {
         data(){
-            return {}
+            return {
+                reporter:'',
+                lawyer:'',
+                article:'',
+                hanye:'',
+            }
         },
         components:{
             headTop,
             tar
+        },
+        created(){
+            this.reporterAjax();
+            this.lawyerAjax();
+            this.articleAjax();
+            this.hanyeAjax();
+        },
+        methods:{
+            reporterAjax(){
+                this.axios.get('/v4/reporter/watch_reporter')
+                    .then(res =>{
+                        this.reporter=res.data.data;
+                        console.log(res);
+                    })
+                    .catch(err =>{
+
+                    })
+            },
+            lawyerAjax(){
+                this.axios.get('/v4/lawyer/watch_lawyer')
+                    .then(res =>{
+                        this.lawyer=res.data.data;
+                        console.log(res);
+                    })
+                    .catch(err =>{
+
+                    })
+            },
+            hanyeAjax(){
+                this.axios.get('/v4/article/article_index?type_id=3')
+                    .then(res =>{
+                        this.hanye=res.data.data;
+                        console.log(res);
+                    })
+                    .catch(err =>{
+
+                    })
+            },
+            articleAjax(){
+                this.axios.get('/v4/article/article_index?type_id=1')
+                    .then(res =>{
+                        this.article=res.data.data;
+                        console.log(res);
+                    })
+                    .catch(err =>{
+
+                    })
+            },
+
         }
     }
 </script>
 
 <style lang="less" scoped>
+    .img{
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
     .dz{
         background: #fff;
         margin-bottom: .2rem;
@@ -114,7 +177,7 @@
                 width: 100%;
                 padding-bottom: .35rem;
                 border-bottom: 1px solid rgba(204,204,204,.5);
-                img{
+                .img{
                     width: 1.9rem;
                     height:2.4rem;
                     float: left;
@@ -157,6 +220,7 @@
             margin-left: .2rem;
             padding-bottom: .3rem;
             display: block;
+            overflow: hidden;
             .box_top{
                 font-size: .32rem;
                 line-height: .48rem;
@@ -170,7 +234,6 @@
                     width: calc(~'100%/3 - .2rem');
                     float: left;
                     height: 1.9rem;
-                    background: #000;
                     margin-right: .2rem;
                 }
             }
@@ -178,6 +241,16 @@
     }
     .tongj .box{
         .box_pic{
+            width: 1.65rem;
+            height: 1.4rem;
+            display: block;
+            float: left;
+            margin-top: .3rem;
+            margin-right: .3rem;
+        }
+    }
+    .js .box{
+        .box_pic1{
             width: 1.65rem;
             height: 1.4rem;
             display: block;

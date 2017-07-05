@@ -11,28 +11,35 @@
             <div class="cent" v-html="detail.content"></div>
         </div>
         <comment :comment="comment" :detail="detail" :type="type"></comment>
+        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadText="loadText"></loading>
     </div>
 </template>
 
 <script>
     import headI from '../../components/header/head'
     import comment from '../../components/common/comment'
+    import loading from '../../components/common/loading'
 
     export default {
         data(){
             return{
                 detail:'',
                 comment:'',
-                type:'article'
+                type:'article',
+                showLoad:false,
+                loadText:null
             }
         },
         components:{
             headI,
-            comment
+            comment,
+            loading
         },
         created () {
             // 组件创建完后获取数据，
             // 此时 data 已经被 observed 了
+            this.showLoad=true;
+            this.loadText='正在加载';
             this.fetchData();
             this.commentData();
         },
@@ -41,8 +48,14 @@
             '$route': 'fetchData'
         },
         methods: {
+            close(){
+                this.showLoad = false;
+            },
+            fanhui(){
+                document.body.scrollTop=0;
+            },
             commentData(){
-                this.axios.get('/v3/article/comments?id='+this.$route.params.id+'')
+                this.axios.get('/v4/article/comments?id='+this.$route.params.id+'')
                     .then(res =>{
                         this.comment=res.data.data;
                         console.log(this.comment);
@@ -53,9 +66,13 @@
                 console.log(this.$route.params.id);
             },
             fetchData () {
-                this.axios.get('/v3/article/detail?id='+this.$route.params.id+'')
+                this.axios.get('/v4/article/detail?article_id='+this.$route.params.id+'')
                     .then(res =>{
                         this.detail=res.data.data;
+                        if(this.detail!=''){
+                            this.showLoad=false;
+                            this.fanhui();
+                        }
                         console.log(this.detail);
                     })
                     .catch(err =>{

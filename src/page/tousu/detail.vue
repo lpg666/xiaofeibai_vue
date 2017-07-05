@@ -170,9 +170,11 @@
             fetchData () {
                 this.axios.get('/v4/tousu/detail?id='+this.$route.params.id+'')
                     .then(res =>{
-                        this.showLoad=false;
                         this.detail=res.data.data;
-                        this.fanhui();
+                        if(this.detail!=''){
+                            this.showLoad=false;
+                            this.fanhui();
+                        }
                         console.log(this.detail);
                     })
                     .catch(err =>{
