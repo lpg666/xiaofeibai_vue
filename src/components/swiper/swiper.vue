@@ -40,7 +40,7 @@
 
         },
         created() {
-            this.axios.get('/v3/home/flash')
+            this.axios.get('/v4/home/home_flash')
                 .then(res => {
                     this.swiperSlides = res.data.data;
                     for(let i=0; i<res.data.data.length; i++){
@@ -71,8 +71,8 @@
         margin-left: -.6rem;
     }
     .swiper-pagination-bullet{
-        width: .12rem;
-        height: .12rem;
+        width: .12rem !important;
+        height: .12rem !important;
         float: left;
         background: #EAEAEA;
         opacity: 1;

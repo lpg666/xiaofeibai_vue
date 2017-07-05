@@ -19,7 +19,17 @@ module.exports = {
     // View the bundle analyzer report after build finishes:
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report
+    bundleAnalyzerReport: process.env.npm_config_report,
+
+    proxyTable: {
+        '/v4': {
+            target: 'http://api.test.xfb315.com',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/v4': '/v4'
+            }
+        }
+    }
   },
   dev: {
     env: require('./dev.env'),
@@ -28,11 +38,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/v3': {
-          target: 'http://api.s2.xfb315.com',
+      '/v4': {
+          target: 'http://api.test.xfb315.com',
           changeOrigin:true,
           pathRewrite: {
-              '^/v3': '/v3'
+              '^/v4': '/v4'
           }
       }
     },

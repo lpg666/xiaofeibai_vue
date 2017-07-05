@@ -12,68 +12,68 @@
         <swiper id="swiper-nav" :options="swiperNav" ref="mySwiper">
             <swiper-slide class="lis">
                 <swiper-l></swiper-l>
-                <section class="recommend_list">
-                    <router-link to="/tousu/detail/1985" class="list">
-                        <div class="list_left">
-                            <p class="p1">啊手机卡就是卡就是卡就是卡就是卡就是卡机</p>
-                            <p class="p2"><span class="hot">热</span><span>绿瘦</span><span>15分钟</span><span class="status">企业处理</span></p>
+                <section class="recommend_list" v-if="recommendData.length>0">
+                    <router-link v-for="data in recommendData" :key="data" :to="'/tousu/detail/'+data.id" class="list" v-if="data.resources_type==0">
+                        <div class="list_left" :style="data.default_pic==null?'width:100%':'height:1.4rem; position:relative;'">
+                            <p class="p1">{{data.title}}</p>
+                            <p class="p2" :style="data.default_pic!=null?'position:absolute; left:0; bottom:0;':''">
+                                <span class="hot" v-if="data.is_hot==1">热</span>
+                                <span v-if="data.complaint_keyword">{{data.complaint_keyword.name}}</span>
+                                <span>{{data.add_time}}</span>
+                                <span class="status status0" v-if="data.status==0">投诉受理</span>
+                                <span class="status status1" v-else-if="data.status==1">企业处理</span>
+                                <span class="status status2" v-else-if="data.status==2">结果审核</span>
+                                <span class="status status3" v-else>完成</span>
+                            </p>
                         </div>
-                        <div class="list_right">
-                            <img src="../../images/default_portrait.png">
+                        <div class="list_right" v-if="data.default_pic">
+                            <img :src="data.default_pic.pic">
                         </div>
                     </router-link>
-                    <div class="list">
-                        <div class="list_left" style="width: 100%">
-                            <p class="p1">啊手机卡就是卡就是卡就是卡就是卡就是卡机</p>
-                            <p class="p2"><span>绿瘦</span><span>15分钟</span><span class="status">企业处理</span></p>
+                    <router-link :to="'/article/detail/'+data.id" class="list" v-else-if="data.resources_type==1">
+                        <div v-if="data.pic==null">
+                            <div class="list_left">
+                                <p class="p1">【消费警示】{{data.title}}</p>
+                                <p class="p2">{{data.add_time}}</p>
+                            </div>
+                            <div class="list_right" :style="{backgroundImage:'url('+data.thumb+'!/fh/230)'}">
+                                <!--<img :src="data.thumb+'!/fh/230'">-->
+                            </div>
                         </div>
-                    </div>
-                    <div class="list">
-                        <p class="p3">【消费警示】路虎投诉高发，方向盘异常抖动该如何解决?</p>
-                        <ul class="pic">
-                            <li><img src="../../images/default_portrait.png"></li>
-                            <li><img src="../../images/default_portrait.png"></li>
-                            <li><img src="../../images/default_portrait.png"></li>
-                        </ul>
-                    </div>
-                    <div class="list">
-                        <p class="p3">【消费警示】路虎投诉高发，方向盘异常抖动该如何解决?</p>
-                        <ul class="pic">
-                            <li><img src="../../images/default_portrait.png"></li>
-                            <li><img src="../../images/default_portrait.png"></li>
-                            <li><img src="../../images/default_portrait.png"></li>
-                        </ul>
-                    </div>
-                    <div class="list">
-                        <p class="p3">【消费警示】路虎投诉高发，方向盘异常抖动该如何解决?</p>
-                        <ul class="pic">
-                            <li><img src="../../images/default_portrait.png"></li>
-                            <li><img src="../../images/default_portrait.png"></li>
-                            <li><img src="../../images/default_portrait.png"></li>
-                        </ul>
-                    </div>
-                    <div class="list">
-                        <p class="p3">【消费警示】路虎投诉高发，方向盘异常抖动该如何解决?</p>
-                        <ul class="pic">
-                            <li><img src="../../images/default_portrait.png"></li>
-                            <li><img src="../../images/default_portrait.png"></li>
-                            <li><img src="../../images/default_portrait.png"></li>
-                        </ul>
+                        <div v-else>
+                            <p class="p3">【消费警示】{{data.title}}</p>
+                            <ul class="pic">
+                                <li v-for="src in data.pic" :style="{backgroundImage:'url('+src.pic+'!/fh/230)'}"><!--<img :src="src.pic">--></li>
+                            </ul>
+                        </div>
+                    </router-link>
+                    <p v-if="showLoading" class="loading">正在加载更多数据...</p>
+                </section>
+                <section class="seat_list" v-else>
+                    <div class="seat_swiper"></div>
+                    <div class="result_seat" v-for="item in 10" :key="item">
+                        <div class="seat_left">
+                            <p class="p1"></p>
+                            <p class="p2"></p>
+                            <p class="p3"></p>
+                        </div>
+                        <div class="seat_right"></div>
                     </div>
                 </section>
             </swiper-slide>
             <swiper-slide class="lis">
-                <section class="result_list" v-if="resultData.length">
-                    <div class="list" v-for="result in resultData" :key="result">
+                <section class="result_list" v-if="resultData.length>0">
+                    <router-link :to="'/tousu/detail/'+result.id" class="list" v-for="result in resultData" :key="result">
                         <div class="list_left" :style="{'width':result.default_pic==null ? '100%' : false}">
                             <p class="p1">{{result.title}}</p>
-                            <p class="p2"><span class="sp1">网友回音：</span>{{result.recommend_result.content}}</p>
+                            <p class="p2" v-if="result.resources_type==1"><span class="sp1">网友回音：</span>{{result.complaint_comment.content}}</p>
+                            <p class="p2" v-if="result.resources_type==0"><span class="sp2">处理结果：</span>{{result.complaint_result.content}}</p>
                             <p class="p3">{{result.add_time}}</p>
                         </div>
-                        <div v-if="result.default_pic" class="list_right">
-                            <img :src="result.default_pic.pic+'!/fh/230'">
+                        <div v-if="result.default_pic" class="list_right" :style="{backgroundImage:'url('+result.default_pic.pic+'!/fh/230)'}">
+                            <!--<img :src="result.default_pic.pic+'!/fh/230'">-->
                         </div>
-                    </div>
+                    </router-link>
                     <p v-if="showLoading" class="loading">正在加载更多数据...</p>
                 </section>
                 <section class="seat_list" v-else>
@@ -88,15 +88,26 @@
                 </section>
             </swiper-slide>
             <swiper-slide class="lis">
-                <section class="cechoice_list">
-                    <div class="list">
+                <section class="cechoice_list" v-if="cechoiceData.length>0">
+                    <router-link :to="'/cechoice/detaol/'+data.id" class="list" v-for="data in cechoiceData" :key="data">
                         <div class="list_left">
-                            <p class="p1">“小蚯蚓”杨紫—戏内蠢萌戏外女汉子 期待AR杂志的出现</p>
-                            <p class="p2"><span class="cechoice_tag">人物</span><span>明星潮人</span><span>15分钟前</span></p>
+                            <p class="p1">{{data.title}}</p>
+                            <p class="p2"><span class="cechoice_tag">{{data.type_name}}</span><!--<span>明星潮人</span>--><span>{{data.add_time}}</span></p>
                         </div>
                         <div class="list_right">
                             <img src="../../images/default_portrait.png">
                         </div>
+                    </router-link>
+                    <p v-if="showLoading" class="loading">正在加载更多数据...</p>
+                </section>
+                <section class="seat_list" v-else>
+                    <div class="result_seat" v-for="item in 10" :key="item">
+                        <div class="seat_left">
+                            <p class="p1"></p>
+                            <p class="p2"></p>
+                            <p class="p3"></p>
+                        </div>
+                        <div class="seat_right"></div>
                     </div>
                 </section>
             </swiper-slide>
@@ -124,6 +135,10 @@ export default {
                     switch (swiper.activeIndex){
                         case 0:
                             this.hover='recommend';
+                            if(this.recommendData == '' && this.recommendRepeat == false){
+                                this.recommendRepeat = true;
+                                this.recommendAjax();
+                            }
                             break;
                         case 1:
                             this.hover='result';
@@ -134,6 +149,10 @@ export default {
                             break;
                         default:
                             this.hover='cechoice';
+                            if(this.cechoiceData == '' && this.cechoiceRepeat == false){
+                                this.cechoiceRepeat = true;
+                                this.cechoiceAjax();
+                            }
                     }
                 }
             },
@@ -176,6 +195,10 @@ export default {
             switch (data){
                 case 'recommend':
                     this.swiper.slideTo(0);
+                    if(this.recommendData == '' && this.recommendRepeat == false){
+                        this.recommendRepeat = true;
+                        this.recommendAjax();
+                    }
                     break;
                 case 'result':
                     this.swiper.slideTo(1);
@@ -186,11 +209,34 @@ export default {
                     break;
                 default:
                     this.swiper.slideTo(2);
+                    if(this.cechoiceData == '' && this.cechoiceRepeat == false){
+                        this.cechoiceRepeat = true;
+                        this.cechoiceAjax();
+                    }
             }
+        },
+        cechoiceAjax(){
+            this.showLoading = true;
+            this.axios.get('/v4/cechoice_article/article_list?page='+this.cechoiceI)
+                .then(res => {
+                    if(this.cechoiceI==0){
+                        this.cechoiceData = res.data.data;
+                    }else{
+                        this.cechoiceData = this.cechoiceData.concat(res.data.data);
+                    }
+                    this.showLoading = false;
+                    this.cechoiceRepeat = false;
+                    console.log(this.cechoiceData);
+                })
+                .catch(err => {
+                    this.showLoading = false;
+                    this.cechoiceRepeat = false;
+                    console.log(err);
+                })
         },
         resultAjax(){
             this.showLoading = true;
-            this.axios.get('v3/home/list-result?page='+this.resultI)
+            this.axios.get('/v4/home/dynamic_list?page='+this.resultI)
                 .then(res => {
                     if(this.resultI==0){
                         this.resultData = res.data.data;
@@ -207,8 +253,33 @@ export default {
                     console.log(err);
                 })
         },
+        recommendAjax(){
+            this.showLoading = true;
+            this.axios.get('/v4/home/recommend_list?page='+this.recommendI)
+                .then(res => {
+                    if(this.recommendI==0){
+                        this.recommendData = res.data.data;
+                    }else{
+                        this.recommendData = this.recommendData.concat(res.data.data);
+                    }
+                    this.showLoading = false;
+                    this.recommendRepeat = false;
+                    console.log(this.recommendData);
+                })
+                .catch(err => {
+                    this.showLoading = false;
+                    this.recommendRepeat = false;
+                    console.log(err);
+                })
+        },
         menuA() {
             this.scrollA = document.querySelectorAll('.lis')[0].scrollTop;
+            if(document.querySelector('.lis').clientHeight + this.scrollA +2 >= document.querySelector('.recommend_list').offsetHeight && this.recommendRepeat==false){
+                this.recommendRepeat = true;
+                this.recommendI += 1;
+                this.recommendAjax();
+                console.log(this.recommendI);
+            }
         },
         menuB() {
             this.scrollB = document.querySelectorAll('.lis')[1].scrollTop;
@@ -221,6 +292,12 @@ export default {
         },
         menuC() {
             this.scrollC = document.querySelectorAll('.lis')[2].scrollTop;
+            if(document.querySelector('.lis').clientHeight + this.scrollC +2 >= document.querySelector('.cechoice_list').offsetHeight && this.cechoiceRepeat==false){
+                this.cechoiceRepeat = true;
+                this.cechoiceI += 1;
+                this.cechoiceAjax();
+                console.log(this.cechoiceI);
+            }
         }
     },
     mounted(){
@@ -236,6 +313,9 @@ export default {
         document.querySelector('#tar').addEventListener("touchmove", function (event) {
             event.preventDefault();
         },false);
+        //首页初始加载
+        this.recommendAjax();
+
     },
     created(){
 
@@ -287,7 +367,7 @@ export default {
             width: calc(~'100% - .44rem');
             overflow: hidden;
             padding: .26rem 0;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid rgba(204,204,204,.5);
             margin: 0 auto;
             .list_left{
                 width: 4.96rem;
@@ -311,6 +391,7 @@ export default {
                         float: left;
                         width: 1.42rem;
                         height: .4rem;
+                        line-height: .38rem;
                         border-radius: .1rem;
                         border: 1px solid #999;
                         display: block;
@@ -332,6 +413,11 @@ export default {
         }
     }
     .seat_list{
+        .seat_swiper{
+            width: 100%;
+            height: 2.5rem;
+            background: #f6f6f6;
+        }
         .result_seat{
             width: calc(~'100% - .44rem');
             overflow: hidden;
@@ -373,7 +459,7 @@ export default {
             width: calc(~'100% - .44rem');
             overflow: hidden;
             padding: .28rem 0;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid rgba(204,204,204,.5);
             margin: 0 auto;
             .list_left{
                 width: 4.96rem;
@@ -407,6 +493,9 @@ export default {
                 width: 1.67rem;
                 height: 1.4rem;
                 float: right;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center center;
                 overflow: hidden;
                 img{
                     width: 100%;
@@ -424,13 +513,15 @@ export default {
             overflow: hidden;
             margin-left: .23rem;
             padding: .23rem 0;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid rgba(204,204,204,.5);
             width: calc(~'100% - .23rem');
             .p3{
-                width: 100%;
+                width: auto;
                 font-size: .32rem;
                 line-height: .48rem;
-                margin-bottom: .11rem;
+                margin-bottom: .2rem;
+                margin-right: .2rem;
+                overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
             }
             .pic{
                 overflow: hidden;
@@ -438,8 +529,13 @@ export default {
                 li{
                     width: calc(~'33.33% - .2rem');
                     float: left;
+                    height: 1.6rem;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center center;
                     margin-right: .2rem;
                     img{
+                        width: 100%;
                         display: block;
                         margin: 0 auto;
                     }
@@ -451,7 +547,9 @@ export default {
                 .p1{
                     font-size: .32rem;
                     line-height: .48rem;
-                    margin-bottom: .11rem;
+                    margin-bottom: .2rem;
+                    margin-right: .2rem;
+                    overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
                 }
                 .p2{
                     font-size: .26rem;
@@ -475,9 +573,12 @@ export default {
                     .status{
                         float: right;
                         font-size: .22rem;
-                        color: #FEB10D;
                         margin-top: .025rem;
                     }
+                    .status0{ color: #1491fd}
+                    .status1{ color: #FEB10D}
+                    .status2{ color: #2dc177}
+                    .status3{ color: #2dc177}
                 }
             }
             .list_right{
@@ -485,6 +586,9 @@ export default {
                 height: 1.4rem;
                 margin-right: .22rem;
                 float: right;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center center;
                 overflow: hidden;
                 img{
                     width: 100%;

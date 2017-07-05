@@ -157,7 +157,7 @@
                 document.body.scrollTop=0;
             },
             commentData(){
-                this.axios.get('/v3/tousu/comments?id='+this.$route.params.id+'')
+                this.axios.get('/v4/tousu/comments?id='+this.$route.params.id+'')
                     .then(res =>{
                         this.comment=res.data.data;
                         console.log(this.comment);
@@ -168,7 +168,7 @@
                 console.log(this.$route.params.id);
             },
             fetchData () {
-                this.axios.get('/v3/tousu/detail?id='+this.$route.params.id+'')
+                this.axios.get('/v4/tousu/detail?id='+this.$route.params.id+'')
                     .then(res =>{
                         this.showLoad=false;
                         this.detail=res.data.data;

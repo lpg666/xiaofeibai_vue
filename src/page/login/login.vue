@@ -69,9 +69,10 @@ export default {
                     this.ajaxRe = true;
                     this.showAlert=true;
                     this.alertText='加载中...';
-                    this.axios.post('v3/auth/login',{
+                    this.axios.post('/v4/auth/login',{
                         mobile:this.mobile,
-                        password:this.password
+                        password:this.password,
+                        source_type:0
                     })
                     .then(res => {
                         if(res.data.error==1){
