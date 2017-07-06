@@ -14,9 +14,9 @@
                     <div id="head_go" @click="$router.go(-1)"><</div>
                     <div class="title_text">我</div>
                 </div>
-                <img class="pic2" :src="userInfos.avatar?userInfos.avatar:'../../images/default_portrait.png'">
-                <p class="name">{{userInfos.name}}</p>
-                <p class="mobile">{{userInfos.mobile}}</p>
+                <img class="pic2" :src="userInfo.avatar?userInfo.avatar:'../../images/default_portrait.png'">
+                <p class="name">{{userInfo.name}}</p>
+                <p class="mobile">{{userInfo.mobile}}</p>
             </div>
             <div class="top_box">
                 <span></span>
@@ -54,9 +54,6 @@ export default {
             'autoRoute',
             'userInfo'
         ]),
-        userInfos(){
-            return JSON.parse(this.userInfo);
-        },
         /*mobile(){
             let m = this.userInfo.mobile;
             //let x = m.substr(2,5);

@@ -149,7 +149,7 @@
                 </div>
             </div>
         </transition>
-        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadText="loadText"></loading>
+        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
         <alert-box v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-box>
         <transition name="fade1">
             <div v-show="dataShow">
@@ -217,6 +217,7 @@ export default {
             //
             picList:[],
             showLoad:false,
+            loadType:null,
             loadText:null
         }
     },
@@ -269,55 +270,67 @@ export default {
                 }
             }
             if(this.userInfo.real_name.length<=0 || !reg1.test(this.userInfo.real_name)){
-                this.showAlert=true;
-                this.alertText='真实姓名不能为空';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='真实姓名不能为空';
+                setTimeout(this.close,2000);
             }else if(this.userInfo.mobile.length!==11 || !reg.test(this.userInfo.mobile)){
-                this.showAlert=true;
-                this.alertText='手机格式错误';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='手机格式错误';
+                setTimeout(this.close,2000);
             }else if(!this.from.value.province || !this.from.value.city){
-                this.showAlert=true;
-                this.alertText='地址不能为空';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='地址不能为空';
+                setTimeout(this.close,2000);
             }else if(this.from.value.type_id=='' || this.from.value.subtype_id==''){
-                this.showAlert=true;
-                this.alertText='行业分类不能为空';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='行业分类不能为空';
+                setTimeout(this.close,2000);
             }else if(this.from.value.brand_id=='' || !this.from.value.brand_id){
-                this.showAlert=true;
-                this.alertText='被投诉企业/品牌不能为空';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='被投诉企业/品牌不能为空';
+                setTimeout(this.close,2000);
             }else if(this.from.value.problems=='' || !this.from.value.problems){
-                this.showAlert=true;
-                this.alertText='投诉问题不能为空';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='投诉问题不能为空';
+                setTimeout(this.close,2000);
             }else if(this.from.value.suqius=='' || !this.from.value.suqius){
-                this.showAlert=true;
-                this.alertText='投诉诉求不能为空';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='投诉诉求不能为空';
+                setTimeout(this.close,2000);
             }else if(arr.length>0){
-                this.showAlert=true;
-                this.alertText='附加属性不能为空';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='附加属性不能为空';
+                setTimeout(this.close,2000);
             }else if(this.from.value.title=='' || !this.from.value.title){
-                this.showAlert=true;
-                this.alertText='投诉标题不能为空';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='投诉标题不能为空';
+                setTimeout(this.close,2000);
             }else if(this.from.value.title.length<5 || this.from.value.title.length>30){
-                this.showAlert=true;
-                this.alertText='投诉标题不能小于5或大于30字符';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='投诉标题不能小于5或大于30字符';
+                setTimeout(this.close,2000);
             }else if(this.from.value.content=='' || !this.from.value.content){
-                this.showAlert=true;
-                this.alertText='投诉内容不能为空';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='投诉内容不能为空';
+                setTimeout(this.close,2000);
             }else if(this.from.value.content.length<20){
-                this.showAlert=true;
-                this.alertText='投诉内容不能小于20字符';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='投诉内容不能小于20字符';
+                setTimeout(this.close,2000);
             }else if(this.re==false){
-                this.closeTip();
+                this.close();
                 var text = '';
                 var text1 = [];
                 for(let i in this.textId){
@@ -341,6 +354,7 @@ export default {
                 this.from.value.version='ios';
 
                 this.showLoad=true;
+                this.loadType='load';
                 this.loadText='正在提交';
 
                 this.axios.post('/v4/complaint/create',this.from.value)
@@ -350,9 +364,10 @@ export default {
                         if(res.data.msg_type==200){
                             this.$router.push({path:'/tousu/success/'+res.data.data.tousu.id});
                         }else{
-                            this.showAlert=true;
-                            this.alertText=res.data.msg;
-                            setTimeout(this.closeTip,2000);
+                            this.showLoad=true;
+                            this.loadType='alert';
+                            this.loadText=res.data.msg;
+                            setTimeout(this.close,2000);
                         }
                     })
                     .catch(err =>{
@@ -377,9 +392,10 @@ export default {
         },
         createImage(file) {
             if(typeof FileReader==='undefined'){
-                this.showAlert=true;
-                this.alertText='您的浏览器不支持图片上传，请升级您的浏览器';
-                setTimeout(this.closeTip,2000);
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='您的浏览器不支持图片上传，请升级您的浏览器';
+                setTimeout(this.close,2000);
             }else{
                 const image = new Image();
                 const vm = this;
@@ -388,15 +404,18 @@ export default {
                 for(let i=0;i<leng;i++){
                     let isLt2M = file[i].size / 1024 / 1024 < 2;
                     if(gs.indexOf(file[i].type)<0){
-                        this.showAlert=true;
-                        this.alertText='文件类型不对';
-                        setTimeout(this.closeTip,2000);
+                        this.showLoad=true;
+                        this.loadType='alert';
+                        this.loadText='文件类型不对';
+                        setTimeout(this.close,2000);
                     }else if(!isLt2M){
-                        this.showAlert=true;
-                        this.alertText='图片过大';
-                        setTimeout(this.closeTip,2000);
+                        this.showLoad=true;
+                        this.loadType='alert';
+                        this.loadText='图片过大';
+                        setTimeout(this.close,2000);
                     }else{
                         this.showLoad=true;
+                        this.loadType='load';
                         this.loadText='上传中';
                         let reader = new FileReader();
                         reader.readAsDataURL(file[i]);
@@ -406,9 +425,7 @@ export default {
                                     vm.picList.push({'src':res.data,'show':'1'});
                                     console.log(res,vm.picList);
                                     console.log('上传成功');
-                                    vm.showAlert=true;
-                                    vm.alertText='上传成功';
-                                    setTimeout(vm.closeTip,2000);
+                                    vm.showLoad=false;
                                 })
                                 .catch(err =>{
 
@@ -691,8 +708,9 @@ export default {
         queRen(){
             if(this.tkData.name=='type'){
                 if(this.from.value.subtype_id){
-                    this.showLoad=true,
-                    this.loadText='正在加载',
+                    this.showLoad=true;
+                    this.loadType='load';
+                    this.loadText='正在加载';
                     this.TOUSU_DATA('');
                     this.ajaxBrands(this.from.value.subtype_id);
                     /*this.ajaxProblems(this.from.value.subtype_id);
@@ -702,59 +720,65 @@ export default {
                     document.querySelector('body').style.overflow='';
                     this.tk=false;
                 }else{
-                    this.showAlert=true;
-                    this.alertText='您还没选择';
-                    setTimeout(this.closeTip,2000);
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='您还没选择';
+                    setTimeout(this.close,2000);
                 }
             }else if(this.tkData.name=='brand'){
                 if(this.from.value.brand_id){
-                    this.showAlert=false;
+                    this.showLoad=false;
                     document.querySelector('body').style.overflow='';
                     this.tk=false;
                 }else{
-                    this.showAlert=true;
-                    this.alertText='您还没选择';
-                    setTimeout(this.closeTip,2000);
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='您还没选择';
+                    setTimeout(this.close,2000);
                 }
             }else if(this.tkData.name=='problem'){
                 if(this.from.value.problems){
-                    this.showAlert=false;
+                    this.showLoad=false;
                     document.querySelector('body').style.overflow='';
                     this.tk=false;
                 }else{
-                    this.showAlert=true;
-                    this.alertText='您还没选择';
-                    setTimeout(this.closeTip,2000);
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='您还没选择';
+                    setTimeout(this.close,2000);
                 }
             }else if(this.tkData.name=='suqiu'){
                 if(this.from.value.suqius){
-                    this.showAlert=false;
+                    this.showLoad=false;
                     document.querySelector('body').style.overflow='';
                     this.tk=false;
                 }else{
-                    this.showAlert=true;
-                    this.alertText='您还没选择';
-                    setTimeout(this.closeTip,2000);
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='您还没选择';
+                    setTimeout(this.close,2000);
                 }
             }else if(this.tkData.name=='propertie'){
                 if(this.hc!==''){
-                    this.showAlert=false;
+                    this.showLoad=false;
                     document.querySelector('body').style.overflow='';
                     this.tk=false;
                 }else{
-                    this.showAlert=true;
-                    this.alertText='您还没选择';
-                    setTimeout(this.closeTip,2000);
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='您还没选择';
+                    setTimeout(this.close,2000);
                 }
             }else if(this.tkData.name=='provinces'){
                 if(this.from.value.province && this.from.value.city){
-                    this.showAlert=false;
+                    this.showLoad=false;
                     document.querySelector('body').style.overflow='';
                     this.tk=false;
                 }else{
-                    this.showAlert=true;
-                    this.alertText='您还没选择';
-                    setTimeout(this.closeTip,2000);
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='您还没选择';
+                    setTimeout(this.close,2000);
                 }
             }
         }
@@ -763,6 +787,7 @@ export default {
         this.show;
         this.tk=true;
         this.showLoad=true;
+        this.loadType='load';
         this.loadText='正在加载';
         this.ajaxTypes();
         this.ajaxProvinces();

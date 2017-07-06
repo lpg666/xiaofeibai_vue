@@ -1,5 +1,10 @@
 <template>
-    <div class="loading_box"><img class="load" src="../../images/loading.png"><p>{{loadText}}</p></div>
+    <div class="loading_box">
+        <img v-if="loadType=='load'" class="load" src="../../images/loading.png">
+        <img v-else-if="loadType=='alert'" class="load" src="">
+        <img v-else src="">
+        <p>{{loadText}}</p>
+    </div>
 </template>
 
 <script>
@@ -13,7 +18,7 @@
         mounted(){
 
         },
-        props: ['loadText'],
+        props: ['loadText','loadType'],
         methods: {
             close(){
                 this.$emit('close')

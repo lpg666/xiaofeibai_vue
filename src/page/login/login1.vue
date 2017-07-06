@@ -10,7 +10,7 @@
             <div class="inp"><img src="../../images/default_portrait.png"><input name="password" type="password" v-model="password" placeholder="密码"></div>
             <div class="but" :class="butClass" @click="login">登录</div>
             <div class="al">
-                <router-link class="all" to="/login1">短信登录</router-link>
+                <router-link class="all" to="/login">账号登录</router-link>
                 <router-link class="alr" to="">忘记密码?</router-link>
             </div>
         </form>

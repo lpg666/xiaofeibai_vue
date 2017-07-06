@@ -89,7 +89,7 @@
         </div>
         <comment style="margin-bottom: .2rem;" :comment="comment" :detail="detail" :type="type"></comment>
         <similars v-if="detail.similars" :detail="detail"></similars>
-        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadText="loadText"></loading>
+        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
 
@@ -107,6 +107,7 @@
                 comment:'',
                 type:'tousu',
                 showLoad:false,
+                loadType:null,
                 loadText:null
             }
         },
@@ -141,6 +142,7 @@
             // 组件创建完后获取数据，
             // 此时 data 已经被 observed 了
             this.showLoad=true;
+            this.loadType='load';
             this.loadText='正在加载';
             this.fetchData();
             this.commentData();
