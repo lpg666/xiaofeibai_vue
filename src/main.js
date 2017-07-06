@@ -41,7 +41,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     if(to.meta.aR){
         if(store.state.userInfo){
-            Vue.axios.post('/v3/auth/check-member-info',{'sign':store.state.userInfo.sign}).then((response) => {
+            /*Vue.axios.post('/v3/auth/check-member-info',{'sign':store.state.userInfo.sign}).then((response) => {
                 if(response.data.msg_type==401){
                     store.commit('QUANJU_TAN','账号已在其他地方登陆');
                     store.commit('OUT_LOGIN');
@@ -57,7 +57,8 @@ router.beforeEach((to, from, next) => {
                     next();
                 }
                 console.log(response.data)
-            });
+            });*/
+            next();
         }else{
             store.commit('AUTO_ROUTE',to.path);
             next("/login?id=1");

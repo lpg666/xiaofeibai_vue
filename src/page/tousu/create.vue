@@ -19,13 +19,13 @@
         </head-i>
         <div class="inp" :class="tki">
             <div class="text">
-                <p :class="userInfo.real_name?'p1':'p2'">真实姓名</p>
-                <input :class="userInfo.real_name?'lp1':'lp2'" type="text" :value="userInfo.real_name" v-model="userInfo.real_name">
+                <p :class="userInfos.real_name?'p1':'p2'">真实姓名</p>
+                <input :class="userInfos.real_name?'lp1':'lp2'" type="text" :value="userInfos.real_name" v-model="userInfos.real_name">
             </div>
             <!-- -->
             <div class="text">
-                <p :class="userInfo.mobile?'p1':'p2'">手机号码</p>
-                <input :class="userInfo.mobile?'lp1':'lp2'" type="text" :value="userInfo.mobile" v-model="userInfo.mobile">
+                <p :class="userInfos.mobile?'p1':'p2'">手机号码</p>
+                <input :class="userInfos.mobile?'lp1':'lp2'" type="text" :value="userInfos.mobile" v-model="userInfos.mobile">
             </div>
             <!-- -->
             <div class="select" @click="tanK('provinces')">
@@ -141,9 +141,9 @@
                         <ul>
                             <li v-for="data in tkData.data" :class="{'hover':from.value.province==data.code}" @click="address('province',data.code,data.name)">{{data.name}}</li>
                         </ul>
-                        <p v-if="city.length>0">城市</p>
-                        <ul>
-                            <li v-for="data in city" :class="{'hover':from.value.city==data.code}" @click="address('city',data.code,data.name)">{{data.name}}</li>
+                        <p>城市</p>
+                        <ul v-for="data in tkData.data" v-if="from.value.province==data.code">
+                            <li v-for="item in data.citys" :class="{'hover':from.value.city==item.code}" @click="address('city',item.code,item.name)">{{item.name}}</li>
                         </ul>
                     </div>
                 </div>
@@ -226,6 +226,9 @@ export default {
             'userInfo',
             'tousuData'
         ]),
+        userInfos(){
+            return JSON.parse(this.userInfo);
+        },
         tki(){
             if(this.tkinp){
                 if(this.tk){
@@ -334,12 +337,13 @@ export default {
                 }
                 this.from.value.address = this.from.name.province + this.from.name.city;
                 this.from.value.sign = this.userInfo.sign;
-                this.from.value.client = 'ios';
+                this.from.value.source_type = 'wechat';
+                this.from.value.version='ios';
 
                 this.showLoad=true;
                 this.loadText='正在提交';
 
-                this.axios.post('/v3/tousu/create',this.from.value)
+                this.axios.post('/v4/complaint/create',this.from.value)
                     .then(res => {
                         this.close();
                         console.log(res.data);
@@ -392,12 +396,12 @@ export default {
                         this.alertText='图片过大';
                         setTimeout(this.closeTip,2000);
                     }else{
-                        this.showAlert=true;
-                        this.alertText='上传中...';
+                        this.showLoad=true;
+                        this.loadText='上传中';
                         let reader = new FileReader();
                         reader.readAsDataURL(file[i]);
                         reader.onload =function(e){
-                            vm.axios.post('/v3/tousu/upload-pic',{'pic':e.target.result})
+                            vm.axios.post('/v4/complaint/upload_pic',{'pic':e.target.result})
                                 .then(res =>{
                                     vm.picList.push({'src':res.data,'show':'1'});
                                     console.log(res,vm.picList);
@@ -492,7 +496,6 @@ export default {
                 if(id=='province'){
                     this.$set(this.from.value,''+id+'',value);
                     this.$set(this.from.name,''+id+'',name);
-                    this.ajaxCities(value);
                 }else if(id=='city'){
                     this.$set(this.from.value,''+id+'',value);
                     this.$set(this.from.name,''+id+'',name);
@@ -549,18 +552,18 @@ export default {
             }
         },
         ajaxTypes(){
-            this.axios.get('/v3/tousu/types')
+            this.axios.get('/v4/complaint/types')
                 .then(res => {
                     this.types=res.data.data;
                     this.tkData={'name':'type','data':res.data.data};
-                    this.closeTip();
+                    this.close();
                 })
                 .catch(err => {
                     console.log(err);
                 })
         },
         ajaxBrands(id){
-            this.axios.get('/v3/tousu/brands?subtype_id='+id+'')
+            this.axios.get('/v4/complaint/brands?subtype_id='+id+'')
                 .then(res => {
                     this.brands=res.data.data;
                 })
@@ -569,7 +572,7 @@ export default {
                 })
         },
         ajaxQita(id){
-            this.axios.get('/v3/tousu/get-problems-suqius-properties-by-subtype?subtype_id='+id+'')
+            this.axios.get('/v4/complaint/get_type_relation?subtype_id='+id+'')
                 .then(res => {
                     this.problems=res.data.data.problems;
                     this.suqius=res.data.data.suqius;
@@ -577,25 +580,47 @@ export default {
                     for(let i=0;i<this.properties.length;i++){
                         this.$set(this.textId,''+this.properties[i].id+'','');
                     }
-                    this.closeTip();
+                    this.close();
                 })
                 .catch(err => {
 
                 })
         },
+        ajaxProblems(id){
+            this.axios.get('/v4/complaint/problems?subtype_id='+id+'')
+                .then(res =>{
+                    this.problems=res.data.data.problems;
+                })
+                .catch(err =>{
+
+                })
+        },
+        ajaxSuqius(id){
+            this.axios.get('/v4/complaint/suqius?subtype_id='+id+'')
+                .then(res =>{
+                    this.suqius=res.data.data.suqius;
+                })
+                .catch(err =>{
+
+                })
+        },
+        ajaxProperties(id){
+            this.axios.get('/v4/complaint/properties?subtype_id='+id+'')
+                .then(res =>{
+                    this.properties=res.data.data.properties;
+                    for(let i=0;i<this.properties.length;i++){
+                        this.$set(this.textId,''+this.properties[i].id+'','');
+                    }
+                })
+                .catch(err =>{
+
+                })
+        },
+        //
         ajaxProvinces(){
-            this.axios.get('/v3/home/provinces')
+            this.axios.get('/v4/complaint/region')
                 .then(res => {
                     this.provinces=res.data.data;
-                })
-                .catch(err => {
-
-                })
-        },
-        ajaxCities(id){
-            this.axios.get('/v3/home/cities?province_code='+id+'')
-                .then(res => {
-                    this.city=res.data.data;
                 })
                 .catch(err => {
 
@@ -666,17 +691,19 @@ export default {
         queRen(){
             if(this.tkData.name=='type'){
                 if(this.from.value.subtype_id){
-                    this.showAlert=true;
-                    this.alertText='加载中...';
+                    this.showLoad=true,
+                    this.loadText='正在加载',
                     this.TOUSU_DATA('');
                     this.ajaxBrands(this.from.value.subtype_id);
+                    /*this.ajaxProblems(this.from.value.subtype_id);
+                    this.ajaxSuqius(this.from.value.subtype_id);
+                    this.ajaxProperties(this.from.value.subtype_id);*/
                     this.ajaxQita(this.from.value.subtype_id);
-
                     document.querySelector('body').style.overflow='';
                     this.tk=false;
                 }else{
                     this.showAlert=true;
-                    this.alertText='确定你妹哦，你都没选';
+                    this.alertText='您还没选择';
                     setTimeout(this.closeTip,2000);
                 }
             }else if(this.tkData.name=='brand'){
@@ -686,7 +713,7 @@ export default {
                     this.tk=false;
                 }else{
                     this.showAlert=true;
-                    this.alertText='确定你妹哦，你都没选';
+                    this.alertText='您还没选择';
                     setTimeout(this.closeTip,2000);
                 }
             }else if(this.tkData.name=='problem'){
@@ -696,7 +723,7 @@ export default {
                     this.tk=false;
                 }else{
                     this.showAlert=true;
-                    this.alertText='确定你妹哦，你都没选';
+                    this.alertText='您还没选择';
                     setTimeout(this.closeTip,2000);
                 }
             }else if(this.tkData.name=='suqiu'){
@@ -706,7 +733,7 @@ export default {
                     this.tk=false;
                 }else{
                     this.showAlert=true;
-                    this.alertText='确定你妹哦，你都没选';
+                    this.alertText='您还没选择';
                     setTimeout(this.closeTip,2000);
                 }
             }else if(this.tkData.name=='propertie'){
@@ -716,7 +743,7 @@ export default {
                     this.tk=false;
                 }else{
                     this.showAlert=true;
-                    this.alertText='确定你妹哦，你都没选';
+                    this.alertText='您还没选择';
                     setTimeout(this.closeTip,2000);
                 }
             }else if(this.tkData.name=='provinces'){
@@ -726,7 +753,7 @@ export default {
                     this.tk=false;
                 }else{
                     this.showAlert=true;
-                    this.alertText='确定你妹哦，你都没选';
+                    this.alertText='您还没选择';
                     setTimeout(this.closeTip,2000);
                 }
             }
@@ -735,8 +762,8 @@ export default {
     created(){
         this.show;
         this.tk=true;
-        this.showAlert=true;
-        this.alertText='加载中...';
+        this.showLoad=true;
+        this.loadText='正在加载';
         this.ajaxTypes();
         this.ajaxProvinces();
         this.TOUSU_DATA('');

@@ -64,11 +64,12 @@ export default [{
         {
             path: '/article',
             component: article,
+            meta: { keepAlive: true },
         },
         //文章详情页
         {
             path: '/article/detail/:id',
-            component: articleDetail
+            component: articleDetail,
         },
         //填写投诉
         {

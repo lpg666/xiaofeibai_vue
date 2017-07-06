@@ -29,6 +29,7 @@
         top: 50%;
         transform: translate(-50%, -50%);
         color: #fff;
+        z-index: 999999;
         background: rgba(0,0,0,.75);
         font-size: .3rem;
         width: 4.8rem;

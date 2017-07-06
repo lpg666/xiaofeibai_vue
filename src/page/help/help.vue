@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="js">
-            <router-link to="/article" class="title">消费警示<span>实用消费警示，远离消费陷阱</span></router-link>
+            <router-link to="/article?type=1" class="title">消费警示<span>实用消费警示，远离消费陷阱</span></router-link>
             <router-link :to="'/article/detail/'+article.id" class="box" v-if="article.default_pic.length<=0">
                 <div class="box_pic1 img" :style="{backgroundImage:'url('+article.thumb+'!/fh/230)'}"></div>
                 <div class="box_top">{{article.title}}</div>
