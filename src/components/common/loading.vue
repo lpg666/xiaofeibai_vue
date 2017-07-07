@@ -38,7 +38,7 @@
         background: rgba(0,0,0,.75);
         font-size: .3rem;
         width: 4.8rem;
-        height: 2.2rem;
+        height: auto;
         border-radius: .2rem;
         img{
             width: .88rem;
@@ -49,6 +49,7 @@
         p{
             text-align: center;
             color: #fff;
+            margin: auto .5rem .25rem .5rem;
         }
     }
     @keyframes load{

@@ -2,19 +2,18 @@
     <div>
         <head-i>
             <span class="head_title" slot="title_text">登录</span>
-            <router-link to="" class="head_a" slot="head_a">注册</router-link>
+            <router-link to="/register" class="head_a" slot="head_a">注册</router-link>
         </head-i>
         <form>
-            <div class="inp" style="margin-top: .6rem;"><img src="../../images/default_portrait.png"><input name="mobile" type="text" v-model="mobile" placeholder="手机号码" maxlength="11"></div>
+            <div class="inp" style="margin-top: .6rem;"><img src="../../images/default_portrait.png"><input name="mobile" type="text" v-model.trim="mobile" placeholder="手机号码" maxlength="11"></div>
             <span class="xian"></span>
-            <div class="inp"><img src="../../images/default_portrait.png"><input name="password" type="password" v-model="password" placeholder="密码"></div>
+            <div class="inp" style="position: relative;"><img src="../../images/default_portrait.png"><input name="captcha" type="text" v-model.trim="captcha" placeholder="验证码" maxlength="4"><div class="code" @click="code">{{codeText}}</div></div>
             <div class="but" :class="butClass" @click="login">登录</div>
             <div class="al">
                 <router-link class="all" to="/login">账号登录</router-link>
-                <router-link class="alr" to="">忘记密码?</router-link>
+                <router-link class="alr" to="/resetPassword">忘记密码?</router-link>
             </div>
         </form>
-        <alert-box v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-box>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
@@ -32,8 +31,10 @@ export default {
             loadType:null,
             loadText:null,
             mobile:'',
-            password:'',
+            captcha:'',
             ajaxRe:false,
+            codeText:'获取验证码',
+            s:60
         }
     },
     watch:{
@@ -42,9 +43,9 @@ export default {
                 this.mobile=e;
             }
         },
-        password(e){
-            if(e.length>=6){
-                this.password=e;
+        captcha(e){
+            if(e.length>=4){
+                this.captcha=e;
             }
         }
     },
@@ -58,7 +59,7 @@ export default {
             'autoRoute'
         ]),
         butClass(){
-            if(this.mobile.length>=11 && this.password.length>=6){
+            if(this.mobile.length>=11 && this.captcha.length>=4){
                 return 'butR';
             }else{
                 return 'butF';
@@ -70,13 +71,18 @@ export default {
             'RECORD_USERINFO'
         ]),
         login(){
-            if(this.mobile.length>=11 && this.password.length>=6){
+            if(this.mobile.length>=11 && this.captcha.length>=4){
                 if(!(/^1[34578][0-9]{9}$/.test(this.mobile))){
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='请填写正确的手机号码';
-                    setTimeout(this.close,2000);
+                    setTimeout(this.close,1500);
                     console.log('请填写正确的手机号码');
+                }else if(isNaN(this.captcha)){
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='请填写正确的验证码';
+                    setTimeout(this.close,1500);
                 }else if(this.ajaxRe == false){
                     this.ajaxRe = true;
                     this.showLoad=true;
@@ -84,7 +90,7 @@ export default {
                     this.loadText='加载中';
                     this.axios.post('/v4/auth/login',{
                         mobile:this.mobile,
-                        password:this.password,
+                        captcha:this.captcha,
                         source_type:0
                     })
                     .then(res => {
@@ -92,18 +98,18 @@ export default {
                             this.showLoad=true;
                             this.loadType='alert';
                             this.loadText=res.data.msg;
-                            setTimeout(this.close,2000);
+                            setTimeout(this.close,1500);
                             this.ajaxRe = false;
                         }else{
                             this.RECORD_USERINFO(res.data.data);
                             this.showLoad=true;
                             this.loadType='';
                             this.loadText=res.data.msg;
-                            setTimeout(this.close,2000);
+                            setTimeout(this.close,1500);
                             if(this.$route.query.id){
                                 this.$router.replace(this.autoRoute);
                             }else{
-                                this.$router.go(-1);
+                                this.$router.push({path:'/member'});
                             }
                         }
 
@@ -111,8 +117,46 @@ export default {
                 }
             }
         },
-        closeTip(){
-            this.showAlert = false;
+        code(){
+            if(this.mobile.length<11 || !(/^1[34578][0-9]{9}$/.test(this.mobile))){
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='请填写正确的手机号码';
+                setTimeout(this.close,1500);
+            }else if(this.ajaxRe == false){
+                this.ajaxRe = true;
+                this.showLoad=true;
+                this.loadType='load';
+                this.loadText='正在发送';
+                this.axios.post('/v4/auth/send_sms',{
+                    'mobile':this.mobile,
+                    'is_login':2
+                })
+                .then(res =>{
+                    this.loadType='alert';
+                    if(res.data.error){
+                        this.loadText=res.data.msg;
+                        this.ajaxRe = false;
+                    }else{
+                        this.loadText='发送成功';
+                        this.settime();
+                    }
+                    setTimeout(this.close,1500);
+                    console.log(res.data);
+                })
+            }
+        },
+        settime() {
+            if(this.s==0){
+                this.codeText='获取验证码';
+                this.ajaxRe =false;
+                this.s=60;
+                return false;
+            }else{
+                this.codeText=this.s+'s';
+                this.s--;
+            }
+            setTimeout(this.settime,1500);
         },
         close(){
             this.showLoad = false;
@@ -146,6 +190,19 @@ export default {
                 height: .85rem;
                 line-height: .85rem;
                 font-size: .32rem;
+            }
+            .code{
+                width: 2rem;
+                height: .68rem;
+                line-height: .68rem;
+                border-radius: .1rem;
+                position:absolute;
+                right: 0;
+                top: .085rem;
+                background: #36c078;
+                color: #fff;
+                font-size: .3rem;
+                text-align: center;
             }
         }
         .xian{

@@ -2,6 +2,8 @@ import App from '../App'
 
 const login = r => require.ensure([], () => r(require('../page/login/login')), 'login')
 const login1 = r => require.ensure([], () => r(require('../page/login/login1')), 'login1')
+const register = r => require.ensure([], () => r(require('../page/login/register')), 'register')
+const resetPassword = r => require.ensure([], () => r(require('../page/login/resetPassword')), 'resetPassword')
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
 const help = r => require.ensure([], () => r(require('../page/help/help')), 'help')
 const member = r => require.ensure([], () => r(require('../page/member/member')), 'member')
@@ -33,6 +35,16 @@ export default [{
         {
             path: '/login1',
             component: login1
+        },
+        //注册
+        {
+            path: '/register',
+            component: register
+        },
+        //重置密码
+        {
+            path: '/resetPassword',
+            component: resetPassword
         },
         //首页
         {

@@ -2,7 +2,7 @@
     <div>
         <head-i>
             <span class="head_title" slot="title_text">登录</span>
-            <router-link to="" class="head_a" slot="head_a">注册</router-link>
+            <router-link to="/register" class="head_a" slot="head_a">注册</router-link>
         </head-i>
         <form>
             <div class="inp" style="margin-top: .6rem;"><img src="../../images/default_portrait.png"><input name="mobile" type="text" v-model="mobile" placeholder="手机号码" maxlength="11"></div>
@@ -11,10 +11,9 @@
             <div class="but" :class="butClass" @click="login">登录</div>
             <div class="al">
                 <router-link class="all" to="/login1">短信登录</router-link>
-                <router-link class="alr" to="">忘记密码?</router-link>
+                <router-link class="alr" to="/resetPassword">忘记密码?</router-link>
             </div>
         </form>
-        <alert-box v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-box>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
@@ -75,7 +74,7 @@ export default {
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='请填写正确的手机号码';
-                    setTimeout(this.close,2000);
+                    setTimeout(this.close,1000);
                     console.log('请填写正确的手机号码');
                 }else if(this.ajaxRe == false){
                     this.ajaxRe = true;
@@ -92,27 +91,24 @@ export default {
                             this.showLoad=true;
                             this.loadType='alert';
                             this.loadText=res.data.msg;
-                            setTimeout(this.close,2000);
+                            setTimeout(this.close,1000);
                             this.ajaxRe = false;
                         }else{
                             this.RECORD_USERINFO(res.data.data);
                             this.showLoad=true;
                             this.loadType='';
                             this.loadText=res.data.msg;
-                            setTimeout(this.close,2000);
+                            setTimeout(this.close,1000);
                             if(this.$route.query.id){
                                 this.$router.replace(this.autoRoute);
                             }else{
-                                this.$router.go(-1);
+                                this.$router.push({path:'/member'});
                             }
                         }
 
                     })
                 }
             }
-        },
-        closeTip(){
-            this.showAlert = false;
         },
         close(){
             this.showLoad = false;

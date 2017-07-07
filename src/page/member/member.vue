@@ -1,12 +1,14 @@
 <template>
-    <div>
+    <div style="background: #F6F7F9; height: calc(100vh);">
         <div class="head" v-if="userInfo==null?true:false">
             <div class="top">
-                <div id="head_go" @click="$router.go(-1)"><</div>
+                <div id="head_go" @click="$router.go(-1)"></div>
                 <div class="title_text">我</div>
             </div>
-            <img class="pic1" src="../../images/default_portrait.png">
-            <router-link to="/login" class="login">登录/注册</router-link>
+            <div class="wd">
+                <img class="pic2" src="../../images/default_portrait.png">
+                <router-link to="/login" class="login">登录/注册</router-link>
+            </div>
         </div>
         <div v-else>
             <div class="head" style="height: 3.3rem;">
@@ -14,9 +16,11 @@
                     <div id="head_go" @click="$router.go(-1)"><</div>
                     <div class="title_text">我</div>
                 </div>
-                <img class="pic2" :src="userInfo.avatar?userInfo.avatar:'../../images/default_portrait.png'">
-                <p class="name">{{userInfo.name}}</p>
-                <p class="mobile">{{userInfo.mobile}}</p>
+                <div class="wd">
+                    <img class="pic2" :src="userInfo.avatar?userInfo.avatar:'../../images/default_portrait.png'">
+                    <p class="name">{{userInfo.name}}</p>
+                    <p class="mobile">{{userInfo.mobile}}</p>
+                </div>
             </div>
             <div class="top_box">
                 <span></span>
@@ -24,19 +28,17 @@
                 <router-link to="">我的投诉</router-link>
             </div>
         </div>
-
-        <router-link to="" class="box" style="font-weight: bold;"><img src="../../images/default_portrait.png">我的服务管家</router-link>
         <div class="box1">
-            <router-link to="" class="das"><img src="../../images/default_portrait.png">维权志愿者联盟</router-link>
+            <router-link to="" class="das"><img src="../../images/myself_volunteer@2x.png">维权志愿者联盟</router-link>
             <span class="xian"></span>
-            <router-link to="" class="das"><img src="../../images/default_portrait.png">玩游戏拿大奖</router-link>
+            <router-link to="" class="das"><img src="../../images/myself_game@2x.png">玩游戏拿大奖</router-link>
         </div>
         <div class="box1">
-            <router-link to="" class="das"><img src="../../images/default_portrait.png">关注的投诉</router-link>
+            <router-link to="" class="das"><img src="../../images/myself_focus@2x.png">关注的投诉</router-link>
             <span class="xian"></span>
             <router-link to="" class="das"><img src="../../images/default_portrait.png">收藏</router-link>
         </div>
-        <router-link to="/member/setting" class="box"><img src="../../images/default_portrait.png">设置</router-link>
+        <router-link to="/member/setting" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5);"><img src="../../images/myself_setting@2x.png">设置</router-link>
     </div>
 </template>
 
@@ -81,8 +83,14 @@ export default {
     .head{
         position: relative;
         width: 100%;
-        background: #000;
+        background: url("../../images/bg_gerenzhongxin.png") no-repeat center;
+        background-size: 100%;
         padding-bottom: .001rem;
+        .wd{
+            height: 2.5rem;
+            background: url("../../images/bg_touxiang.png") no-repeat center;
+            background-size: cover;
+        }
         .top{
             width: 100%;
             height: .8rem;
@@ -92,6 +100,8 @@ export default {
                 height: .8rem;
                 font-size: .4rem;
                 float: left;
+                background: url("../../images/jt_bai.png") no-repeat left .1rem center;
+                background-size: .4rem;
             }
             .title_text{
                 text-align: center;
@@ -137,21 +147,24 @@ export default {
             text-align: center;
             border: 1px solid #fff;
             border-radius: .08rem;
-            margin: 0 auto .3rem auto;
             font-size: .28rem;
             color: #fff;
             display: block;
+            position: absolute;
+            left: 2.2rem;
+            bottom: .85rem;
         }
     }
     .top_box{
         position: relative;
+        background: #fff;
         width: 100%;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid rgba(204,204,204,.5);
         height: .88rem;
         span{
             width: auto;
             height: .65rem;
-            border-left: 1px solid #ccc;
+            border-left: 1px solid rgba(204,204,204,.5);
             position: absolute;
             left: 50%;
             top: .115rem;
@@ -170,10 +183,10 @@ export default {
         width: 100%;
         height: .85rem;
         line-height: .85rem;
-        border-top:1px solid #ccc;
-        border-bottom:1px solid #ccc;
+        border-bottom:1px solid rgba(204,204,204,.5);
         font-size: .3rem;
-        margin-top: .2rem;
+        background:#fff url("../../images/jt_hui.png") no-repeat right .2rem center;
+        background-size:.3rem;
         display: block;
         img{
             width:.4rem;
@@ -186,12 +199,13 @@ export default {
     .box1{
         width: 100%;
         margin-top: .2rem;
-        border-top:1px solid #ccc;
-        border-bottom:1px solid #ccc;
+        border-top:1px solid rgba(204,204,204,.5);
+        border-bottom:1px solid rgba(204,204,204,.5);
+        background: #fff;
         font-size: .3rem;
         .xian{
             width: calc(~'100% - 1rem');
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid rgba(204,204,204,.5);
             display:block;
             float: right;
         }
@@ -199,6 +213,8 @@ export default {
             display: block;
             width: 100%;
             height: .85rem;
+            background: url("../../images/jt_hui.png") no-repeat right .2rem center;
+            background-size:.3rem;
             line-height: .85rem;
             img{
                 width:.4rem;
