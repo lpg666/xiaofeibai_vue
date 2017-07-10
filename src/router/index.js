@@ -6,6 +6,9 @@ const register = r => require.ensure([], () => r(require('../page/login/register
 const resetPassword = r => require.ensure([], () => r(require('../page/login/resetPassword')), 'resetPassword')
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
 const help = r => require.ensure([], () => r(require('../page/help/help')), 'help')
+const lawyer = r => require.ensure([], () => r(require('../page/lawyer/list')), 'lawyer')
+const lawyerDetail = r => require.ensure([], () => r(require('../page/lawyer/detail')), 'lawyerDetail')
+const lawyerCommit = r => require.ensure([], () => r(require('../page/lawyer/commit')), 'lawyerCommit')
 const member = r => require.ensure([], () => r(require('../page/member/member')), 'member')
 const setting = r => require.ensure([], () => r(require('../page/member/setting')), 'setting')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
@@ -15,6 +18,7 @@ const articleDetail = r => require.ensure([], () => r(require('../page/article/d
 const tousuDetail = r => require.ensure([], () => r(require('../page/tousu/detail')), 'tousuDetail')
 const tousuCreate = r => require.ensure([], () => r(require('../page/tousu/create')), 'tousuCreate')
 const tousuSuccess = r => require.ensure([], () => r(require('../page/tousu/success')), 'tousuSuccess')
+const activity = r => require.ensure([], () => r(require('../page/activity/activity')), 'activity')
 
 
 export default [{
@@ -57,6 +61,22 @@ export default [{
             path: '/help',
             component: help,
             meta: { keepAlive: true },
+        },
+        //律师列表
+        {
+            path: '/lawyer/list',
+            component: lawyer,
+            meta: { keepAlive: true },
+        },
+        //律师详情
+        {
+            path: '/lawyer/detail/:id',
+            component: lawyerDetail,
+        },
+        //律师咨询
+        {
+            path: '/lawyer/commit/:id',
+            component: lawyerCommit,
         },
         //个人信息页
         {
@@ -106,6 +126,12 @@ export default [{
         {
             path: '/tousu/detail/:id',
             component: tousuDetail
+        },
+        //活动页
+        {
+            path: '/activity',
+            component: activity,
+            meta: { keepAlive: true }
         }
     ]
 }]

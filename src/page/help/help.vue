@@ -6,7 +6,7 @@
         <div class="dz">
             <div class="title">今日当值</div>
             <div class="box">
-                <router-link to="" class="box_top">律师<span>查看全部</span></router-link>
+                <router-link to="/lawyer/list" class="box_top">律师<span>查看全部</span></router-link>
                 <div class="box_info">
                     <div class="img" :style="{backgroundImage:'url('+lawyer.avatar+'!/fh/230)'}"></div>
                     <!--<img :src="lawyer.avatar">-->
@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="box">
-                <router-link to="" class="box_top">记者<span>查看全部</span></router-link>
+                <router-link to="/reporter/list" class="box_top">记者<span>查看全部</span></router-link>
                 <div class="box_info" style="border-bottom: none;">
                     <div class="img" :style="{backgroundImage:'url('+reporter.avatar+'!/fh/230)'}"></div>
                     <!--<img :src="reporter.avatar">-->

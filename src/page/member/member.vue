@@ -28,6 +28,7 @@
                 <router-link to="">我的投诉</router-link>
             </div>
         </div>
+        <router-link to="/product" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5); font-weight: bolder; font-size: .32rem;"><img src="../../images/icon_fuwuguanjia@2x.png">我的服务管家</router-link>
         <div class="box1">
             <router-link to="" class="das"><img src="../../images/myself_volunteer@2x.png">维权志愿者联盟</router-link>
             <span class="xian"></span>
@@ -36,7 +37,7 @@
         <div class="box1">
             <router-link to="" class="das"><img src="../../images/myself_focus@2x.png">关注的投诉</router-link>
             <span class="xian"></span>
-            <router-link to="" class="das"><img src="../../images/default_portrait.png">收藏</router-link>
+            <router-link to="" class="das"><img src="../../images/icon_xing.png">收藏</router-link>
         </div>
         <router-link to="/member/setting" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5);"><img src="../../images/myself_setting@2x.png">设置</router-link>
     </div>
