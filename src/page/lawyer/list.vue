@@ -169,7 +169,7 @@
             .hf{
                 background: #f1f1f1;
                 padding: .2rem;
-                border-radius: .15rem;
+                border-radius: .1rem;
                 .p3{
                     font-size: .28rem;
                     line-height: .38rem;
