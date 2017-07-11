@@ -1,28 +1,28 @@
 <template>
     <div style="padding-top: 1rem;">
-        <head-i><span class="head_title" slot="title_text">律师</span></head-i>
+        <head-i><span class="head_title" slot="title_text">记者</span></head-i>
         <nav>
             <div class="list" :class="{hover: hover=='list'}" @click="navClick('list')">列表<span></span></div>
             <div class="example" :class="{hover: hover=='example'}" @click="navClick('example')">案例<span></span></div>
         </nav>
         <swiper id="swiper-nav" :options="swiperNav" ref="mySwiper">
             <swiper-slide class="list lis">
-                <router-link :to="'/lawyer/detail/'+data.id" v-for="data in list" :key="data">
+                <router-link :to="'/reporter/detail/'+data.id" v-for="data in list" :key="data">
                     <div class="tx" :style="{backgroundImage:'url('+data.avatar+'!/fh/230)'}"></div>
                     <div class="info">
-                        <p class="p1">{{data.name}}</p>
-                        <p class="p2">执业证号{{data.license_number}}</p>
+                        <p class="p1">{{data.name}}<span style="font-size: .24rem; margin-left: .6rem;">媒体志愿者</span></p>
+                        <p class="p2">已爆料{{data.inquiries}}件热点投诉</p>
                     </div>
-                    <router-link :to="'/lawyer/commit/'+data.id" class="but">咨询我</router-link>
+                    <router-link :to="'/reporter/commit/'+data.id" class="but">爆料</router-link>
                     <div class="p3">擅长领域：{{data.good_at}}</div>
                 </router-link>
             </swiper-slide>
             <swiper-slide class="example lis">
-                <router-link :to="'/example/'+data.id+'?id=lawyer'" v-for="data in example" :key="data">
+                <router-link :to="'/example/'+data.id+'?id=reporter'" v-for="data in example" :key="data">
                     <p class="p1">{{data.title}}</p>
                     <p class="p2">{{data.inquiry_content}}</p>
                     <div class="hf">
-                        <p class="p3"><span>律师回复：</span>{{data.reply_content}}</p>
+                        <p class="p3"><span>记者回复：</span>{{data.reply_content}}</p>
                     </div>
                 </router-link>
             </swiper-slide>
@@ -86,7 +86,7 @@
                 }
             },
             fetchData(){
-                this.axios.get('/v3/lawyer/list')
+                this.axios.get('/v3/reporter/list')
                     .then(res =>{
                         this.list=res.data.data;
                         if(this.list!=''){
@@ -96,7 +96,7 @@
                     })
             },
             examples(){
-                this.axios.get('/v3/lawyer/example?volunteer_type=lawyer')
+                this.axios.get('/v3/lawyer/example?volunteer_type=reporter')
                     .then(res =>{
                         this.example=res.data.data;
                         if(this.example!=''){
@@ -213,9 +213,9 @@
                     margin-top: .05rem;
                 }
                 .p2{
-                    color: #999;
                     font-size: .24rem;
                     margin-top: .2rem;
+                    color: #999;
                 }
             }
             .p3{

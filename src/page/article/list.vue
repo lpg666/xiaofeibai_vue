@@ -82,6 +82,7 @@
         width: 100%;
         height: calc(100vh);
         overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
     }
     .recommend_list{
     .list:last-child{

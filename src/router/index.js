@@ -7,9 +7,15 @@ const resetPassword = r => require.ensure([], () => r(require('../page/login/res
 const home = r => require.ensure([], () => r(require('../page/home/home')), 'home')
 const help = r => require.ensure([], () => r(require('../page/help/help')), 'help')
 const lawyer = r => require.ensure([], () => r(require('../page/lawyer/list')), 'lawyer')
+const reporter = r => require.ensure([], () => r(require('../page/reporter/list')), 'reporter')
 const lawyerDetail = r => require.ensure([], () => r(require('../page/lawyer/detail')), 'lawyerDetail')
+const reporterDetail = r => require.ensure([], () => r(require('../page/reporter/detail')), 'reporterDetail')
 const lawyerCommit = r => require.ensure([], () => r(require('../page/lawyer/commit')), 'lawyerCommit')
+const reporterCommit = r => require.ensure([], () => r(require('../page/reporter/commit')), 'reporterCommit')
+const example = r => require.ensure([], () => r(require('../page/lawyer/example')), 'example')
+const commitSuccess = r => require.ensure([], () => r(require('../page/lawyer/success')), 'commitSuccess')
 const member = r => require.ensure([], () => r(require('../page/member/member')), 'member')
+const memberTousu = r => require.ensure([], () => r(require('../page/member/tousu')), 'memberTousu')
 const setting = r => require.ensure([], () => r(require('../page/member/setting')), 'setting')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
@@ -18,7 +24,9 @@ const articleDetail = r => require.ensure([], () => r(require('../page/article/d
 const tousuDetail = r => require.ensure([], () => r(require('../page/tousu/detail')), 'tousuDetail')
 const tousuCreate = r => require.ensure([], () => r(require('../page/tousu/create')), 'tousuCreate')
 const tousuSuccess = r => require.ensure([], () => r(require('../page/tousu/success')), 'tousuSuccess')
+const tousuError = r => require.ensure([], () => r(require('../page/member/error')), 'tousuError')
 const activity = r => require.ensure([], () => r(require('../page/activity/activity')), 'activity')
+const productRecommend = r => require.ensure([], () => r(require('../page/product/recommend')), 'productRecommend')
 
 
 export default [{
@@ -62,6 +70,11 @@ export default [{
             component: help,
             meta: { keepAlive: true },
         },
+        //
+        {
+            path: '/product/recommend',
+            component: productRecommend
+        },
         //律师列表
         {
             path: '/lawyer/list',
@@ -78,6 +91,32 @@ export default [{
             path: '/lawyer/commit/:id',
             component: lawyerCommit,
         },
+        //记者列表
+        {
+            path: '/reporter/list',
+            component: reporter,
+            meta: { keepAlive: true },
+        },
+        //记者详情
+        {
+            path: '/reporter/detail/:id',
+            component: reporterDetail,
+        },
+        //记者爆料
+        {
+            path: '/reporter/commit/:id',
+            component: reporterCommit,
+        },
+        //案例详情
+        {
+            path:'example/:id',
+            component:example,
+        },
+        //爆料/咨询结束页
+        {
+            path:'commit/success/:id',
+            component:commitSuccess,
+        },
         //个人信息页
         {
             path: '/member',
@@ -87,6 +126,16 @@ export default [{
         {
             path:'/member/setting',
             component:setting
+        },
+        //我的投诉页
+        {
+            path: '/member/tousu',
+            component: memberTousu
+        },
+        //我的投诉错误页
+        {
+            path: '/member/error',
+            component: tousuError
         },
         //信息页
         {

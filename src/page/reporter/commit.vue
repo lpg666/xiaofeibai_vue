@@ -1,8 +1,8 @@
 <template>
     <div style="padding-top: 1rem; background: #F6F7F9;">
-        <head-i><span class="head_title" slot="title_text">我要咨询</span></head-i>
+        <head-i><span class="head_title" slot="title_text">我要爆料</span></head-i>
         <div class="com">
-            <input class="title" value="" v-model="title" placeholder="咨询标题（5-30个字）">
+            <input class="title" value="" v-model="title" placeholder="爆料标题（5-30个字）">
             <textarea class="cent" placeholder="请详细描述相关事件（不少于20个字）" v-model="cent"></textarea>
         </div>
         <div class="picbox">

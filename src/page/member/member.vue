@@ -5,6 +5,11 @@
                 <div id="head_go" @click="$router.go(-1)"></div>
                 <div class="title_text">我</div>
             </div>
+            <div class="bc">
+                <i></i>
+                请完善资料，即可快速投诉。
+                <router-link to="">立即完善</router-link>
+            </div>
             <div class="wd">
                 <img class="pic2" src="../../images/default_portrait.png">
                 <router-link to="/login" class="login">登录/注册</router-link>
@@ -25,7 +30,7 @@
             <div class="top_box">
                 <span></span>
                 <router-link to="">编辑资料</router-link>
-                <router-link to="">我的投诉</router-link>
+                <router-link to="/member/tousu">我的投诉</router-link>
             </div>
         </div>
         <router-link to="/product" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5); font-weight: bolder; font-size: .32rem;"><img src="../../images/icon_fuwuguanjia@2x.png">我的服务管家</router-link>
@@ -87,6 +92,36 @@ export default {
         background: url("../../images/bg_gerenzhongxin.png") no-repeat center;
         background-size: 100%;
         padding-bottom: .001rem;
+        .bc{
+            width: 100%;
+            height: .72rem;
+            line-height: .72rem;
+            font-size: .24rem;
+            background: rgb(252,236,147);
+            i{
+                width: .44rem;
+                height: .44rem;
+                display: block;
+                float: left;
+                margin-top: .16rem;
+                margin-left: .3rem;
+                margin-right: .1rem;
+            }
+            a{
+                margin-top: .08rem;
+                width: 1.36rem;
+                height: .54rem;
+                text-align: center;
+                background: #fff;
+                line-height: .54rem;
+                border: 1px solid #37C078;
+                border-radius: .1rem;
+                float: right;
+                margin-right: .3rem;
+                display: block;
+                color: #37C078;
+            }
+        }
         .wd{
             height: 2.5rem;
             background: url("../../images/bg_touxiang.png") no-repeat center;

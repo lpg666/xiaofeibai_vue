@@ -46,7 +46,7 @@
             </router-link>
         </div>
         <div class="tuij">
-            <router-link to="" class="title">产品推荐<span>消费电子行业最新产品测评</span></router-link>
+            <router-link to="/product/recommend" class="title">产品推荐<span>消费电子行业最新产品测评</span></router-link>
             <router-link to="" class="box">
                 <div class="box_top">平民价的高级享受 JBL CM102高保真有源监听音箱体验评测</div>
                 <ul class="box_pic">
