@@ -170,7 +170,7 @@
                 console.log(this.$route.params.id);
             },
             fetchData () {
-                this.axios.get('/v4/tousu/detail?id='+this.$route.params.id+'')
+                this.axios.get('/v4/complaint/detail?complaint_id='+this.$route.params.id+'')
                     .then(res =>{
                         this.detail=res.data.data;
                         if(this.detail!=''){

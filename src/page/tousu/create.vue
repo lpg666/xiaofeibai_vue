@@ -3,13 +3,13 @@
         <transition name="router-fade" v-if="isShow">
             <div class="tank">
                 <div class="declare" v-if="declare">
-                    <div class="title">投诉须知</div>
+                    <div class="title"></div>
                     <p>1.投诉是非常严肃的事情,请务必输入真实姓名及联系电话，以便我们工作人员能及时与您联系沟通和协助投诉处理事宜，如果投诉人相关信息不属实，则按无效投诉处理。</p>
                     <p>2.投诉人应当对投诉内容的真实性负责，因虚假投诉引起的法律责任，由投诉人承担。</p>
                     <p>3.不得使用诋毁，辱骂性的语言损害他人声誉，否则引起的法律责任，由投诉人承担。</p>
                     <p>4.请不要重复投诉，消费保在收到投诉后会在第一时间联系您并协助维权。</p>
                     <p style="color:#FD9C33; margin-bottom: 0;">5.投诉时请注意保护个人隐私，不要在投诉内容里面填写个人联系电话或帐号信息，涉及个人隐私或者敏感照片请选择不公开。</p>
-                    <div class="check"><span :class="{sp1:declareSp}" @click="Declare">{{declareSp}}</span>下次不再提醒</div>
+                    <div class="check"><span :class="{sp1:declareSp}" @click="Declare"></span>下次不再提醒</div>
                     <div class="btn" @click="declareG">我知道了</div>
                 </div>
             </div>
@@ -18,16 +18,16 @@
             <span class="head_title" slot="title_text">填写投诉</span>
         </head-i>
         <div class="inp" :class="tki">
-            <div class="text">
+            <!--<div class="text">
                 <p :class="userInfos.real_name?'p1':'p2'">真实姓名</p>
                 <input :class="userInfos.real_name?'lp1':'lp2'" type="text" :value="userInfos.real_name" v-model="userInfos.real_name">
             </div>
-            <!-- -->
+            &lt;!&ndash; &ndash;&gt;
             <div class="text">
                 <p :class="userInfos.mobile?'p1':'p2'">手机号码</p>
                 <input :class="userInfos.mobile?'lp1':'lp2'" type="text" :value="userInfos.mobile" v-model="userInfos.mobile">
             </div>
-            <!-- -->
+            &lt;!&ndash; &ndash;&gt;-->
             <div class="select" @click="tanK('provinces')">
                 <p :class="from.value.province?'p1':'p2'">所在地区</p>
                 <div :class="from.value.province?'lp1':'lp2'">{{from.name.province}} {{from.name.city}}</div>
@@ -269,66 +269,66 @@ export default {
                     arr.push(1);
                 }
             }
-            if(this.userInfo.real_name.length<=0 || !reg1.test(this.userInfo.real_name)){
+            /*if(this.userInfo.real_name.length<=0 || !reg1.test(this.userInfo.real_name)){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='真实姓名不能为空';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.userInfo.mobile.length!==11 || !reg.test(this.userInfo.mobile)){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='手机格式错误';
-                setTimeout(this.close,2000);
-            }else if(!this.from.value.province || !this.from.value.city){
+                setTimeout(this.close,1500);
+            }else */if(!this.from.value.province || !this.from.value.city){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='地址不能为空';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.from.value.type_id=='' || this.from.value.subtype_id==''){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='行业分类不能为空';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.from.value.brand_id=='' || !this.from.value.brand_id){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='被投诉企业/品牌不能为空';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.from.value.problems=='' || !this.from.value.problems){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='投诉问题不能为空';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.from.value.suqius=='' || !this.from.value.suqius){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='投诉诉求不能为空';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(arr.length>0){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='附加属性不能为空';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.from.value.title=='' || !this.from.value.title){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='投诉标题不能为空';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.from.value.title.length<5 || this.from.value.title.length>30){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='投诉标题不能小于5或大于30字符';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.from.value.content=='' || !this.from.value.content){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='投诉内容不能为空';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.from.value.content.length<20){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='投诉内容不能小于20字符';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else if(this.re==false){
                 this.close();
                 var text = '';
@@ -349,7 +349,7 @@ export default {
                     this.from.value.pics = text1.join('|||');
                 }
                 this.from.value.address = this.from.name.province + this.from.name.city;
-                this.from.value.sign = this.userInfo.sign;
+                this.from.value.sign = JSON.parse(this.userInfo).sign;
                 this.from.value.source_type = 'wechat';
                 this.from.value.version='ios';
 
@@ -367,11 +367,14 @@ export default {
                             this.showLoad=true;
                             this.loadType='alert';
                             this.loadText=res.data.msg;
-                            setTimeout(this.close,2000);
+                            setTimeout(this.close,1500);
                         }
                     })
                     .catch(err =>{
-
+                        this.showLoad=true;
+                        this.loadType='alert';
+                        this.loadText='网络出错';
+                        setTimeout(this.close,1500);
                     })
             }
             console.log(this.from.value);
@@ -395,7 +398,7 @@ export default {
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='您的浏览器不支持图片上传，请升级您的浏览器';
-                setTimeout(this.close,2000);
+                setTimeout(this.close,1500);
             }else{
                 const image = new Image();
                 const vm = this;
@@ -407,12 +410,12 @@ export default {
                         this.showLoad=true;
                         this.loadType='alert';
                         this.loadText='文件类型不对';
-                        setTimeout(this.close,2000);
+                        setTimeout(this.close,1500);
                     }else if(!isLt2M){
                         this.showLoad=true;
                         this.loadType='alert';
                         this.loadText='图片过大';
-                        setTimeout(this.close,2000);
+                        setTimeout(this.close,1500);
                     }else{
                         this.showLoad=true;
                         this.loadType='load';
@@ -428,7 +431,10 @@ export default {
                                     vm.showLoad=false;
                                 })
                                 .catch(err =>{
-
+                                    vm.showLoad=true;
+                                    vm.loadType='alert';
+                                    vm.loadText='网络出错';
+                                    setTimeout(vm.close,1500);
                                 })
                         };
                     }
@@ -491,20 +497,39 @@ export default {
         //投诉单选
         radio(id,value,name,parent){
             if(parent){
-                this.from.name={};
-                this.from.value={};
+                this.$delete(this.from.value,'type_id');
+                this.$delete(this.from.value,'subtype_id');
+                this.$delete(this.from.value,'brand_id');
+                this.$delete(this.from.value,'problems');
+                this.$delete(this.from.value,'suqius');
+
+                this.$delete(this.from.name,'type_id');
+                this.$delete(this.from.name,'subtype_id');
+                this.$delete(this.from.name,'brand_id');
+                this.$delete(this.from.name,'problems');
+                this.$delete(this.from.name,'suqius');
+
                 this.textId={};
+
                 this.$set(this.from.value,'type_id',parent.id);
                 this.$set(this.from.name,'type_id',parent.name);
-            }
-            if(id){
-                if(id=='propertie'){
-                    this.$set(this.textId,''+value+'',name);
-                    this.hc=name;
-                    console.log(id,value,name);
-                }else{
-                    this.$set(this.from.value,''+id+'',value);
-                    this.$set(this.from.name,''+id+'',name);
+
+                this.$set(this.from.value,'subtype_id',value);
+                this.$set(this.from.name,'subtype_id',name);
+
+                console.log(this.from.value);
+            }else{
+                if(id){
+                    if(id=='propertie'){
+                        this.$set(this.textId,''+value+'',name);
+                        this.hc=name;
+                        console.log(id,value,name);
+                    }else{
+                        this.$set(this.from.value,''+id+'',value);
+                        this.$set(this.from.name,''+id+'',name);
+
+                        console.log(this.from.value.brand_id);
+                    }
                 }
             }
         },
@@ -655,48 +680,53 @@ export default {
         },
         //点击选项弹出
         tanK(data,id){
-            document.querySelector('body').style.overflow='hidden';
-            this.tkinp=true;
-            this.tk=true;
             console.log(data);
-            switch (data){
-                case 'type':
-                    this.tkData={'name':data,'data':this.types};
-                    break;
-                case 'brand':
-                    this.tkData={'name':data,'data':this.brands};
-                    break;
-                case 'problem':
-                    this.tkData={'name':data,'data':this.problems};
-                    break;
-                case 'suqiu':
-                    this.tkData={'name':data,'data':this.suqius};
-                    break;
-                case 'propertie':
-                    var pro = '';
-                    for(let i=0;i<this.properties.length;i++){
-                        if(this.properties[i].id==id){
-                            pro = this.properties[i];
+            if(data!='type' && this.types=='' && data!='provinces'){
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='请先选择行业分类';
+                setTimeout(this.close,1500);
+            }else{
+                document.querySelector('body').style.overflow='hidden';
+                this.tkinp=true;
+                this.tk=true;
+                switch (data){
+                    case 'type':
+                        this.tkData={'name':data,'data':this.types};
+                        break;
+                    case 'brand':
+                        this.tkData={'name':data,'data':this.brands};
+                        break;
+                    case 'problem':
+                        this.tkData={'name':data,'data':this.problems};
+                        break;
+                    case 'suqiu':
+                        this.tkData={'name':data,'data':this.suqius};
+                        break;
+                    case 'propertie':
+                        var pro = '';
+                        for(let i=0;i<this.properties.length;i++){
+                            if(this.properties[i].id==id){
+                                pro = this.properties[i];
+                            }
                         }
-                    }
-                    this.tkData={'name':data,'data':pro};
-                    console.log(this.tkData.data);
-                    break;
-                case 'provinces':
-                    this.tkData={'name':data,'data':this.provinces};
-                    break;
-                default:
-                    this.tkData={};
+                        this.tkData={'name':data,'data':pro};
+                        console.log(this.tkData.data);
+                        break;
+                    case 'provinces':
+                        this.tkData={'name':data,'data':this.provinces};
+                        break;
+                    default:
+                        this.tkData={};
+                }
             }
-
         },
         //关闭弹框按钮
         tanG(){
-            if(this.tkData.name=='type' && this.problems==''){
+            if(this.tkData.name=='type'){
                 document.querySelector('body').style.overflow='';
                 this.tk=false;
                 this.showAlert=false;
-                this.$router.go(-1);
             }else{
                 document.querySelector('body').style.overflow='';
                 this.tk=false;
@@ -723,7 +753,7 @@ export default {
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='您还没选择';
-                    setTimeout(this.close,2000);
+                    setTimeout(this.close,1500);
                 }
             }else if(this.tkData.name=='brand'){
                 if(this.from.value.brand_id){
@@ -734,7 +764,7 @@ export default {
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='您还没选择';
-                    setTimeout(this.close,2000);
+                    setTimeout(this.close,1500);
                 }
             }else if(this.tkData.name=='problem'){
                 if(this.from.value.problems){
@@ -745,7 +775,7 @@ export default {
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='您还没选择';
-                    setTimeout(this.close,2000);
+                    setTimeout(this.close,1500);
                 }
             }else if(this.tkData.name=='suqiu'){
                 if(this.from.value.suqius){
@@ -756,7 +786,7 @@ export default {
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='您还没选择';
-                    setTimeout(this.close,2000);
+                    setTimeout(this.close,1500);
                 }
             }else if(this.tkData.name=='propertie'){
                 if(this.hc!==''){
@@ -767,7 +797,7 @@ export default {
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='您还没选择';
-                    setTimeout(this.close,2000);
+                    setTimeout(this.close,1500);
                 }
             }else if(this.tkData.name=='provinces'){
                 if(this.from.value.province && this.from.value.city){
@@ -778,14 +808,14 @@ export default {
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='您还没选择';
-                    setTimeout(this.close,2000);
+                    setTimeout(this.close,1500);
                 }
             }
         }
     },
     created(){
         this.show;
-        this.tk=true;
+        //this.tk=true;
         this.showLoad=true;
         this.loadType='load';
         this.loadText='正在加载';
@@ -1170,22 +1200,27 @@ export default {
             font-size: .28rem;
             margin: .4rem auto;
             .wh(1.6rem,.35rem);
-            background: #000;
+            background: url("../../images/complaints_procedure@2x.png") no-repeat center;
+            background-size: 100%;
         }
         .check{
             .sc(.24rem,#999);
             margin: .35rem auto;
+            text-indent: .28rem;
             text-align: center;
             span{
+                background: url("../../images/icon_xuzhi.png") no-repeat top;
+                background-size: 100%;
                 width: .28rem;
                 height: .28rem;
-                border-radius: 100%;
-                border: 1px solid #cdcdcd;
-                display: inline-block;
+                position: absolute;
+                left: 35%;
+                display: block;
+                margin-top: .045rem;
                 margin-right: .15rem;
             }
             .sp1{
-                background: #2dc177;
+                background-position: bottom;
             }
         }
         .btn{

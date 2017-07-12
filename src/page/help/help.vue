@@ -41,23 +41,19 @@
             <router-link :to="'/article/detail/'+article.id" class="box" v-else>
                 <div class="box_top">{{article.title}}</div>
                 <ul class="box_pic">
-                    <li class="img" v-for="data in article.default_pic" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
+                    <li v-if="key<3" class="img" v-for="data,key in article.default_pic" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
                 </ul>
             </router-link>
         </div>
         <div class="tuij">
             <router-link to="/product/recommend" class="title">产品推荐<span>消费电子行业最新产品测评</span></router-link>
-            <router-link to="" class="box">
-                <div class="box_top">平民价的高级享受 JBL CM102高保真有源监听音箱体验评测</div>
-                <ul class="box_pic">
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
+            <router-link :to="'/cechoice/detail/'+chanpin.article_id" class="box">
+                <div class="box_pic img" :style="{backgroundImage:'url('+chanpin.thumb+')'}"></div>
+                <div class="box_top">{{chanpin.title}}</div>
             </router-link>
         </div>
         <div class="tongj">
-            <router-link to="" class="title">行业统计<span>消各行业投诉数据</span></router-link>
+            <router-link to="/article?type=3" class="title">行业统计<span>消各行业投诉数据</span></router-link>
             <router-link :to="'/article/detail/'+hanye.id" class="box">
                 <div class="box_pic img" :style="{backgroundImage:'url('+hanye.thumb+'!/fh/230)'}"></div>
                 <div class="box_top">{{hanye.title}}</div>
@@ -78,6 +74,7 @@
                 lawyer:'',
                 article:'',
                 hanye:'',
+                chanpin:'',
             }
         },
         components:{
@@ -89,8 +86,19 @@
             this.lawyerAjax();
             this.articleAjax();
             this.hanyeAjax();
+            this.chanpinAjax();
         },
         methods:{
+            chanpinAjax(){
+                this.axios.get('/v4/cechoice_article/article_list?type_id=2&getRecommend=1')
+                    .then(res =>{
+                        this.chanpin=res.data.data;
+                        console.log(res);
+                    })
+                    .catch(err =>{
+
+                    })
+            },
             reporterAjax(){
                 this.axios.get('/v4/reporter/watch_reporter')
                     .then(res =>{
@@ -224,7 +232,7 @@
             .box_top{
                 font-size: .32rem;
                 line-height: .48rem;
-                padding: .3rem 0;
+                padding: .3rem .22rem .3rem 0;
             }
             .box_pic{
                 width: 100%;
@@ -239,7 +247,7 @@
             }
         }
     }
-    .tongj .box{
+    .tongj .box,.tuij .box{
         .box_pic{
             width: 1.65rem;
             height: 1.4rem;

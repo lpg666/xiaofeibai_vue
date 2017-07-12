@@ -1,8 +1,8 @@
 <template>
     <div class="loading_box">
         <img v-if="loadType=='load'" class="load" src="../../images/loading.png">
-        <img v-else-if="loadType=='alert'" class="load" src="">
-        <img v-else src="">
+        <img v-else-if="loadType=='alert'" style="width: .66rem; height: .66rem;" src="../../images/yuancuo.png">
+        <img v-else src="../../images/yuandui.png">
         <p>{{loadText}}</p>
     </div>
 </template>

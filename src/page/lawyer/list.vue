@@ -1,10 +1,10 @@
 <template>
     <div style="padding-top: 1rem;">
         <head-i><span class="head_title" slot="title_text">律师</span></head-i>
-        <nav>
+        <div class="lawyer_nav">
             <div class="list" :class="{hover: hover=='list'}" @click="navClick('list')">列表<span></span></div>
             <div class="example" :class="{hover: hover=='example'}" @click="navClick('example')">案例<span></span></div>
-        </nav>
+        </div>
         <swiper id="swiper-nav" :options="swiperNav" ref="mySwiper">
             <swiper-slide class="list lis">
                 <router-link :to="'/lawyer/detail/'+data.id" v-for="data in list" :key="data">
@@ -127,7 +127,7 @@
           }
         }
     }
-    nav{
+    .lawyer_nav{
         background: #fff;
         position: relative;
         border-bottom: 1px solid rgba(204,204,204,.5);

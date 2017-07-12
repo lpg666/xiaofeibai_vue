@@ -1,9 +1,12 @@
 <template>
     <div class="scroll" style="padding-top: 1rem; background: #fff;">
-        <head-i><span class="head_title" slot="title_text">消费警示</span></head-i>
+        <head-i>
+            <span v-if="$route.query.type==1" class="head_title" slot="title_text">消费警示</span>
+            <span v-else class="head_title" slot="title_text">行业统计</span>
+        </head-i>
         <section class="recommend_list" v-if="recommendData.length>0">
             <router-link v-for="data in recommendData" :key="data" :to="'/article/detail/'+data.id" class="list">
-                <div v-if="data.pic==null">
+                <div v-if="data.default_pic==null">
                     <div class="list_left">
                         <p class="p1">{{data.title}}</p>
                         <p class="p2">{{data.add_time}}</p>
@@ -15,7 +18,7 @@
                 <div v-else>
                     <p class="p3">{{data.title}}</p>
                     <ul class="pic">
-                        <li v-for="src in data.pic" :style="{backgroundImage:'url('+src.pic+'!/fh/230)'}"><!--<img :src="src.pic">--></li>
+                        <li v-if="key<3" v-for="src,key in data.default_pic" :style="{backgroundImage:'url('+src.pic+'!/fh/230)'}"><!--<img :src="src.pic">--></li>
                     </ul>
                 </div>
             </router-link>

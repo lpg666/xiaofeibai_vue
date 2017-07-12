@@ -3,12 +3,12 @@
         <head-i><span class="head_title" slot="title_text">产品推荐</span></head-i>
         <div class="box">
             <div class="list" style="overflow: hidden; padding-bottom: .3rem;">
-                <router-link to="" v-for="item in 10">
-                    <div class="pic"></div>
-                    <p>收购 Withings 的果实，诺基 亚推出一系列数码健康产品</p>
+                <router-link :to="'/cechoice/detail/'+item.article_id" v-for="item in detail" :key="item">
+                    <div class="pic" :style="{backgroundImage:'url('+item.thumb+')'}"></div>
+                    <p>{{item.title}}</p>
                 </router-link>
             </div>
-            <p v-if="showLoading" class="loading">正在加载更多数据...</p>
+            <p v-if="showLoading" class="loading">{{load}}</p>
         </div>
     </div>
 </template>
@@ -20,9 +20,11 @@
         data(){
             return {
                 showLoading:false,
+                load:'正在加载更多数据...',
                 scrollA: '',
                 repeat:false,
                 page:0,
+                detail:''
             }
         },
         components:{
@@ -32,14 +34,31 @@
 
         },
         created(){
-
+            this.ajaxData();
         },
         methods:{
             ajaxData(){
                 this.showLoading = true;
+                this.axios.get('/v4/cechoice_article/article_list?type_id=2&page='+this.page)
+                    .then(res =>{
+                        if(res.data.error){
+                            this.load=this.data.msg;
+                        }else if(this.page==0){
+                            this.detail= res.data.data;
+                        }else{
+                            this.detail= this.detail.concat(res.data.data);
+                        }
+                        this.repeat = false;
+                        this.showLoading = false;
+                        console.log(res);
+                    })
+                    .catch(err =>{
+
+                    })
             },
             menu() {
                 this.scrollA = document.querySelector('.box').scrollTop;
+                console.log();
                 if(document.querySelector('.box').clientHeight + this.scrollA +2 >= document.querySelector('.list').offsetHeight && this.repeat==false){
                     this.repeat = true;
                     this.page += 1;
@@ -66,7 +85,6 @@
             margin-top: .3rem;
             margin-left: .23rem;
             .pic{
-                background: #000;
                 width: 100%;
                 height: 3.45rem;
                 background-size: cover;
@@ -74,6 +92,7 @@
                 background-repeat: no-repeat;
             }
             p{
+                height: .6rem;
                 margin-top: .2rem;
                 width: 100%;
                 font-size: .26rem;

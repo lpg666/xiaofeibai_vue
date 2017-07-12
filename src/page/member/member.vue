@@ -18,7 +18,7 @@
         <div v-else>
             <div class="head" style="height: 3.3rem;">
                 <div class="top">
-                    <div id="head_go" @click="$router.go(-1)"><</div>
+                    <div id="head_go" @click="fh"></div>
                     <div class="title_text">我</div>
                 </div>
                 <div class="wd">
@@ -76,7 +76,10 @@ export default {
     methods:{
         ...mapMutations([
             'RECORD_USERINFO'
-        ])
+        ]),
+        fh(){
+            this.$router.push({path:'/home'});
+        }
     },
     mounted() {
         console.log(this.autoRoute,this.userInfo);

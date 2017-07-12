@@ -10,14 +10,12 @@
             </div>
             <div class="cent" v-html="detail.content"></div>
         </div>
-        <comment :comment="comment" :detail="detail" :type="type"></comment>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
 
 <script>
     import headI from '../../components/header/head'
-    import comment from '../../components/common/comment'
     import loading from '../../components/common/loading'
 
     export default {
@@ -33,7 +31,6 @@
         },
         components:{
             headI,
-            comment,
             loading
         },
         created () {
@@ -43,7 +40,6 @@
             this.loadType='load';
             this.loadText='正在加载';
             this.fetchData();
-            this.commentData();
         },
         watch: {
             // 如果路由有变化，会再次执行该方法
@@ -56,19 +52,8 @@
             fanhui(){
                 document.body.scrollTop=0;
             },
-            commentData(){
-                this.axios.get('/v4/article/comments?id='+this.$route.params.id+'')
-                    .then(res =>{
-                        this.comment=res.data.data;
-                        console.log(this.comment);
-                    })
-                    .catch(err =>{
-
-                    });
-                console.log(this.$route.params.id);
-            },
             fetchData () {
-                this.axios.get('/v4/article/detail?article_id='+this.$route.params.id+'')
+                this.axios.get('/v4/cechoice_article/article_details?article_id='+this.$route.params.id+'')
                     .then(res =>{
                         this.detail=res.data.data;
                         if(this.detail!=''){
@@ -80,7 +65,7 @@
                     .catch(err =>{
 
                     });
-                    console.log(this.$route.params.id);
+                console.log(this.$route.params.id);
             }
         }
 
@@ -113,11 +98,15 @@
                 margin-bottom: .2rem;
                 font-size: .3rem !important;
                 line-height: .5rem;
+                img{
+                    width: 100% !important;
+                    height: auto !important;
+                    display: block;
+                }
             }
-        span{
-            text-align: justify;
-            font-size: .3rem !important;
-            display: block;
+            span{
+                text-align: justify;
+                font-size: .3rem !important;
                 img{
                     display: block;
                 }

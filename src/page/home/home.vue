@@ -16,10 +16,10 @@
                     <router-link v-for="data in recommendData" :key="data" :to="'/tousu/detail/'+data.id" class="list" v-if="data.resources_type==0">
                         <div class="list_left" :style="data.default_pic==null?'width:100%':'height:1.4rem; position:relative;'">
                             <p class="p1">{{data.title}}</p>
-                            <p class="p2" :style="data.default_pic!=null?'position:absolute; left:0; bottom:0;':''">
+                            <p class="p2" :style="data.default_pic!=null?'position:absolute; left:0; bottom:0; width:100%;':''">
                                 <span class="hot" v-if="data.is_hot==1">热</span>
                                 <span v-if="data.complaint_keyword">{{data.complaint_keyword.name}}</span>
-                                <span>{{data.add_time}}</span>
+                                <span>{{data.add_time.substr(0,10)}}</span>
                                 <span class="status status0" v-if="data.status==0">投诉受理</span>
                                 <span class="status status1" v-else-if="data.status==1">企业处理</span>
                                 <span class="status status2" v-else-if="data.status==2">结果审核</span>
@@ -33,8 +33,8 @@
                     <router-link :to="'/article/detail/'+data.id" class="list" v-else-if="data.resources_type==1">
                         <div v-if="data.pic==null">
                             <div class="list_left">
-                                <p class="p1">【消费警示】{{data.title}}</p>
-                                <p class="p2">{{data.add_time}}</p>
+                                <p class="p1" :style="data.pic==null?'min-height:.84rem;':''">【消费警示】{{data.title}}</p>
+                                <p class="p2">{{data.add_time.substr(0,10)}}</p>
                             </div>
                             <div class="list_right" :style="{backgroundImage:'url('+data.thumb+'!/fh/230)'}">
                                 <!--<img :src="data.thumb+'!/fh/230'">-->
@@ -47,7 +47,7 @@
                             </ul>
                         </div>
                     </router-link>
-                    <p v-if="showLoading" class="loading">正在加载更多数据...</p>
+                    <p v-if="showLoading" class="loading">{{load1}}</p>
                 </section>
                 <section class="seat_list" v-else>
                     <div class="seat_swiper"></div>
@@ -74,7 +74,7 @@
                             <!--<img :src="result.default_pic.pic+'!/fh/230'">-->
                         </div>
                     </router-link>
-                    <p v-if="showLoading" class="loading">正在加载更多数据...</p>
+                    <p v-if="showLoading" class="loading">{{load2}}</p>
                 </section>
                 <section class="seat_list" v-else>
                     <div class="result_seat" v-for="item in 10" :key="item">
@@ -89,16 +89,14 @@
             </swiper-slide>
             <swiper-slide class="lis">
                 <section class="cechoice_list" v-if="cechoiceData.length>0">
-                    <router-link :to="'/cechoice/detaol/'+data.id" class="list" v-for="data in cechoiceData" :key="data">
+                    <router-link :to="'/cechoice/detail/'+data.article_id" class="list" v-for="data in cechoiceData" :key="data">
                         <div class="list_left">
                             <p class="p1">{{data.title}}</p>
                             <p class="p2"><span class="cechoice_tag">{{data.type_name}}</span><!--<span>明星潮人</span>--><span>{{data.add_time}}</span></p>
                         </div>
-                        <div class="list_right">
-                            <img src="../../images/default_portrait.png">
-                        </div>
+                        <div class="list_right" :style="{backgroundImage:'url('+data.thumb+')'}"></div>
                     </router-link>
-                    <p v-if="showLoading" class="loading">正在加载更多数据...</p>
+                    <p v-if="showLoading" class="loading">{{load3}}</p>
                 </section>
                 <section class="seat_list" v-else>
                     <div class="result_seat" v-for="item in 10" :key="item">
@@ -170,7 +168,10 @@ export default {
             cechoiceI:0,
             scrollA: '',
             scrollB: '',
-            scrollC: ''
+            scrollC: '',
+            load1:'正在加载更多数据...',
+            load2:'正在加载更多数据...',
+            load3:'正在加载更多数据...',
         }
     },
     components:{
@@ -219,7 +220,9 @@ export default {
             this.showLoading = true;
             this.axios.get('/v4/cechoice_article/article_list?page='+this.cechoiceI)
                 .then(res => {
-                    if(this.cechoiceI==0){
+                    if(res.data.error){
+                        this.load3=res.data.msg;
+                    }else if(this.cechoiceI==0){
                         this.cechoiceData = res.data.data;
                     }else{
                         this.cechoiceData = this.cechoiceData.concat(res.data.data);
@@ -238,7 +241,9 @@ export default {
             this.showLoading = true;
             this.axios.get('/v4/home/dynamic_list?page='+this.resultI)
                 .then(res => {
-                    if(this.resultI==0){
+                    if(res.data.error){
+                        this.load2=res.data.msg;
+                    }else if(this.resultI==0){
                         this.resultData = res.data.data;
                     }else{
                         this.resultData = this.resultData.concat(res.data.data);
@@ -257,7 +262,9 @@ export default {
             this.showLoading = true;
             this.axios.get('/v4/home/recommend_list?page='+this.recommendI)
                 .then(res => {
-                    if(this.recommendI==0){
+                    if(res.data.error){
+                        this.load1=res.data.msg;
+                    }else if(this.recommendI==0){
                         this.recommendData = res.data.data;
                     }else{
                         this.recommendData = this.recommendData.concat(res.data.data);
@@ -401,6 +408,9 @@ export default {
                 }
             }
             .list_right{
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
                 width: 1.67rem;
                 height: 1.4rem;
                 float: right;
@@ -552,6 +562,7 @@ export default {
                     overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
                 }
                 .p2{
+                    color: #999;
                     font-size: .26rem;
                     .hot{
                         border: 1px solid #FC405B;

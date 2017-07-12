@@ -21,6 +21,7 @@ const news = r => require.ensure([], () => r(require('../page/news/news')), 'new
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
 const article = r => require.ensure([], () => r(require('../page/article/list')), 'article')
 const articleDetail = r => require.ensure([], () => r(require('../page/article/detail')), 'articleDetail')
+const cechoiceDetail = r => require.ensure([], () => r(require('../page/cechoice/detail')), 'cechoiceDetail')
 const tousuDetail = r => require.ensure([], () => r(require('../page/tousu/detail')), 'tousuDetail')
 const tousuCreate = r => require.ensure([], () => r(require('../page/tousu/create')), 'tousuCreate')
 const tousuSuccess = r => require.ensure([], () => r(require('../page/tousu/success')), 'tousuSuccess')
@@ -151,12 +152,16 @@ export default [{
         {
             path: '/article',
             component: article,
-            meta: { keepAlive: true },
         },
         //文章详情页
         {
             path: '/article/detail/:id',
             component: articleDetail,
+        },
+        //消费电子详情页
+        {
+            path: '/cechoice/detail/:id',
+            component: cechoiceDetail,
         },
         //填写投诉
         {
