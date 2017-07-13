@@ -1,39 +1,46 @@
 <template>
     <div>
         <div @click="outLogin">退出登录</div>
-        <alert-box v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-box>
+        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
 
 <script>
     import {mapState,mapMutations} from 'vuex'
-    import alertBox from '../../components/common/alertBox'
+    import loading from '../../components/common/loading'
+
     export default {
         data(){
             return {
-                showAlert: false, //显示提示组件
-                alertText: null, //提示的内容
+                showLoad:false,
+                loadType:null,
+                loadText:null
             }
         },
         components:{
-            alertBox
+            loading
         },
         methods:{
             ...mapMutations([
                 'OUT_LOGIN'
             ]),
             outLogin(){
-                this.showAlert=true;
-                this.alertText='退出成功';
-                setTimeout(this.then,1000);
+                this.axios.post('/v4/auth/logout')
+                    .then(res =>{
+                        this.showLoad=true;
+                        this.loadText='退出成功';
+                        setTimeout(this.then,1500);
+                        console.log(res.data);
+                    });
 
             },
             then(){
+                this.showLoad = false;
                 this.$router.go(-1);
                 this.OUT_LOGIN();
             },
-            closeTip(){
-                this.showAlert = false;
+            close(){
+                this.showLoad = false;
             }
         }
     }

@@ -7,8 +7,8 @@
                 <div class="tx"><img :src="detail.member!=null?detail.member.avatar:require('../../images/default_portrait.png')"></div>
                 <div><span class="sp_name">{{detail.name}}</span> <span>发于&nbsp;&nbsp;{{detail.add_time}}</span></div>
                 <div class="client">来自{{detail.client}}</div>
-                <div class="guanzhu1" v-if="detail.is_collect">已关注</div>
-                <div class="guanzhu" v-else>+关注</div>
+                <div @click="gz(1)" class="guanzhu1" v-if="isgz">已关注</div>
+                <div @click="gz(0)" class="guanzhu" v-else>+关注</div>
             </div>
             <div style="background: #fff; padding-bottom: .24rem;">
                 <div class="info">
@@ -106,6 +106,7 @@
                 detail:'',
                 comment:'',
                 type:'tousu',
+                isgz:'',
                 showLoad:false,
                 loadType:null,
                 loadText:null
@@ -152,6 +153,54 @@
             '$route': 'fetchData'
         },
         methods: {
+            ...mapMutations([
+                'AUTO_ROUTE'
+            ]),
+            gz(index){
+                console.log(this.userInfo);
+                if(this.userInfo == null || this.userInfo == ''){
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='请先登录';
+                    setTimeout(this.close,1500);
+                    setTimeout(this.dl,1500);
+
+                }else if(index==0){
+                    this.axios.get('/v4/member/add_complaint_collect?complaint_id='+this.$route.params.id)
+                        .then(res =>{
+                            if(res.data.error==1){
+                                this.showLoad=true;
+                                this.loadType='alert';
+                                this.loadText=res.data.msg;
+                            }else{
+                                this.isgz=true;
+                                this.showLoad=true;
+                                this.loadText='关注成功';
+                            }
+                            setTimeout(this.close,1500);
+                            console.log(res.data);
+                        })
+                }else{
+                    this.axios.get('/v4/member/drop_complaint_collect?complaint_id='+this.$route.params.id)
+                        .then(res =>{
+                            if(res.data.error==1){
+                                this.showLoad=true;
+                                this.loadType='alert';
+                                this.loadText=res.data.msg;
+                            }else{
+                                this.isgz=false;
+                                this.showLoad=true;
+                                this.loadText='取消关注成功';
+                            }
+                            setTimeout(this.close,1500);
+                            console.log(res.data);
+                        })
+                }
+            },
+            dl(){
+                this.AUTO_ROUTE(this.$route.path);
+                this.$router.push({path:'/login?id=1'});
+            },
             close(){
                 this.showLoad = false;
             },
@@ -173,11 +222,12 @@
                 this.axios.get('/v4/complaint/detail?complaint_id='+this.$route.params.id+'')
                     .then(res =>{
                         this.detail=res.data.data;
+                        this.isgz = this.detail.is_collect;
                         if(this.detail!=''){
                             this.showLoad=false;
                             this.fanhui();
                         }
-                        console.log(this.detail);
+                        console.log(this.detail,this.isgz);
                     })
                     .catch(err =>{
 

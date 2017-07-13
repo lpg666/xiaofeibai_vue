@@ -11,7 +11,7 @@
             <li><img src="../../images/share_qq@2x.png"></li>
             <li><img src="../../images/share_qzone@2x.png"></li>
         </ul>
-        <similars></similars>
+        <similars v-if="detail.similars" :detail="detail"></similars>
     </div>
 </template>
 
@@ -20,17 +20,38 @@
     export default {
         data(){
             return{
+                detail:'',
+                showLoad:false,
+                loadType:null,
+                loadText:null
             }
         },
         created () {
-            this.aaa();
+            this.fetchData();
         },
         components:{
             similars
         },
         methods:{
-            aaa(){
+            fetchData () {
+                this.showLoad=true;
+                this.loadType='load';
+                this.loadText='加载中';
+                this.axios.get('/v4/complaint/detail?complaint_id='+this.$route.params.id+'')
+                    .then(res =>{
+                        this.detail=res.data.data;
+                        if(this.detail!=''){
+                            this.showLoad=false;
+                        }
+                        console.log(this.detail);
+                    })
+                    .catch(err =>{
+
+                    });
                 console.log(this.$route.params.id);
+            },
+            close(){
+                this.showLoad = false;
             }
         }
     }

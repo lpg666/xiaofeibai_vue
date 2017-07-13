@@ -14,7 +14,7 @@
                         <p class="name">{{lawyer.name}}</p>
                         <p class="dw">{{lawyer.organization}}</p>
                         <p class="dt">3分钟前回复了Kelly</p>
-                        <router-link to="">向Ta咨询</router-link>
+                        <router-link :to="'/lawyer/commit/'+lawyer.id">向Ta咨询</router-link>
                     </div>
                 </div>
             </div>

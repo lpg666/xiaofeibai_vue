@@ -2,7 +2,7 @@
     <div style="background: #F6F7F9; height: calc(100vh);">
         <div class="head" v-if="userInfo==null?true:false">
             <div class="top">
-                <div id="head_go" @click="$router.go(-1)"></div>
+                <div id="head_go" @click="fh"></div>
                 <div class="title_text">我</div>
             </div>
             <div class="bc">
@@ -22,7 +22,7 @@
                     <div class="title_text">我</div>
                 </div>
                 <div class="wd">
-                    <img class="pic2" :src="userInfo.avatar?userInfo.avatar:'../../images/default_portrait.png'">
+                    <img class="pic2" :src="userInfo.avatar?userInfo.avatar:require('../../images/default_portrait.png')">
                     <p class="name">{{userInfo.name}}</p>
                     <p class="mobile">{{userInfo.mobile}}</p>
                 </div>
@@ -80,6 +80,9 @@ export default {
         fh(){
             this.$router.push({path:'/home'});
         }
+    },
+    created(){
+
     },
     mounted() {
         console.log(this.autoRoute,this.userInfo);

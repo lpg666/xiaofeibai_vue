@@ -21,12 +21,14 @@
         </div>
         <div class="gk"><i :class="gk==false?'bt':''" @click="gkc"></i>对外公开<span>您的事件可作为典型案例对所有人显示</span></div>
         <div style="background: #fff;"><div class="but" @click="but">提交</div></div>
+        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
 
 <script>
     import loading from '../../components/common/loading'
     import headI from '../../components/header/head'
+    import {mapState,mapMutations} from 'vuex'
 
     export default {
         data(){
@@ -34,7 +36,11 @@
                 title:'',
                 cent:'',
                 picList:'',
-                gk:true
+                gk:true,
+                re:false,
+                showLoad:false,
+                loadType:null,
+                loadText:null
             }
         },
         components:{
@@ -42,14 +48,66 @@
             headI
         },
         computed:{
-
+            ...mapState([
+                'userInfo'
+            ])
         },
         created(){
 
         },
         methods:{
             but(){
+                if(this.title.length<5 || this.title.length>30){
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='标题字符长度不能小于5或大于30';
+                    setTimeout(this.close,1500);
+                }else if(this.cent.length<20){
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='内容字符长度不能小于20';
+                    setTimeout(this.close,1500);
+                }else if(this.re==false){
+                    this.close();
+                    this.re=true;
+
+                    var text = [];
+                    if(this.picList.length>0){
+                        for(let i=0;i<this.picList.length;i++){
+                            text[i] = 'http://xiaofeibao.b0.upaiyun.com'+this.picList[i].src.data+'###'+this.picList[i].show;
+                        }
+                        this.picList = text.join('|||');
+                    }
+
+                    this.axios.post('/v4/lawyer/commit',{
+                        'lawyer_id':parseInt(this.$route.params.id),
+                        'title':this.title,
+                        'content':this.cent,
+                        'pics':this.picList,
+                        'sign':this.userInfo.sign,
+                        'is_open':this.gk,
+                        'source_type':1
+                    })
+                    .then(res =>{
+                        this.re=false;
+                        if(res.data.error){
+                            this.showLoad=true;
+                            this.loadType='alert';
+                            this.loadText=res.data.msg;
+                            setTimeout(this.close,1500);
+                        }else{
+
+                        }
+                        console.log(res.data);
+                    })
+                    .catch(err =>{
+                        this.re=false;
+                    });
+                }
                 console.log(this.title,this.cent,this.picList,this.gk,this.$route.params.id);
+            },
+            close(){
+                this.showLoad = false;
             },
             gkc(){
                 this.gk = !this.gk;
@@ -73,7 +131,7 @@
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='您的浏览器不支持图片上传，请升级您的浏览器';
-                    setTimeout(this.close,2000);
+                    setTimeout(this.close,1500);
                 }else{
                     const image = new Image();
                     const vm = this;
@@ -85,12 +143,12 @@
                             this.showLoad=true;
                             this.loadType='alert';
                             this.loadText='文件类型不对';
-                            setTimeout(this.close,2000);
+                            setTimeout(this.close,1500);
                         }else if(!isLt2M){
                             this.showLoad=true;
                             this.loadType='alert';
                             this.loadText='图片过大';
-                            setTimeout(this.close,2000);
+                            setTimeout(this.close,1500);
                         }else{
                             this.showLoad=true;
                             this.loadType='load';

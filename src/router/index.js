@@ -91,6 +91,7 @@ export default [{
         {
             path: '/lawyer/commit/:id',
             component: lawyerCommit,
+            meta: { aR:true },
         },
         //记者列表
         {

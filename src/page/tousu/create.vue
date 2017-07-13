@@ -331,6 +331,7 @@ export default {
                 setTimeout(this.close,1500);
             }else if(this.re==false){
                 this.close();
+                this.re=true;
                 var text = '';
                 var text1 = [];
                 for(let i in this.textId){
@@ -349,7 +350,7 @@ export default {
                     this.from.value.pics = text1.join('|||');
                 }
                 this.from.value.address = this.from.name.province + this.from.name.city;
-                this.from.value.sign = JSON.parse(this.userInfo).sign;
+                this.from.value.sign = this.userInfo.sign;
                 this.from.value.source_type = 'wechat';
                 this.from.value.version='ios';
 
@@ -361,16 +362,18 @@ export default {
                     .then(res => {
                         this.close();
                         console.log(res.data);
-                        if(res.data.msg_type==200){
-                            this.$router.push({path:'/tousu/success/'+res.data.data.tousu.id});
-                        }else{
+                        if(res.data.error){
+                            this.re=false;
                             this.showLoad=true;
                             this.loadType='alert';
                             this.loadText=res.data.msg;
                             setTimeout(this.close,1500);
+                        }else{
+                            this.$router.push({path:'/tousu/success/'+res.data.data.tousu.id});
                         }
                     })
                     .catch(err =>{
+                        this.re=false;
                         this.showLoad=true;
                         this.loadType='alert';
                         this.loadText='网络出错';
@@ -680,8 +683,7 @@ export default {
         },
         //点击选项弹出
         tanK(data,id){
-            console.log(data);
-            if(data!='type' && this.types=='' && data!='provinces'){
+            if(data!='type' && data!='provinces' && !this.from.value.type_id){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='请先选择行业分类';

@@ -5,7 +5,7 @@ import mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
-    userInfo:localStorage.getItem('userInfo'),
+    userInfo:JSON.parse(localStorage.getItem('userInfo')),
     isDeclare:localStorage.getItem('isDeclare'),
     autoRoute:localStorage.getItem('autoRoute'),
     tousuData:'',
