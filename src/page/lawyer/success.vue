@@ -6,8 +6,14 @@
             <span class="head_a"></span>
         </header>
         <img class="yes" src="../../images/evaluate_success@2x.png" alt="">
-        <p>您咨询的问题已提交给记者陈丽媛</p>
-        <p>记者回复后将以消息形式反馈给你，请留意。</p>
+        <div v-if="$route.params.id=='lawyer'">
+            <p>您咨询的问题已提交给律师{{$route.query.name}}</p>
+            <p>律师回复后将以消息形式反馈给您，请留意。</p>
+        </div>
+        <div v-else>
+            <p>您咨询的问题已提交给记者{{$route.query.name}}</p>
+            <p>记者回复后将以消息形式反馈给您，请留意。</p>
+        </div>
     </div>
 </template>
 

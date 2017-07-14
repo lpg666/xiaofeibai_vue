@@ -3,7 +3,7 @@
         <router-link to="/member" v-if="userInfo==null?true:false" class="user_portrait"><img src="../../images/icon_gerenzhongxin@2x.png"></router-link>
         <router-link to="/member" v-else class="user_info">152****77</router-link>
         <slot name="title_text"></slot>
-        <router-link to="/search" class="head_search"><img src="../../images/default_portrait.png"></router-link>
+        <router-link to="/search" class="head_search"><img src="../../images/icon_search.png"></router-link>
         <router-link to="/news" class="head_news"><img src="../../images/icon_xiaoxi@2x.png"><span>1</span></router-link>
     </header>
 </template>
@@ -73,17 +73,16 @@
         }
     }
     .head_search{
-        width: .5rem;
-        height: .5rem;
+        width: .42rem;
+        height: .42rem;
         position: absolute;
         right: .24rem;
-        top: .25rem;
+        top: .29rem;
         display:block;
         img{
-            width: .36rem;
-            height: .36rem;
+            width: 100%;
+            height: auto;
             display: block;
-            margin:.07rem auto;
         }
     }
     .head_news{

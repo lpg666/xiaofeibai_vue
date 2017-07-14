@@ -7,34 +7,34 @@
             <div class="title">今日当值</div>
             <div class="box">
                 <router-link to="/lawyer/list" class="box_top">律师<span>查看全部</span></router-link>
-                <div class="box_info">
+                <router-link :to="'/lawyer/detail/'+lawyer.id" class="box_info">
                     <div class="img" :style="{backgroundImage:'url('+lawyer.avatar+'!/fh/230)'}"></div>
                     <!--<img :src="lawyer.avatar">-->
                     <div class="box_x">
                         <p class="name">{{lawyer.name}}</p>
                         <p class="dw">{{lawyer.organization}}</p>
                         <p class="dt">3分钟前回复了Kelly</p>
-                        <router-link :to="'/lawyer/commit/'+lawyer.id">向Ta咨询</router-link>
+                        <router-link :to="'/lawyer/commit/'+lawyer.id+'?name='+lawyer.name">向Ta咨询</router-link>
                     </div>
-                </div>
+                </router-link>
             </div>
             <div class="box">
                 <router-link to="/reporter/list" class="box_top">记者<span>查看全部</span></router-link>
-                <div class="box_info" style="border-bottom: none;">
+                <router-link :to="'/reporter/detail/'+reporter.id" class="box_info" style="border-bottom: none;">
                     <div class="img" :style="{backgroundImage:'url('+reporter.avatar+'!/fh/230)'}"></div>
                     <!--<img :src="reporter.avatar">-->
                     <div class="box_x">
                         <p class="name">{{reporter.name}}</p>
                         <p class="dw">{{reporter.organization}}</p>
                         <p class="dt">3分钟前回复了Kelly</p>
-                        <router-link to="">向Ta爆料</router-link>
+                        <router-link :to="'/reporter/commit/'+reporter.id+'?name='+reporter.name">向Ta爆料</router-link>
                     </div>
-                </div>
+                </router-link>
             </div>
         </div>
         <div class="js">
             <router-link to="/article?type=1" class="title">消费警示<span>实用消费警示，远离消费陷阱</span></router-link>
-            <router-link :to="'/article/detail/'+article.id" class="box" v-if="article.default_pic.length<=0">
+            <router-link :to="'/article/detail/'+article.id" class="box" v-if="article && article.default_pic.length<=0">
                 <div class="box_pic1 img" :style="{backgroundImage:'url('+article.thumb+'!/fh/230)'}"></div>
                 <div class="box_top">{{article.title}}</div>
             </router-link>
@@ -182,6 +182,7 @@
                 }
             }
             .box_info{
+                display: block;
                 width: 100%;
                 padding-bottom: .35rem;
                 border-bottom: 1px solid rgba(204,204,204,.5);

@@ -5,9 +5,9 @@
             <router-link to="/register" class="head_a" slot="head_a">注册</router-link>
         </head-i>
         <form>
-            <div class="inp" style="margin-top: .6rem;"><img src="../../images/default_portrait.png"><input name="mobile" type="text" v-model.trim="mobile" placeholder="手机号码" maxlength="11"></div>
+            <div class="inp" style="margin-top: .6rem;"><img src="../../images/icon_shoujihao@2x.png"><input name="mobile" type="text" v-model.trim="mobile" placeholder="手机号码" maxlength="11"></div>
             <span class="xian"></span>
-            <div class="inp" style="position: relative;"><img src="../../images/default_portrait.png"><input name="captcha" type="text" v-model.trim="captcha" placeholder="验证码" maxlength="4"><div class="code" @click="code">{{codeText}}</div></div>
+            <div class="inp" style="position: relative;"><img src="../../images/icon_yanzhengma@2x.png"><input name="captcha" type="text" v-model.trim="captcha" placeholder="验证码" maxlength="4"><div class="code" @click="code">{{codeText}}</div></div>
             <div class="but" :class="butClass" @click="login">登录</div>
             <div class="al">
                 <router-link class="all" to="/login">账号登录</router-link>
@@ -179,10 +179,10 @@ export default {
             overflow: hidden;
             height: .85rem;
             img{
-                width: .26rem;
-                height: .38rem;
+                width: .3rem;
+                height: auto;
                 float: left;
-                margin-top: .235rem;
+                margin-top: .25rem;
             }
             input{
                 width: calc(~'100% - .5rem');
@@ -206,7 +206,7 @@ export default {
             }
         }
         .xian{
-            width: calc(~'100% - .3rem');
+            width: calc(~'100% - .5rem');
             float: right;
             border-bottom: 1px solid #ccc;
         }

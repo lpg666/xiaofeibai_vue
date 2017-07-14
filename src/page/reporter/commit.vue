@@ -21,20 +21,26 @@
         </div>
         <div class="gk"><i :class="gk==false?'bt':''" @click="gkc"></i>对外公开<span>您的事件可作为典型案例对所有人显示</span></div>
         <div style="background: #fff;"><div class="but" @click="but">提交</div></div>
+        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
 
 <script>
     import loading from '../../components/common/loading'
     import headI from '../../components/header/head'
+    import {mapState,mapMutations} from 'vuex'
 
     export default {
         data(){
             return {
                 title:'',
                 cent:'',
-                picList:'',
-                gk:true
+                picList:[],
+                gk:true,
+                re:false,
+                showLoad:false,
+                loadType:null,
+                loadText:null
             }
         },
         components:{
@@ -42,14 +48,71 @@
             headI
         },
         computed:{
-
+            ...mapState([
+                'userInfo'
+            ])
         },
         created(){
-
+console.log();
         },
         methods:{
             but(){
+                if(this.title.length<5 || this.title.length>30){
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='标题字符长度不能小于5或大于30';
+                    setTimeout(this.close,1500);
+                }else if(this.cent.length<20){
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='内容字符长度不能小于20';
+                    setTimeout(this.close,1500);
+                }else if(this.re==false){
+                    this.close();
+                    this.re=true;
+
+                    this.showLoad=true;
+                    this.loadType='load';
+                    this.loadText='提交中';
+
+                    var text = [];
+                    if(this.picList.length>0){
+                        for(let i=0;i<this.picList.length;i++){
+                            text[i] = 'http://xiaofeibao.b0.upaiyun.com'+this.picList[i].src.data+'###'+this.picList[i].show;
+                        }
+                        this.picList = text.join('|||');
+                    }
+
+                    this.axios.post('/v4/reporter/commit',{
+                        'reporter_id':parseInt(this.$route.params.id),
+                        'title':this.title,
+                        'content':this.cent,
+                        'pics':this.picList,
+                        'sign':this.userInfo.sign,
+                        'is_open':this.gk,
+                        'source_type':1
+                    })
+                        .then(res =>{
+                            this.re=false;
+                            if(res.data.error){
+                                this.showLoad=true;
+                                this.loadType='alert';
+                                this.loadText=res.data.msg;
+                                setTimeout(this.close,1500);
+                            }else{
+                                this.$router.push({path:'/commit/success/lawyer?id='+this.$route.params.id+'&name='+this.$route.query.name});
+                            }
+                            console.log(res.data);
+                        })
+                        .catch(err =>{
+                            this.re=false;
+                        });
+                }
                 console.log(this.title,this.cent,this.picList,this.gk,this.$route.params.id);
+            },
+            close(){
+                alert(1);
+                this.showLoad = false;
             },
             gkc(){
                 this.gk = !this.gk;
@@ -101,9 +164,7 @@
                                 vm.axios.post('/v4/complaint/upload_pic',{'pic':e.target.result})
                                     .then(res =>{
                                         vm.picList.push({'src':res.data,'show':'1'});
-                                        console.log(res,vm.picList);
-                                        console.log('上传成功');
-                                        vm.showLoad=false;
+                                        vm.close();
                                     })
                                     .catch(err =>{
 

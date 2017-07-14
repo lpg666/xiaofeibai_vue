@@ -1,6 +1,9 @@
 <template>
     <div style="padding-top: 1rem;">
-        <head-i><span class="head_title" slot="title_text">记者</span></head-i>
+        <header id="headI">
+            <div id="head_go" @click="$router.push({path:'/help'})"></div>
+            <span class="head_title" slot="title_text">记者</span>
+        </header>
         <div class="lawyer_nav">
             <div class="list" :class="{hover: hover=='list'}" @click="navClick('list')">列表<span></span></div>
             <div class="example" :class="{hover: hover=='example'}" @click="navClick('example')">案例<span></span></div>
@@ -117,6 +120,44 @@
 </script>
 
 <style lang="less">
+    #headI{
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 99;
+        width: 100%;
+        height: 1rem;
+        border-bottom: 1px solid #cccccc;
+        background: #fff;
+    #head_go{
+        float: left;
+        width: 1rem;
+        height: 1rem;
+        background: url("../../images/head_jt.png") no-repeat left .1rem center;
+        background-size: .4rem;
+    }
+    span.head_title{
+        float: left;
+        width: calc(~'100% - 2rem');
+        text-align: center;
+        display: block;
+        height: 1rem;
+        line-height: 1rem;
+        font-size: .34rem;
+        color: #37C078;
+    }
+    .head_a{
+        float: right;
+        width: 1rem;
+        height: 1rem;
+        line-height: 1rem;
+        color: #37C078;
+        font-size: .3rem;
+        text-align: center;
+    }
+
+    }
+
     #swiper-nav{
         width: 100%;
         > .swiper-wrapper{

@@ -58,7 +58,7 @@
             },
             menu() {
                 this.scrollA = document.querySelector('.box').scrollTop;
-                console.log();
+                //console.log(this.scrollA,document.querySelector('.box').clientHeight,document.querySelector('.list').offsetHeight);
                 if(document.querySelector('.box').clientHeight + this.scrollA +2 >= document.querySelector('.list').offsetHeight && this.repeat==false){
                     this.repeat = true;
                     this.page += 1;

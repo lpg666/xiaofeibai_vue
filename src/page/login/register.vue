@@ -4,13 +4,13 @@
             <span class="head_title" slot="title_text">注册</span>
         </head-i>
         <form>
-            <div class="inp" style="margin-top: .6rem;"><img src="../../images/default_portrait.png"><input name="mobile" type="text" v-model.trim="mobile" placeholder="输入手机号码" maxlength="11"></div>
+            <div class="inp" style="margin-top: .6rem;"><img src="../../images/icon_shoujihao@2x.png"><input name="mobile" type="text" v-model.trim="mobile" placeholder="输入手机号码" maxlength="11"></div>
             <span class="xian"></span>
-            <div class="inp" style="position: relative;"><img src="../../images/default_portrait.png"><input name="captcha" type="text" v-model.trim="captcha" placeholder="输入验证码" maxlength="4"><div class="code" @click="code">{{codeText}}</div></div>
+            <div class="inp" style="position: relative;"><img src="../../images/icon_yanzhengma@2x.png"><input name="captcha" type="text" v-model.trim="captcha" placeholder="输入验证码" maxlength="4"><div class="code" @click="code">{{codeText}}</div></div>
             <span class="xian"></span>
-            <div class="inp"><img src="../../images/default_portrait.png"><input name="password" type="password" v-model.trim="password" placeholder="设置密码"></div>
+            <div class="inp"><img src="../../images/icon_mima@2x.png"><input name="password" type="password" v-model.trim="password" placeholder="设置密码"></div>
             <span class="xian"></span>
-            <div class="inp"><img src="../../images/default_portrait.png"><input name="resetPassword" type="password" v-model.trim="resetPassword" placeholder="再次输入密码" maxlength="11"></div>
+            <div class="inp"><img src="../../images/icon_zaicishuru@2x.png"><input name="resetPassword" type="password" v-model.trim="resetPassword" placeholder="再次输入密码" maxlength="11"></div>
             <div class="but" :class="butClass" @click="register">注册</div>
         </form>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
@@ -193,10 +193,10 @@
         overflow: hidden;
         height: .85rem;
     img{
-        width: .26rem;
-        height: .38rem;
+        width: .3rem;
+        height: auto;
         float: left;
-        margin-top: .235rem;
+        margin-top: .25rem;
     }
     input{
         width: calc(~'100% - .5rem');
@@ -220,7 +220,7 @@
     }
     }
     .xian{
-        width: calc(~'100% - .3rem');
+        width: calc(~'100% - .5rem');
         float: right;
         border-bottom: 1px solid #ccc;
         margin-bottom: .2rem;

@@ -6,7 +6,7 @@
         <p class="mobile">{{detail.license_number}}</p>
         <p class="good">{{detail.good_at}}</p>
         <p class="memo">{{detail.memo}}</p>
-        <router-link :to="'/reporter/commit/'+detail.id">我要爆料</router-link>
+        <router-link :to="'/reporter/commit/'+detail.id+'?name='+detail.name">我要爆料</router-link>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>

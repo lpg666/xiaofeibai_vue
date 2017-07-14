@@ -74,7 +74,8 @@ export default [{
         //
         {
             path: '/product/recommend',
-            component: productRecommend
+            component: productRecommend,
+            meta: { keepAlive: true },
         },
         //律师列表
         {

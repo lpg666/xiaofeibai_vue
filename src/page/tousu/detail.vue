@@ -23,8 +23,8 @@
                 </div>
                 <div v-if="detail.addons.length>0" class="c_neir" v-for="data in detail.addons">&nbsp;&nbsp;投诉补充内容<span>{{data.created_at}}</span>{{data.content}}</div>
                 <div class="c_pic" v-if="detail.pic.length>0">
-                    <ul v-for="data in detail.pic">
-                        <li><img :src="data.pic"></li>
+                    <ul>
+                        <li v-if="data.is_show==1" v-for="data in detail.pic" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
                     </ul>
                 </div>
             </div>
@@ -80,9 +80,9 @@
                     <span>{{detail.default_result.add_time}}</span>
                 </div>
                 <div class="good" v-if="detail.status==3">
-                    <img v-if="!userInfo" src="../../images/lightGood.png">
-                    <img v-else-if="!detail.default_result.is_favour" class="1" src="../../images/lightGood.png">
-                    <img src="../../images/good.png" v-else>
+                    <img v-if="!userInfo" src="../../images/lightGood.png" @click="dl">
+                    <img v-else-if="!detail.is_favour" @click="zang" src="../../images/lightGood.png">
+                    <img src="../../images/good.png" @click="zang" v-else>
                     <p>已有<span>{{detail.stat.favours}}</span>人点赞</p>
                 </div>
             </div>
@@ -107,6 +107,7 @@
                 comment:'',
                 type:'tousu',
                 isgz:'',
+                isdz:'',
                 showLoad:false,
                 loadType:null,
                 loadText:null
@@ -156,15 +157,40 @@
             ...mapMutations([
                 'AUTO_ROUTE'
             ]),
+            zang(){
+                if(!this.isdz){
+                    this.axios.post('/v4/member/add_complaint_favour',{'complaint_id':this.$route.params.id})
+                        .then(res =>{
+                            if(res.data.error){
+                                this.showLoad=true;
+                                this.loadType='alert';
+                                this.loadText=res.data.msg;
+                                setTimeout(this.close,1500);
+                            }else{
+                                this.showLoad=true;
+                                this.loadType='';
+                                this.loadText='点赞成功';
+                                this.isdz=true;
+                                setTimeout(this.close,1500);
+                            }
+                        })
+                        .catch(err =>{
+
+                        });
+                }else{
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='你已点过赞';
+                    setTimeout(this.close,1500);
+                }
+            },
             gz(index){
-                console.log(this.userInfo);
-                if(this.userInfo == null || this.userInfo == ''){
+                if(this.userInfo){
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='请先登录';
                     setTimeout(this.close,1500);
                     setTimeout(this.dl,1500);
-
                 }else if(index==0){
                     this.axios.get('/v4/member/add_complaint_collect?complaint_id='+this.$route.params.id)
                         .then(res =>{
@@ -207,7 +233,7 @@
             fanhui(){
                 document.body.scrollTop=0;
             },
-            commentData(){
+            /*commentData(){
                 this.axios.get('/v4/tousu/comments?id='+this.$route.params.id+'')
                     .then(res =>{
                         this.comment=res.data.data;
@@ -217,12 +243,14 @@
 
                     });
                 console.log(this.$route.params.id);
-            },
+            },*/
             fetchData () {
                 this.axios.get('/v4/complaint/detail?complaint_id='+this.$route.params.id+'')
                     .then(res =>{
                         this.detail=res.data.data;
+                        this.comment=res.data.data.comments;
                         this.isgz = this.detail.is_collect;
+                        this.isdz = this.detail.is_favour;
                         if(this.detail!=''){
                             this.showLoad=false;
                             this.fanhui();
@@ -268,9 +296,9 @@
     .content .c_neir span{color: #999; margin-right:.2rem;}
     .content .c_pic{font-size: .3rem; color: #1d2733; padding: 0 .25rem; text-indent: -.4em; line-height: .55rem;}
     .content .c_pic span{color: #999; margin-right:.2rem;}
-    .content .c_pic ul{overflow: hidden; margin-top: .35rem; padding-bottom: .35rem;}
-    .content .c_pic ul li{float: left; width: 2.24rem; height: 2.24rem; overflow: hidden; margin-right: .12rem; margin-bottom: .12rem;}
-    .content .c_pic ul li:nth-child(3n){margin-right: 0;}
+    .content .c_pic ul{overflow: hidden; padding-bottom: .35rem;}
+    .content .c_pic ul li{float: left; width: 1.6rem; height: 1.6rem; overflow: hidden; margin-right: .2rem; margin-bottom: .2rem; background-position: center; background-size: cover; background-repeat: no-repeat;}
+    .content .c_pic ul li:nth-child(4n){margin-right: 0;}
     .content .c_pic ul li img{width: 100%; display: block; margin: 0 auto;}
     .c_dt{padding-bottom: .4rem;}
     .c_dt img{ width:calc(~'100% - 2.16rem'); margin: .64rem auto 0 auto; display:block;}

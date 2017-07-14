@@ -1,6 +1,6 @@
 <template>
     <div style="padding-top: 1rem; background: #F6F7F9;">
-        <head-i><span class="head_title" slot="title_text">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span></head-i>
+        <head-i><span class="head_title" slot="title_text" v-if="detail">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span></head-i>
         <div class="main">
             <div class="title">{{detail.title}}</div>
             <div class="info">

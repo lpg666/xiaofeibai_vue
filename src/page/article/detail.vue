@@ -1,7 +1,7 @@
 <template>
     <div style="padding-top: 1rem; background: #F6F7F9;">
-        <head-i><span class="head_title" slot="title_text">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span></head-i>
-        <div class="main">
+        <head-i><span class="head_title" slot="title_text" v-if="detail">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span></head-i>
+        <div class="armain">
             <div class="title">{{detail.title}}</div>
             <div class="info">
                 <span v-if="detail.add_time">{{detail.add_time}}</span>
@@ -88,7 +88,7 @@
 </script>
 
 <style lang="less">
-    .main{
+    .armain{
         width: auto;
         background: #fff;
         padding: 0 .22rem;
@@ -109,6 +109,7 @@
         .cent{
             padding-bottom: .35rem;
             width: 100%;
+            font-size: .3rem;
             p{
                 margin-bottom: .2rem;
                 font-size: .3rem !important;

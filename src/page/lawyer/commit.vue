@@ -35,7 +35,7 @@
             return {
                 title:'',
                 cent:'',
-                picList:'',
+                picList:[],
                 gk:true,
                 re:false,
                 showLoad:false,
@@ -71,6 +71,10 @@
                     this.close();
                     this.re=true;
 
+                    this.showLoad=true;
+                    this.loadType='load';
+                    this.loadText='提交中';
+
                     var text = [];
                     if(this.picList.length>0){
                         for(let i=0;i<this.picList.length;i++){
@@ -96,7 +100,7 @@
                             this.loadText=res.data.msg;
                             setTimeout(this.close,1500);
                         }else{
-
+                            this.$router.push({path:'/commit/success/lawyer?id='+this.$route.params.id+'&name='+this.$route.query.name});
                         }
                         console.log(res.data);
                     })
@@ -159,9 +163,7 @@
                                 vm.axios.post('/v4/complaint/upload_pic',{'pic':e.target.result})
                                     .then(res =>{
                                         vm.picList.push({'src':res.data,'show':'1'});
-                                        console.log(res,vm.picList);
-                                        console.log('上传成功');
-                                        vm.showLoad=false;
+                                        vm.close();
                                     })
                                     .catch(err =>{
 

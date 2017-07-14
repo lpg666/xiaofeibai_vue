@@ -5,21 +5,21 @@
                 <div id="head_go" @click="fh"></div>
                 <div class="title_text">我</div>
             </div>
-            <div class="bc">
-                <i></i>
-                请完善资料，即可快速投诉。
-                <router-link to="">立即完善</router-link>
-            </div>
             <div class="wd">
                 <img class="pic2" src="../../images/default_portrait.png">
                 <router-link to="/login" class="login">登录/注册</router-link>
             </div>
         </div>
         <div v-else>
-            <div class="head" style="height: 3.3rem;">
+            <div class="head">
                 <div class="top">
                     <div id="head_go" @click="fh"></div>
                     <div class="title_text">我</div>
+                </div>
+                <div class="bc" v-if="userInfo.real_name=='' || userInfo.mobile==''">
+                    <i></i>
+                    请完善资料，即可快速投诉。
+                    <router-link to="">立即完善</router-link>
                 </div>
                 <div class="wd">
                     <img class="pic2" :src="userInfo.avatar?userInfo.avatar:require('../../images/default_portrait.png')">
@@ -173,13 +173,13 @@ export default {
             color: #fff;
             position: absolute;
             left: 2.1rem;
-            top: 1.7rem;
+            bottom: 1.25rem;
         }
         .mobile{
             font-size: .28rem;
             color: #fff;
             position: absolute;
-            top: 2.2rem;
+            bottom: .75rem;
             left: 2.1rem;
         }
         .login{
