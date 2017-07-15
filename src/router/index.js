@@ -16,6 +16,7 @@ const example = r => require.ensure([], () => r(require('../page/lawyer/example'
 const commitSuccess = r => require.ensure([], () => r(require('../page/lawyer/success')), 'commitSuccess')
 const member = r => require.ensure([], () => r(require('../page/member/member')), 'member')
 const memberTousu = r => require.ensure([], () => r(require('../page/member/tousu')), 'memberTousu')
+const followTousu = r => require.ensure([], () => r(require('../page/member/followTousu')), 'followTousu')
 const setting = r => require.ensure([], () => r(require('../page/member/setting')), 'setting')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
@@ -37,6 +38,10 @@ export default [{
         //地址为空时跳转home页面
         {
             path: '',
+            redirect: '/home'
+        },
+        {
+            path: '/',
             redirect: '/home'
         },
         //账号登陆
@@ -139,6 +144,12 @@ export default [{
         {
             path: '/member/error',
             component: tousuError
+        },
+        //关注的投诉页
+        {
+            path: '/member/followTousu',
+            component: followTousu,
+            meta: { aR:true },
         },
         //信息页
         {

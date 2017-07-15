@@ -26,9 +26,7 @@
                                 <span class="status status3" v-else>完成</span>
                             </p>
                         </div>
-                        <div class="list_right" v-if="data.default_pic">
-                            <img :src="data.default_pic.pic">
-                        </div>
+                        <div class="list_right" v-if="data.default_pic" :style="{backgroundImage:'url('+data.default_pic.pic+'!/fh/230)'}"></div>
                     </router-link>
                     <router-link :to="'/article/detail/'+data.id" class="list" v-else-if="data.resources_type==1">
                         <div v-if="data.pic==null">

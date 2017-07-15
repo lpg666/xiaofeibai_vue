@@ -185,7 +185,7 @@
                 }
             },
             gz(index){
-                if(this.userInfo){
+                if(this.userInfo=='' || this.userInfo==null){
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='请先登录';
@@ -288,7 +288,7 @@
     .info .problem{margin-bottom: .34rem; margin-left: .22rem; padding-top: .14rem;}
     .info .suqiu{ padding-bottom: .14rem; margin-left: .22rem;}
     .content{background: #fff; margin-top: .2rem; border-bottom: 1px solid #ebebeb;}
-    .content .c_title{border-bottom: 1px solid #ebebeb; height: auto; overflow: hidden; width:auto; margin: 0 .22rem;}
+    .content .c_title{border-bottom: 1px solid #ebebeb; height: auto; overflow: hidden; width:auto; margin-left:.22rem;}
     .content .c_title img{ width: .32rem; height: .32rem; float: left; margin: .18rem .16rem .18rem 0;}
     .content .c_title span{font-size: .32rem; color: #1d2733; line-height: .68rem;}
     .content .c_text{ font-size: .3rem; color: #1d2733; padding: .32rem .22rem; line-height: .50rem; text-indent: 2em; text-align: justify; display: inline-block;}

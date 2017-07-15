@@ -5,7 +5,7 @@
             <input type="text" class="pl_title" name="title" v-model="title" placeholder="评论" v-focus="focusStatus">
             <div class="plBut" @click="plBut">发送</div>
         </div>
-        <div class="title"><i></i>网友评论({{type=='tousu'?detail.comments_count:'1'}})<div class="but" @click="pl">评论</div></div>
+        <div class="title"><i></i>网友评论({{type=='tousu'?detail.comments_count:detail.comments}})<div class="but" @click="pl">评论</div></div>
         <ul>
             <li v-if="key<3" v-for="data,key in comment">
                 <img :src="data.member?data.member.avatar:require('../../images/default_portrait.png')">
@@ -18,7 +18,7 @@
             </li>
         </ul>
         <div class="gd" v-if="comment.length>3">查看更多评论</div>
-        <p class="zhichi" v-if="type=='tousu'" :style="comment.length<=0?'margin-top:.5rem':''">已经有<span>{{detail.clicks}}</span>人通过关注公众号支持</p>
+        <p class="zhichi" v-if="type=='tousu'" style="margin-top:.4rem;">已经有<span>{{detail.clicks}}</span>人通过关注公众号支持</p>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
@@ -91,6 +91,7 @@
                                     this.loadText='评论成功';
                                     setTimeout(this.close,1500);
                                     setTimeout(this.gb,1500);
+                                    setTimeout(this.shuaxin,1500);
                                 }
                                 this.re=false;
                                 console.log(res);
@@ -121,6 +122,7 @@
                                 this.loadText='评论成功';
                                 setTimeout(this.close,1500);
                                 setTimeout(this.gb,1500);
+                                setTimeout(this.shuaxin,1500);
                             }
                             this.re=false;
                             console.log(res);
@@ -136,16 +138,16 @@
                 }
             },
             pl(){
-                if(this.userInfo){
-                    this.tc=true;
-                    this.focusStatus=true;
-                    document.querySelector('body').style.overflow='hidden';
-                }else{
+                if(!this.userInfo){
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='请先登录';
                     setTimeout(this.close,1500);
                     setTimeout(this.dl,1500);
+                }else{
+                    this.tc=true;
+                    this.focusStatus=true;
+                    document.querySelector('body').style.overflow='hidden';
                 }
             },
             dl(){
@@ -156,9 +158,11 @@
                 this.showLoad = false;
             },
             gb(){
-                this.$router.go(0);
                 this.tc=false;
                 document.querySelector('body').style.overflow='';
+            },
+            shuaxin(){
+                this.$router.go(0);
             }
         }
     }

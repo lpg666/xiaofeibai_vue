@@ -56,21 +56,11 @@
             fanhui(){
                 document.body.scrollTop=0;
             },
-            commentData(){
-                this.axios.get('/v4/article/comments?id='+this.$route.params.id+'')
-                    .then(res =>{
-                        this.comment=res.data.data;
-                        console.log(this.comment);
-                    })
-                    .catch(err =>{
-
-                    });
-                console.log(this.$route.params.id);
-            },
             fetchData () {
                 this.axios.get('/v4/article/detail?article_id='+this.$route.params.id+'')
                     .then(res =>{
                         this.detail=res.data.data;
+                        this.comment=res.data.data.comment;
                         if(this.detail!=''){
                             this.showLoad=false;
                             this.fanhui();

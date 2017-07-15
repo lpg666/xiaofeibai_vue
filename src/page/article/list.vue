@@ -6,7 +6,7 @@
         </head-i>
         <section class="recommend_list" v-if="recommendData.length>0">
             <router-link v-for="data in recommendData" :key="data" :to="'/article/detail/'+data.id" class="list">
-                <div v-if="data.default_pic==null">
+                <div v-if="data.default_pics==null">
                     <div class="list_left">
                         <p class="p1">{{data.title}}</p>
                         <p class="p2">{{data.add_time}}</p>
@@ -18,7 +18,7 @@
                 <div v-else>
                     <p class="p3">{{data.title}}</p>
                     <ul class="pic">
-                        <li v-if="key<3" v-for="src,key in data.default_pic" :style="{backgroundImage:'url('+src.pic+'!/fh/230)'}"><!--<img :src="src.pic">--></li>
+                        <li v-if="key<3" v-for="src,key in data.default_pics" :style="{backgroundImage:'url('+src.pic+'!/fh/230)'}"><!--<img :src="src.pic">--></li>
                     </ul>
                 </div>
             </router-link>

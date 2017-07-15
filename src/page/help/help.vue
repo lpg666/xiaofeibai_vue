@@ -34,14 +34,14 @@
         </div>
         <div class="js">
             <router-link to="/article?type=1" class="title">消费警示<span>实用消费警示，远离消费陷阱</span></router-link>
-            <router-link :to="'/article/detail/'+article.id" class="box" v-if="article && article.default_pic.length<=0">
+            <router-link :to="'/article/detail/'+article.id" class="box" v-if="article && article.default_pics.length<=0">
                 <div class="box_pic1 img" :style="{backgroundImage:'url('+article.thumb+'!/fh/230)'}"></div>
                 <div class="box_top">{{article.title}}</div>
             </router-link>
             <router-link :to="'/article/detail/'+article.id" class="box" v-else>
                 <div class="box_top">{{article.title}}</div>
                 <ul class="box_pic">
-                    <li v-if="key<3" class="img" v-for="data,key in article.default_pic" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
+                    <li v-if="key<3" class="img" v-for="data,key in article.default_pics" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
                 </ul>
             </router-link>
         </div>

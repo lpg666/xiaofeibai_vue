@@ -1,11 +1,11 @@
 <template>
     <div style="padding-top: 1rem;">
         <head-i>
-            <span class="head_title" slot="title_text">我的投诉</span>
+            <span class="head_title" slot="title_text">关注的投诉</span>
         </head-i>
         <div class="scroll">
             <div class="box">
-                <router-link :to="'tousu/detail/'+data.id" v-for="data in detail" :key="data">
+                <router-link :to="'/tousu/detail/'+data.id" v-for="data in detail" :key="data">
                     <div class="yt">
                         <div class="pic" v-if="data.default_pic" :style="{backgroundImage:'url('+data.default_pic.pic+'!/fh/230)'}"></div>
                         <p class="p1"><span>投诉编号：TS{{data.id}}</span><span>{{data.add_time}}</span></p>
@@ -17,7 +17,7 @@
                         <span class="status status2" v-else-if="data.status==2">结果审核</span>
                         <span class="status status3" v-else>完成</span>
                         <div class="fx">分享</div>
-                        <div class="bc">补充</div>
+                        <!--<div class="bc">补充</div>-->
                     </div>
                 </router-link>
                 <!--<router-link to="">
