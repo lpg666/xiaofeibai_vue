@@ -40,10 +40,6 @@ export default [{
             path: '',
             redirect: '/home'
         },
-        {
-            path: '/',
-            redirect: '/home'
-        },
         //账号登陆
         {
             path: '/login',

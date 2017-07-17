@@ -6,10 +6,10 @@ import routes from './router/index'
 import store from './store/'
 import FastClick from 'fastclick'
 import './config/rem'
+import './config/vconsole.min'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
-import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false
@@ -24,7 +24,6 @@ if('addEventListener' in document){                           //document.addEven
 Vue.use(VueRouter)
 Vue.use(VueAxios,axios)
 Vue.use(VueAwesomeSwiper)
-Vue.use(ElementUI)
 
 const router = new VueRouter({
     mode: 'history',
