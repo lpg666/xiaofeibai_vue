@@ -26,17 +26,17 @@ Vue.use(VueAxios,axios)
 Vue.use(VueAwesomeSwiper)
 Vue.use(ElementUI)
 
+const router = new VueRouter({
+    mode: 'history',
+    routes,
+});
+
 /*设置线上环境api前缀*/
 if (process.env.NODE_ENV == 'development') {
 
 }else if(process.env.NODE_ENV == 'production'){
     axios.defaults.baseURL = 'http://api.test.xfb315.com';
 }
-
-const router = new VueRouter({
-    mode: 'history',
-    routes,
-});
 
 router.beforeEach((to, from, next) => {
     if(to.meta.aR){
