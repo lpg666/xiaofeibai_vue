@@ -51,8 +51,8 @@
         methods: {
             fx(){
                 var url=encodeURIComponent(window.location.href.split('/#')[0]);
-                console.log(url);
-                this.axios.post('/v4/weixin',{'url':url})
+                alert(url);
+                this.axios.get('/v4/weixin?url='+url)
                     .then(res =>{
                         console.log(res.data);
                         wx.config({
@@ -67,7 +67,7 @@
                             title: this.detail.title,
                             desc: this.detail.content,
                             imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
-                            link: document.location.href,
+                            link: window.location.href,
                         };
                         wx.ready(function(){
                             wx.onMenuShareWeibo(share_info);

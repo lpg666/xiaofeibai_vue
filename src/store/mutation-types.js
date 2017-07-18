@@ -5,4 +5,6 @@ export const OUT_LOGIN = 'OUT_LOGIN'
 export const TOUSU_DATA = 'TOUSU_DATA'
 export const QUANJU_TAN = 'QUANJU_TAN'
 export const QUANJU_BUTAN = 'QUANJU_BUTAN'
+export const WECHAT = 'WECHAT'
+export const WECHAT_DEL = 'WECHAT_DEL'
 

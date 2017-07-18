@@ -10,7 +10,8 @@ const state = {
     autoRoute:localStorage.getItem('autoRoute'),
     tousuData:'',
     tanQ:false,
-    tanQzi:''
+    tanQzi:'',
+    wechat:'',
 }
 
 export default new Vuex.Store({

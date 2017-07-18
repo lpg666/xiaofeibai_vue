@@ -12,7 +12,7 @@ import VueAxios from 'vue-axios'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'element-ui/lib/theme-default/index.css'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /*实例化FastClick*/
 if('addEventListener' in document){                           //document.addEventListener == true
@@ -21,9 +21,9 @@ if('addEventListener' in document){                           //document.addEven
   },false);                                                   //如果为false事件的顺序为 标签的onclick事件 ---- document.onclick  ---- addEventListener
 }
 
-Vue.use(VueRouter)
-Vue.use(VueAxios,axios)
-Vue.use(VueAwesomeSwiper)
+Vue.use(VueRouter);
+Vue.use(VueAxios,axios);
+Vue.use(VueAwesomeSwiper);
 
 const router = new VueRouter({
     mode: 'history',
@@ -71,4 +71,4 @@ router.beforeEach((to, from, next) => {
 new Vue({
     router,
     store
-}).$mount('#app')
+}).$mount('#app');

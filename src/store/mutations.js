@@ -5,7 +5,9 @@ import {
     OUT_LOGIN,
     TOUSU_DATA,
     QUANJU_TAN,
-    QUANJU_BUTAN
+    QUANJU_BUTAN,
+    WECHAT,
+    WECHAT_DEL
 } from './mutation-types.js'
 
 import {setStore,getStore,removeStore} from '../config/mUtils'
@@ -35,6 +37,16 @@ export default {
         removeStore('userInfo');
         removeStore('isDeclare');
         removeStore('autoRoute');
+    },
+    //
+    [WECHAT](state, info){
+        state.wechat = info;
+        setStore('wechat', info);
+    },
+    //
+    [WECHAT_DEL](state){
+        state.wechat = '';
+        removeStore('wechat');
     },
     //
     [TOUSU_DATA](state,info){
