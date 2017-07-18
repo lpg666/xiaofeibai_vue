@@ -75,6 +75,9 @@
         },
         mounted(){
             document.querySelectorAll('.scroll')[0].addEventListener('scroll', this.menuA);
+            document.getElementById('headI').addEventListener("touchmove", function (event) {
+                event.preventDefault();
+            },false);
             this.recommendAjax();
         }
     }

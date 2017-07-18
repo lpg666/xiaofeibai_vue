@@ -222,10 +222,11 @@ export default {
                         this.load3=res.data.msg;
                     }else if(this.cechoiceI==0){
                         this.cechoiceData = res.data.data;
+                        this.showLoading = false;
                     }else{
                         this.cechoiceData = this.cechoiceData.concat(res.data.data);
+                        this.showLoading = false;
                     }
-                    this.showLoading = false;
                     this.cechoiceRepeat = false;
                     console.log(this.cechoiceData);
                 })
@@ -243,10 +244,11 @@ export default {
                         this.load2=res.data.msg;
                     }else if(this.resultI==0){
                         this.resultData = res.data.data;
+                        this.showLoading = false;
                     }else{
                         this.resultData = this.resultData.concat(res.data.data);
+                        this.showLoading = false;
                     }
-                    this.showLoading = false;
                     this.resultRepeat = false;
                     console.log(this.resultData);
                 })
@@ -264,10 +266,11 @@ export default {
                         this.load1=res.data.msg;
                     }else if(this.recommendI==0){
                         this.recommendData = res.data.data;
+                        this.showLoading = false;
                     }else{
                         this.recommendData = this.recommendData.concat(res.data.data);
+                        this.showLoading = false;
                     }
-                    this.showLoading = false;
                     this.recommendRepeat = false;
                     console.log(this.recommendData);
                 })

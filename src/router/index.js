@@ -29,6 +29,8 @@ const tousuSuccess = r => require.ensure([], () => r(require('../page/tousu/succ
 const tousuError = r => require.ensure([], () => r(require('../page/member/error')), 'tousuError')
 const activity = r => require.ensure([], () => r(require('../page/activity/activity')), 'activity')
 const productRecommend = r => require.ensure([], () => r(require('../page/product/recommend')), 'productRecommend')
+const productIndex = r => require.ensure([], () => r(require('../page/product/index')), 'productIndex')
+const productInfo = r => require.ensure([], () => r(require('../page/product/info')), 'productInfo')
 
 
 export default [{
@@ -72,11 +74,22 @@ export default [{
             component: help,
             meta: { keepAlive: true },
         },
-        //
+        //产品推荐列表
         {
             path: '/product/recommend',
             component: productRecommend,
             meta: { keepAlive: true },
+        },
+        //产品管家首页
+        {
+            path: '/product',
+            component: productIndex,
+            meta: { aR: true },
+        },
+        //产品管家介绍页
+        {
+            path: '/product/info',
+            component: productInfo,
         },
         //律师列表
         {

@@ -50,7 +50,7 @@
         },
         methods: {
             fx(){
-                var url=encodeURIComponent(window.location.href.split('/#')[0]);
+                var url=encodeURIComponent(window.location.href.split('#')[0]);
                 alert(url);
                 this.axios.get('/v4/weixin?url='+url)
                     .then(res =>{
