@@ -10,7 +10,7 @@ import './config/vconsole.min'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
-import 'element-ui/lib/theme-default/index.css'
+//import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false;
 

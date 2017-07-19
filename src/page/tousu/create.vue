@@ -81,7 +81,7 @@
                             </div>
                         </li>
                     </ul>
-                    <div id="upload"><input @change="onFileChange" type="file" multiple></div>
+                    <form enctype="multipart/form-data" id="upload"><input @change="onFileChange" type="file" accept="image/png,image/jpeg,image/gif,image/jpg" multiple="true" /></form>
                 </div>
                 <div class="tousuInfo">*投诉时，请注意保护个人隐私，涉及个人隐私或者敏感照片请选择不公开。</div>
                 <div class="fromBut" @click="fromBut">提交</div>
@@ -393,6 +393,7 @@ export default {
         },
         onFileChange(e){
             var files = e.target.files || e.dataTransfer.files;
+            console.log(files,length);
             if (!files.length) return;
             this.createImage(files);
         },

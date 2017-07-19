@@ -33,7 +33,7 @@
                 <router-link to="/member/tousu">我的投诉</router-link>
             </div>
         </div>
-        <router-link to="/product" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5); font-weight: bolder; font-size: .32rem;"><img src="../../images/icon_fuwuguanjia@2x.png">我的服务管家</router-link>
+        <router-link :to="userInfo==null?'/product/info':'/product/list'" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5); font-weight: bolder; font-size: .32rem;"><img src="../../images/icon_fuwuguanjia@2x.png">我的服务管家</router-link>
         <div class="box1">
             <router-link to="" class="das"><img src="../../images/myself_volunteer@2x.png">维权志愿者联盟</router-link>
             <span class="xian"></span>

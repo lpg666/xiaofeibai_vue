@@ -30,7 +30,9 @@ const tousuError = r => require.ensure([], () => r(require('../page/member/error
 const activity = r => require.ensure([], () => r(require('../page/activity/activity')), 'activity')
 const productRecommend = r => require.ensure([], () => r(require('../page/product/recommend')), 'productRecommend')
 const productIndex = r => require.ensure([], () => r(require('../page/product/index')), 'productIndex')
+const productList = r => require.ensure([], () => r(require('../page/product/list')), 'productList')
 const productInfo = r => require.ensure([], () => r(require('../page/product/info')), 'productInfo')
+const productConsult = r => require.ensure([], () => r(require('../page/product/consult')), 'productConsult')
 
 
 export default [{
@@ -86,10 +88,21 @@ export default [{
             component: productIndex,
             meta: { aR: true },
         },
+        //产品管家列表
+        {
+            path: '/product/list',
+            component: productList,
+            meta: { aR: true },
+        },
         //产品管家介绍页
         {
             path: '/product/info',
             component: productInfo,
+        },
+        //产品管家-咨询客服
+        {
+            path: '/product/consult/:id',
+            component: productConsult,
         },
         //律师列表
         {

@@ -37,6 +37,9 @@
             loading
         },
         created () {
+
+        },
+        mounted(){
             // 组件创建完后获取数据，
             // 此时 data 已经被 observed 了
             this.showLoad=true;
