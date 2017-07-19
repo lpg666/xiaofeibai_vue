@@ -8,11 +8,30 @@
     <transition name="router-fade" mode="out-in">
       <router-view v-if="!$route.meta.keepAlive"></router-view>
     </transition>
+    <alert-box v-if="tanQ" :showHide="tanQ" :alertText="tanQzi"></alert-box>
   </div>
 </template>
 
 <script>
+import alertBox from './components/common/alertBox'
+import {mapState,mapMutations} from 'vuex'
+
 export default {
+    data(){
+        return{
+
+        }
+    },
+    components:{
+        alertBox
+    },
+    computed:{
+        ...mapState([
+            'tanQ',
+            'tanQzi'
+        ])
+    },
+
 }
 </script>
 

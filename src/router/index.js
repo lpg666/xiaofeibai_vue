@@ -33,6 +33,7 @@ const productIndex = r => require.ensure([], () => r(require('../page/product/in
 const productList = r => require.ensure([], () => r(require('../page/product/list')), 'productList')
 const productInfo = r => require.ensure([], () => r(require('../page/product/info')), 'productInfo')
 const productConsult = r => require.ensure([], () => r(require('../page/product/consult')), 'productConsult')
+const productDetail = r => require.ensure([], () => r(require('../page/product/detail')), 'productDetail')
 
 
 export default [{
@@ -103,6 +104,13 @@ export default [{
         {
             path: '/product/consult/:id',
             component: productConsult,
+            meta: { aR: true },
+        },
+        //产品管家-产品详情页
+        {
+            path: '/product/detail/:id',
+            component: productDetail,
+            meta: { aR: true },
         },
         //律师列表
         {

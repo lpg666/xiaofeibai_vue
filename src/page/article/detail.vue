@@ -1,6 +1,6 @@
 <template>
     <div style="padding-top: 1rem; background: #F6F7F9;">
-        <head-i><span class="head_title" slot="title_text" v-if="detail">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span></head-i>
+        <head-i><span class="head_title" slot="title_text" v-if="detail" @click="sx">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span></head-i>
         <div class="armain">
             <div class="title">{{detail.title}}</div>
             <div class="info">
@@ -10,6 +10,8 @@
             </div>
             <div class="cent" v-html="detail.content"></div>
         </div>
+        <div @click="sx">aasksakjsana</div>
+        <img style="width: 100%;" :src="localData"/>
         <comment :comment="comment" :detail="detail" :type="type"></comment>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
@@ -28,7 +30,9 @@
                 type:'article',
                 showLoad:false,
                 loadType:null,
-                loadText:null
+                loadText:null,
+                localData:'121212121',
+                localIds:''
             }
         },
         components:{
@@ -64,7 +68,7 @@
                             timestamp: res.data.timestamp, // 必填，生成签名的时间戳
                             nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
                             signature: res.data.signature,// 必填，签名，见附录1
-                            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo','chooseImage','getLocalImgData'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
                         var share_info = {
                             title: this.detail.title,
@@ -79,6 +83,23 @@
                             wx.onMenuShareTimeline(share_info);
                         });
                     });
+            },
+            sx(){
+                const vm = this;
+                wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        vm.localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        wx.getLocalImgData({
+                            localId: vm.localIds[0], // 图片的localID
+                            success: function (res) {
+                                vm.localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+                            }
+                        });
+                    }
+                });
             },
             close(){
                 this.showLoad = false;

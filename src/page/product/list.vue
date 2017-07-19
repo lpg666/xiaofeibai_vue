@@ -1,5 +1,5 @@
     <template>
-    <div style="padding-top: 1rem;">
+    <div style="padding-top: 1rem; min-height: calc(100vh); background: #F6F7F9;">
         <head-i><span class="head_title" slot="title_text">我的产品列表</span><router-link class="head_a" slot="head_a" to="/product"></router-link></head-i>
         <div v-if="detail=='a'" class="wu">您暂时没有录入数据哦</div>
         <div v-else class="box">
@@ -71,6 +71,7 @@
 </script>
 
 <style lang="less" scoped>
+    .box{background: #fff;}
     .list{
         display: block;
         margin: 0 .2rem;

@@ -110,13 +110,11 @@
             <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
         <tar></tar>
-        <alert-box v-if="tanQ" :showHide="tanQ" :alertText="tanQzi"></alert-box>
     </div>
 </template>
 
 <script>
 import headTop from '../../components/header/header'
-import alertBox from '../../components/common/alertBox'
 import swiperL from '../../components/swiper/swiper'
 import tar from '../../components/tar/tar'
 import {mapState,mapMutations} from 'vuex'
@@ -176,13 +174,10 @@ export default {
         headTop,
         swiperL,
         tar,
-        alertBox
     },
     computed:{
         ...mapState([
             'userInfo',
-            'tanQ',
-            'tanQzi'
         ]),
         swiper() {
             return this.$refs.mySwiper.swiper

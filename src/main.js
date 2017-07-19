@@ -40,11 +40,11 @@ if (process.env.NODE_ENV == 'development') {
 router.beforeEach((to, from, next) => {
     if(to.meta.aR){
         if(store.state.userInfo){
-            /*Vue.axios.post('/v3/auth/check-member-info',{'sign':store.state.userInfo.sign}).then((response) => {
-                if(response.data.msg_type==401){
-                    store.commit('QUANJU_TAN','账号已在其他地方登陆');
+            Vue.axios.post('/v4/auth/check_member_info',{'sign':store.state.userInfo.sign}).then((response) => {
+                if(response.data.error){
+                    store.commit('QUANJU_TAN',response.data.msg);
                     store.commit('OUT_LOGIN');
-                    setTimeout(fu,2000);
+                    setTimeout(fu,1500);
 
                     function fu() {
                         store.commit('QUANJU_BUTAN');
@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
                     next();
                 }
                 console.log(response.data)
-            });*/
+            });
             next();
         }else{
             store.commit('AUTO_ROUTE',to.path);
