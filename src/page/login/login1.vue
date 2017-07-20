@@ -68,7 +68,8 @@ export default {
     },
     methods:{
         ...mapMutations([
-            'RECORD_USERINFO'
+            'RECORD_USERINFO',
+            'EDIT_INFO'
         ]),
         login(){
             if(this.mobile.length>=11 && this.captcha.length>=4){
@@ -102,6 +103,7 @@ export default {
                             this.ajaxRe = false;
                         }else{
                             this.RECORD_USERINFO(res.data.data);
+                            this.EDIT_INFO(res.data.data);
                             this.showLoad=true;
                             this.loadType='';
                             this.loadText=res.data.msg;

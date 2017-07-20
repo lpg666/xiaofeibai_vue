@@ -38,9 +38,11 @@ export default {
     //
     [OUT_LOGIN](state){
         state.userInfo = null;
+        state.editInfo = null;
         state.isDeclare = null;
         state.autoRoute = null;
         removeStore('userInfo');
+        removeStore('editInfo');
         removeStore('isDeclare');
         removeStore('autoRoute');
     },

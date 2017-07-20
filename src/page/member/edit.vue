@@ -1,6 +1,6 @@
 <template>
     <div style="padding-top: 1rem; background: #F6F7F9; height: calc(100vh);">
-        <head-i><span class="head_title" slot="title_text">编辑资料</span><div class="head_a" slot="head_a" @click="butData">保存</div></head-i>
+        <header id="headI"><div id="head_go" @click="$router.push({path:'/member'})"></div><span class="head_title" slot="title_text">编辑资料</span><div class="head_a" slot="head_a" @click="butData">保存</div></header>
         <div class="box tx">头像<img :src="editInfo.avatar!=''?editInfo.avatar:''"></div>
         <div class="box" @click="gq('呢称','name')">呢称<span class="rt" v-if="editInfo.name!=''">{{editInfo.name}}</span><span v-else class="rt">请填写呢称</span></div>
         <div class="box mt">手机号<span class="rt">{{editInfo.mobile}}</span></div>
@@ -259,5 +259,42 @@
     }
     .mt{
         margin-top: .2rem;
+    }
+    #headI{
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 99;
+        width: 100%;
+        height: 1rem;
+        border-bottom: 1px solid #cccccc;
+        background: #fff;
+        #head_go{
+            float: left;
+            width: 1rem;
+            height: 1rem;
+            background: url("../../images/head_jt.png") no-repeat left .1rem center;
+            background-size: .4rem;
+        }
+        span.head_title{
+            float: left;
+            width: calc(~'100% - 2rem');
+            text-align: center;
+            display: block;
+            height: 1rem;
+            line-height: 1rem;
+            font-size: .34rem;
+            color: #37C078;
+        }
+        .head_a{
+            float: right;
+            width: 1rem;
+            height: 1rem;
+            line-height: 1rem;
+            color: #37C078;
+            font-size: .3rem;
+            text-align: center;
+        }
+
     }
 </style>

@@ -38,9 +38,9 @@
                 this.showLoad = false;
             },
             fetchData () {
-                this.axios.get('/v3/home/activities')
+                this.axios.get('/v4/home/activity_list')
                     .then(res =>{
-                        this.list=res.data;
+                        this.list=res.data.data;
                         if(this.list!=''){
                             this.showLoad=false;
                         }

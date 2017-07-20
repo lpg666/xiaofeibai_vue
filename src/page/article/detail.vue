@@ -108,7 +108,7 @@
     }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     .armain{
         width: auto;
         background: #fff;

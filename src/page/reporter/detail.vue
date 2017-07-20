@@ -36,7 +36,7 @@
         },
         methods:{
             fetchData(){
-                this.axios.get('/v3/reporter/detail?id='+this.$route.params.id)
+                this.axios.get('/v4/reporter/detail?reporter_id='+this.$route.params.id)
                     .then(res =>{
                         this.detail=res.data.data;
                         console.log(this.detail);

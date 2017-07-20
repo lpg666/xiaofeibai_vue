@@ -64,14 +64,15 @@
             ajaxData(){
                 this.axios.get('/v4/member/complaint_list?page='+this.page,{'sign':this.userInfo.sign})
                     .then(res =>{
-                        if(!res.data.data){
+                        if(res.data.data.length==0){
                             this.load='已加载完毕'
                         }else if(this.page==0){
                             this.detail = res.data.data;
+                            this.showLoading = false;
                         }else{
                             this.detail = this.detail.concat(res.data.data);
+                            this.showLoading = false;
                         }
-                        this.showLoading = false;
                         console.log(res.data);
                     })
                     .catch(err =>{

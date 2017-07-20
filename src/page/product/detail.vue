@@ -33,16 +33,18 @@
             </div>
         </div>
         <div class="deta_f">
-            <a href="#" class="xian"><span><img src="../../images/icon_woyaotousu@2x.png">我要投诉</span></a>
+            <a @click="tousu" class="xian"><span><img src="../../images/icon_woyaotousu@2x.png">我要投诉</span></a>
             <router-link :to="'/product/consult/'+this.$route.params.id"><span><img src="../../images/icon_lianxikefu@2x.png">联系客服</span></router-link>
         </div>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
+        <alert-ios v-if="showAlertIos" :showHide="showAlertIos" @closeIos="closeIos" @parent="parent" @iosQd="iosQd" :alertIosText="alertIosText"></alert-ios>
     </div>
 </template>
 
 <script>
     import headI from '../../components/header/head'
     import loading from '../../components/common/loading'
+    import alertIos from '../../components/common/alertIos'
     import {mapState,mapMutations} from 'vuex'
 
     export default {
@@ -53,11 +55,14 @@
                 showLoad:false,
                 loadType:null,
                 loadText:null,
+                showAlertIos:false,
+                alertIosText:'您还没有填写真实姓名或者所在地区,点击“设置”前去补全信息'
             }
         },
         components:{
             headI,
-            loading
+            loading,
+            alertIos
         },
         computed:{
             ...mapState([
@@ -88,6 +93,21 @@
             },
             fh(){
                 this.$router.push({path:'/product/list'})
+            },
+            tousu(){
+                console.log(this.userInfo.real_name,this.userInfo.address);
+                if(this.userInfo.real_name=='' || this.userInfo.address==''){
+                    this.showAlertIos = true;
+                }
+            },
+            iosQd(){
+                this.$router.push({path:'/member/edit'});
+            },
+            parent(){
+                this.showAlertIos = false;
+            },
+            closeIos(){
+                this.showAlertIos = false;
             },
             close(){
                 this.showLoad=false;

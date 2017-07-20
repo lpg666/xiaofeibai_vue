@@ -1,5 +1,5 @@
 <template>
-    <div style="padding-top: 2rem; padding-bottom: 1rem;">
+    <div id="home_swiper" style="padding-top: 2rem; padding-bottom: 1rem;">
         <head-top>
             <span slot="title_text"></span>
         </head-top>

@@ -246,7 +246,7 @@ export default {
             }
         },
         show(){
-            if(this.userInfo.real_name==''){
+            if(this.userInfo.real_name=='' || this.userInfo.address==''){
                 this.showAlertIos=true;
                 this.isShow=false;
             }else if(this.isDeclare==true || this.isDeclare=='true'){

@@ -21,7 +21,8 @@
                     pagination : '.swiper-pagination',
                     paginationClickable :true,
                     mousewheelControl : true,
-                    observeParents:true
+                    observeParents:true,
+                    loop:true
                 },
                 swiperSlides:''
             }
@@ -59,7 +60,8 @@
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+#home_swiper{
     .swiper-container{
         padding-bottom: .2rem;
     }
@@ -86,4 +88,5 @@
         width: 100%;
         display: block;
     }
+}
 </style>

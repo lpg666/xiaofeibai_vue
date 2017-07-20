@@ -89,7 +89,7 @@
                 }
             },
             fetchData(){
-                this.axios.get('/v3/reporter/list')
+                this.axios.get('/v4/reporter/reporter_list')
                     .then(res =>{
                         this.list=res.data.data;
                         if(this.list!=''){
@@ -99,7 +99,7 @@
                     })
             },
             examples(){
-                this.axios.get('/v3/lawyer/example?volunteer_type=reporter')
+                this.axios.get('/v4/lawyer/example?volunteer_type=reporter')
                     .then(res =>{
                         this.example=res.data.data;
                         if(this.example!=''){

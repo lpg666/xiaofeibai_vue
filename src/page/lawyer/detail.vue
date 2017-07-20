@@ -36,7 +36,7 @@
         },
         methods:{
             fetchData(){
-                this.axios.get('/v3/lawyer/detail?id='+this.$route.params.id)
+                this.axios.get('/v4/lawyer/detail?lawyer_id='+this.$route.params.id)
                     .then(res =>{
                         this.detail=res.data.data;
                         console.log(this.detail);

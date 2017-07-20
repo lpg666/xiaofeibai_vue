@@ -281,8 +281,8 @@
     .name .tx{ width: .8rem; height: .8rem; border-radius: 50%; overflow: hidden; float: left; margin: 0 .26rem 0 0;}
     .name .tx img{ width: 100%;}
     .name .sp_name{color: #1d2733; margin-right: .26rem; font-size:.28rem;}
-    .name .guanzhu{font-size: .26rem; color: #37c078; padding:.1rem .2rem; position: absolute; top: 0; right: .22rem; border: 1px solid #37c078; border-radius:4px;}
-    .name .guanzhu1{font-size: .26rem; color: #999; padding:.1rem .2rem; position: absolute; top: 0; right: .22rem; border-radius:4px; background: #e0e0e0;}
+    .name .guanzhu{font-size: .26rem; color: #37c078; padding: .08rem .24rem .1rem .2rem; position: absolute; top: 0; right: .22rem; border: 1px solid #37c078; border-radius:4px;}
+    .name .guanzhu1{font-size: .26rem; color: #999; padding: .08rem .2rem .1rem .2rem; position: absolute; top: 0; right: .22rem; border-radius:4px; background: #e0e0e0; border: 1px solid #e0e0e0;}
     .info{ font-size: .26rem; color: #1d2733; background: #fff; border-left:.06rem solid #37c078; margin: 0 .22rem;}
     .info span{color: #323232; margin-right: .24rem;}
     .info .problem{margin-bottom: .34rem; margin-left: .22rem; padding-top: .14rem;}

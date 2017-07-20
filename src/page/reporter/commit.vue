@@ -187,7 +187,6 @@ console.log();
             font-size: .3rem;
             display: block;
             height: 1.3rem;
-            line-height: 1.3rem;
             width: calc(~'100% - .22rem');
             margin-left: .22rem;
             border-bottom: 1px solid rgba(204,204,204,.5);
