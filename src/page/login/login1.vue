@@ -188,7 +188,6 @@ export default {
                 width: calc(~'100% - .5rem');
                 float: right;
                 height: .85rem;
-                line-height: .85rem;
                 font-size: .32rem;
             }
             .code{

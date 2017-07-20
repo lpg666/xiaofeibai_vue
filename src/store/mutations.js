@@ -7,7 +7,8 @@ import {
     QUANJU_TAN,
     QUANJU_BUTAN,
     WECHAT,
-    WECHAT_DEL
+    WECHAT_DEL,
+    EDIT_INFO
 } from './mutation-types.js'
 
 import {setStore,getStore,removeStore} from '../config/mUtils'
@@ -23,6 +24,11 @@ export default {
     [RECORD_DECLARE](state, info) {
         state.isDeclare = info;
         setStore('isDeclare', info);
+    },
+    //修改个人信息
+    [EDIT_INFO](state, info){
+        state.editInfo = info;
+        setStore('editInfo', info);
     },
     //
     [AUTO_ROUTE](state, info){

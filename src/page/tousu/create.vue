@@ -151,6 +151,7 @@
         </transition>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
         <alert-box v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-box>
+        <alert-ios v-if="showAlertIos" :showHide="showAlertIos" @closeIos="closeIos" @parent="parent" @iosQd="iosQd" :alertIosText="alertIosText"></alert-ios>
         <transition name="fade1">
             <div v-show="dataShow">
                 <com-calendar
@@ -175,6 +176,7 @@ import headI from '../../components/header/head'
 import alertBox from '../../components/common/alertBox'
 import calendarComponent from '../../components/common/calendar'
 import loading from '../../components/common/loading'
+import alertIos from '../../components/common/alertIos'
 import {mapState,mapMutations} from 'vuex'
 
 export default {
@@ -218,7 +220,9 @@ export default {
             picList:[],
             showLoad:false,
             loadType:null,
-            loadText:null
+            loadText:null,
+            showAlertIos:false,
+            alertIosText:'您还没有填写真实姓名或者所在地区,点击“设置”前去补全信息'
         }
     },
     computed:{
@@ -242,7 +246,10 @@ export default {
             }
         },
         show(){
-            if(this.isDeclare==true || this.isDeclare=='true'){
+            if(this.userInfo.real_name==''){
+                this.showAlertIos=true;
+                this.isShow=false;
+            }else if(this.isDeclare==true || this.isDeclare=='true'){
                 this.isShow=false;
             }
         },
@@ -251,6 +258,7 @@ export default {
         headI,
         alertBox,
         loading,
+        alertIos,
         comCalendar:calendarComponent
     },
     methods:{
@@ -492,8 +500,18 @@ export default {
                 return false;
             }
         },
+        iosQd(){
+            this.$router.push({path:'/member/edit'});
+        },
+        parent(){
+            this.showAlertIos = false;
+            this.$router.push({path:'/home'});
+        },
         closeTip(){
             this.showAlert = false;
+        },
+        closeIos(){
+            this.showAlertIos = false;
         },
         close(){
             this.showLoad = false;

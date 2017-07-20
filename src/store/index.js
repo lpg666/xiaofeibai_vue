@@ -12,6 +12,7 @@ const state = {
     tanQ:false,
     tanQzi:'',
     wechat:'',
+    editInfo:JSON.parse(localStorage.getItem('userInfo'))
 }
 
 export default new Vuex.Store({

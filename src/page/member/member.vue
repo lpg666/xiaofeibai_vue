@@ -19,7 +19,7 @@
                 <div class="bc" v-if="userInfo.real_name=='' || userInfo.mobile==''">
                     <i></i>
                     请完善资料，即可快速投诉。
-                    <router-link to="">立即完善</router-link>
+                    <router-link to="/member/edit">立即完善</router-link>
                 </div>
                 <div class="wd">
                     <img class="pic2" :src="userInfo.avatar?userInfo.avatar:require('../../images/default_portrait.png')">
@@ -29,7 +29,7 @@
             </div>
             <div class="top_box">
                 <span></span>
-                <router-link to="">编辑资料</router-link>
+                <router-link to="/member/edit">编辑资料</router-link>
                 <router-link to="/member/tousu">我的投诉</router-link>
             </div>
         </div>

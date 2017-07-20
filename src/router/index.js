@@ -15,6 +15,8 @@ const reporterCommit = r => require.ensure([], () => r(require('../page/reporter
 const example = r => require.ensure([], () => r(require('../page/lawyer/example')), 'example')
 const commitSuccess = r => require.ensure([], () => r(require('../page/lawyer/success')), 'commitSuccess')
 const member = r => require.ensure([], () => r(require('../page/member/member')), 'member')
+const memberEdit = r => require.ensure([], () => r(require('../page/member/edit')), 'memberEdit')
+const memberFrom = r => require.ensure([], () => r(require('../page/member/editFrom')), 'memberFrom')
 const memberTousu = r => require.ensure([], () => r(require('../page/member/tousu')), 'memberTousu')
 const followTousu = r => require.ensure([], () => r(require('../page/member/followTousu')), 'followTousu')
 const setting = r => require.ensure([], () => r(require('../page/member/setting')), 'setting')
@@ -159,6 +161,19 @@ export default [{
         {
             path: '/member',
             component: member,
+        },
+        //个人信息修改页
+        {
+            path: '/member/edit',
+            component: memberEdit,
+            meta: { aR:true },
+
+        },
+        //个人信息修改数据页
+        {
+            path: '/member/from',
+            component: memberFrom,
+            meta: { aR:true },
         },
         //个人信息设置页
         {

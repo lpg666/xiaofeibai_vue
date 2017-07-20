@@ -7,4 +7,5 @@ export const QUANJU_TAN = 'QUANJU_TAN'
 export const QUANJU_BUTAN = 'QUANJU_BUTAN'
 export const WECHAT = 'WECHAT'
 export const WECHAT_DEL = 'WECHAT_DEL'
+export const EDIT_INFO = 'EDIT_INFO'
 
