@@ -138,7 +138,7 @@
                 }
             },
             pl(){
-                if(!this.userInfo){
+                if(this.userInfo=='' || this.userInfo==null){
                     this.showLoad=true;
                     this.loadType='alert';
                     this.loadText='请先登录';
