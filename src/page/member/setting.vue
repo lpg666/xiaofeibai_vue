@@ -20,17 +20,29 @@
         components:{
             loading
         },
+        computed:{
+            ...mapState([
+                'userInfo'
+            ]),
+        },
         methods:{
             ...mapMutations([
                 'OUT_LOGIN'
             ]),
             outLogin(){
-                this.axios.post('/v4/auth/logout')
+                this.axios.post('/v4/auth/logout',{'sign':this.userInfo.sign})
                     .then(res =>{
-                        this.showLoad=true;
-                        this.loadText='退出成功';
-                        setTimeout(this.then,1500);
-                        console.log(res.data);
+                        if(res.data.error){
+                            this.showLoad=true;
+                            this.loadText=res.data.msg;
+                            setTimeout(this.then,1500);
+                        }else{
+                            this.showLoad=true;
+                            this.loadText='退出成功';
+                            setTimeout(this.then,1500);
+                            console.log(res.data);
+                        }
+
                     });
 
             },
