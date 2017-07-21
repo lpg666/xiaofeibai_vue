@@ -18,16 +18,6 @@
             <span class="head_title" slot="title_text">填写投诉</span>
         </head-i>
         <div class="inp" :class="tki">
-            <!--<div class="text">
-                <p :class="userInfos.real_name?'p1':'p2'">真实姓名</p>
-                <input :class="userInfos.real_name?'lp1':'lp2'" type="text" :value="userInfos.real_name" v-model="userInfos.real_name">
-            </div>
-            &lt;!&ndash; &ndash;&gt;
-            <div class="text">
-                <p :class="userInfos.mobile?'p1':'p2'">手机号码</p>
-                <input :class="userInfos.mobile?'lp1':'lp2'" type="text" :value="userInfos.mobile" v-model="userInfos.mobile">
-            </div>
-            &lt;!&ndash; &ndash;&gt;-->
             <div class="select" @click="tanK('provinces')">
                 <p :class="from.value.province?'p1':'p2'">所在地区</p>
                 <div :class="from.value.province?'lp1':'lp2'">{{from.name.province}} {{from.name.city}}</div>
@@ -229,7 +219,8 @@ export default {
         ...mapState([
             'isDeclare',
             'userInfo',
-            'tousuData'
+            'tousuData',
+            'tousuPra'
         ]),
         userInfos(){
             return JSON.parse(this.userInfo);
@@ -277,17 +268,7 @@ export default {
                     arr.push(1);
                 }
             }
-            /*if(this.userInfo.real_name.length<=0 || !reg1.test(this.userInfo.real_name)){
-                this.showLoad=true;
-                this.loadType='alert';
-                this.loadText='真实姓名不能为空';
-                setTimeout(this.close,1500);
-            }else if(this.userInfo.mobile.length!==11 || !reg.test(this.userInfo.mobile)){
-                this.showLoad=true;
-                this.loadType='alert';
-                this.loadText='手机格式错误';
-                setTimeout(this.close,1500);
-            }else */if(!this.from.value.province || !this.from.value.city){
+            if(!this.from.value.province || !this.from.value.city){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='地址不能为空';
@@ -332,7 +313,7 @@ export default {
                 this.loadType='alert';
                 this.loadText='投诉内容不能为空';
                 setTimeout(this.close,1500);
-            }else if(this.from.value.content.length<30){
+            }else if(this.from.value.content.length<20){
                 this.showLoad=true;
                 this.loadType='alert';
                 this.loadText='投诉内容不能小于30字符';
@@ -621,6 +602,12 @@ export default {
                     this.types=res.data.data;
                     this.tkData={'name':'type','data':res.data.data};
                     this.close();
+
+                    this.$set(this.from.value,'type_id',this.tousuPra.type_id);
+                    this.$set(this.from.name,'type_id',this.tousuPra.type.name);
+                    this.$set(this.from.value,'subtype_id',this.tousuPra.subtype_id);
+                    this.$set(this.from.name,'subtype_id',this.tousuPra.subtype.name);
+
                 })
                 .catch(err => {
                     console.log(err);
@@ -630,6 +617,9 @@ export default {
             this.axios.get('/v4/complaint/brands?subtype_id='+id+'')
                 .then(res => {
                     this.brands=res.data.data;
+
+                    this.$set(this.from.value,'brand_id',this.tousuPra.brand_id);
+                    this.$set(this.from.name,'brand_id',this.tousuPra.brand.name);
                 })
                 .catch(err => {
 
@@ -642,9 +632,14 @@ export default {
                     this.suqius=res.data.data.suqius;
                     this.properties=res.data.data.properties;
                     for(let i=0;i<this.properties.length;i++){
-                        this.$set(this.textId,''+this.properties[i].id+'','');
+                        for(let o=0;o<this.tousuPra.property.length;o++){
+                            if(this.tousuPra.property[o].id==this.properties[i].id){
+                                this.$set(this.textId,''+this.properties[i].id+'',this.tousuPra.property[o].pivot.property_value);
+                            }
+                        }
                     }
                     this.close();
+                    console.log(this.textId);
                 })
                 .catch(err => {
 
@@ -685,6 +680,22 @@ export default {
             this.axios.get('/v4/complaint/region')
                 .then(res => {
                     this.provinces=res.data.data;
+                    var a ='';
+                    var b ='';
+                    for(let i = 0;i<this.provinces.length;i++){
+                        if(this.provinces[i].code==this.userInfo.province){
+                            a = this.provinces[i].name;
+                        }
+                        for(let o = 0;o<this.provinces[i].citys.length;o++){
+                            if(this.provinces[i].citys[o].code==this.userInfo.city){
+                                b = this.provinces[i].citys[o].name;
+                            }
+                        }
+                    }
+                    this.$set(this.from.value,'province',this.userInfo.province);
+                    this.$set(this.from.name,'province',a);
+                    this.$set(this.from.value,'city',this.userInfo.city);
+                    this.$set(this.from.name,'city',b);
                 })
                 .catch(err => {
 
@@ -842,7 +853,10 @@ export default {
         this.loadText='正在加载';
         this.ajaxTypes();
         this.ajaxProvinces();
-        this.TOUSU_DATA('');
+        this.ajaxBrands(this.tousuPra.subtype_id);
+        this.ajaxQita(this.tousuPra.subtype_id);
+        this.TOUSU_DATA(new Date(this.tousuPra.consume_time*1000).getFullYear()+'-'+(parseInt(new Date(this.tousuPra.consume_time*1000).getMonth())+1)+'-'+new Date(this.tousuPra.consume_time*1000).getDate());
+        console.log(this.from,this.tousuPra,);
     }
 }
 </script>

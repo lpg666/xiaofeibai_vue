@@ -1,33 +1,33 @@
 <template>
     <div style="padding-top: 1rem; min-height: calc(100vh); background: #F6F7F9;">
         <head-i><span class="head_title" slot="title_text">产品详情页</span></head-i>
-        <div class="list_box">
+        <div class="list_box" v-if="detail!=''">
             <div class="list1">
-                <div class="pic"></div>
+                <div class="pic" v-if="detail.pic.length>0" :style="{backgroundImage:'url('+detail.pic[0].pic+')'}"></div>
+                <div class="pic" v-else style="background:#f6f7f9;"></div>
                 <div class="text">
-                    <div class="title">产品类型</div>
+                    <div class="title">{{detail.brand.name}} {{detail.subtype.name}}</div>
                     <div class="zl1">
-                        <div class="sta1">保修期内已过保</div>
+                        <div class="sta1" v-if="detail.is_over==0">保修期内</div>
+                        <div class="sta2" v-else>已过保</div>
                         <router-link to="" class="yb1">购买延保</router-link>
-                        <div class="data1">过保时间</div>
+                        <div class="data1">过保时间 {{detail.over_time}}</div>
                     </div>
                 </div>
-                <div class="bz1">
-                    <div class="bz1_box">
-                        xxxxx
-                    </div>
+                <div class="bz1" v-if="detail.pic.length>0">
+                    <div class="bz1_box" v-if="detail.pic[0].pic_remark==''">暂无备注</div>
+                    <div class="bz1_box" v-else>{{detail.pic_remark}}</div>
                 </div>
             </div>
             <div class="">
                 <ul class="deta_zl">
-                    <li><div class="pz">12121</div><span>:</span><span class="xz">1212121</span></li>
+                    <li v-for="data in detail.property" :key="data"><div class="pz">{{data.name}}</div><span>:</span><span class="xz">{{data.pivot.property_value}}</span></li>
                 </ul>
-                <div class="pics">
-                    <div class="box">
-                        <div class="pics_box">
-                            <img src="">
-                        </div>
-                        <div class="pic_bz">1212121</div>
+                <div class="pics" v-if="detail.pic">
+                    <div class="box" v-for="data in detail.pic" :key="data">
+                        <div class="pics_box" :style="{backgroundImage:'url('+data.pic+')'}"></div>
+                        <div class="pic_bz" v-if="data.pic_remark==''">暂无备注</div>
+                        <div class="pic_bz" v-else>{{data.pic_remark}}</div>
                     </div>
                 </div>
             </div>
@@ -66,15 +66,19 @@
         },
         computed:{
             ...mapState([
-                'userInfo'
+                'userInfo',
+                'tousuPra'
             ])
         },
         created(){
-
+            this.ajaxDatb();
         },
         methods:{
+            ...mapMutations([
+               'TOUSU_PRA'
+            ]),
             ajaxDatb(){
-                this.axios.post('/v4/bulter/consult',{'sign':this.userInfo.sign,'butler_service_id':this.$route.params.id,'content':this.detail})
+                this.axios.get('/v4/bulter/content_list?sign='+this.userInfo.sign+'&butler_id='+this.$route.params.id+'&type=details')
                     .then(res =>{
                         if(res.data.error){
                             this.showLoad=true;
@@ -83,9 +87,9 @@
                             setTimeout(this.close,1500);
                             this.re=false;
                         }else{
-                            this.tk=true;
+                            this.detail=res.data.data[0];
                         }
-                        console.log(res);
+                        console.log(res.data.data[0]);
                     })
                     .catch(err =>{
 
@@ -98,6 +102,10 @@
                 console.log(this.userInfo.real_name,this.userInfo.address);
                 if(this.userInfo.real_name=='' || this.userInfo.address==''){
                     this.showAlertIos = true;
+                }else{
+                    this.TOUSU_PRA(this.detail);
+                    this.$router.push({path:'/tousu/create1'});
+                    console.log(this.tousuPra);
                 }
             },
             iosQd(){
@@ -169,6 +177,9 @@
                 width: 1.5rem;
                 height: 1.55rem;
                 overflow: hidden;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
             }
             .pic_bz{
                 width: 1.45rem;

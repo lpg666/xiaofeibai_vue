@@ -1,5 +1,5 @@
 <template>
-    <div id="home_swiper" style="padding-top: 2rem; padding-bottom: 1rem;">
+    <div style="padding-top: 2rem; padding-bottom: 1rem;">
         <head-top>
             <span slot="title_text"></span>
         </head-top>
@@ -11,7 +11,7 @@
         <router-link to="/tousu/create" id="ts_btn"><span>一键<br/>投诉</span></router-link>
         <swiper id="swiper-nav" :options="swiperNav" ref="mySwiper">
             <swiper-slide class="lis">
-                <swiper-l></swiper-l>
+                <div id="home_swiper"><swiper-l></swiper-l></div>
                 <section class="recommend_list" v-if="recommendData.length>0">
                     <router-link v-for="data in recommendData" :key="data" :to="'/tousu/detail/'+data.id" class="list" v-if="data.resources_type==0">
                         <div class="list_left" :style="data.default_pic==null?'width:100%':'height:1.4rem; position:relative;'">
@@ -328,15 +328,16 @@ export default {
 
 <style lang="less">
     #ts_btn{
+        margin: 0;
         display: table;
         position: fixed;
         right: .2rem;
-        bottom: 1.2rem;
+        bottom: 1.32rem;
         background: url("../../images/FAB@2x.png") no-repeat center;
         background-size: 100%;
         z-index: 999;
-        width: 1.1rem;
-        height: 1.1rem;
+        width: 1.22rem;
+        height: 1.22rem;
         span{
             text-align: center;
             font-size: .24rem;

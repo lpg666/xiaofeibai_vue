@@ -7,6 +7,7 @@
             <img :src="item.bg">
         </a>
         <tar></tar>
+        <router-link to="/tousu/create" id="ts_btn"><span>一键<br/>投诉</span></router-link>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
@@ -69,5 +70,24 @@
             width: 100%;
             display: block;
         }
+    }
+    #ts_btn{
+        margin: 0;
+        display: table;
+        position: fixed;
+        right: .2rem;
+        bottom: 1.32rem;
+        background: url("../../images/FAB@2x.png") no-repeat center;
+        background-size: 100%;
+        z-index: 999;
+        width: 1.22rem;
+        height: 1.22rem;
+    span{
+        text-align: center;
+        font-size: .24rem;
+        color: #fff;
+        vertical-align: middle;
+        display: table-cell;
+    }
     }
 </style>

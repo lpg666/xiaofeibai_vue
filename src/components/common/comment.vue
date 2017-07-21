@@ -195,6 +195,7 @@
         margin-left: .25rem;
         border-right: 1px solid rgba(204,204,204,.5);
         font-size: .26rem;
+        border-radius: 0;
     }
     .plBox{
         position: fixed;

@@ -1,5 +1,5 @@
 <template>
-    <swiper :options="swiperOption">
+    <swiper v-if="swiperSlides!=''" :options="swiperOption">
         <swiper-slide v-for="slide in swiperSlides" :key="slide">
             <router-link :to="slide.url">
                 <img :src="slide.pic+'!/fh/230'">
@@ -17,12 +17,14 @@
             return {
                 swiperOption: {
                     autoplay: 3500,
+                    autoplayDisableOnInteraction : false,
                     setWrapperSize :true,
                     pagination : '.swiper-pagination',
                     paginationClickable :true,
                     mousewheelControl : true,
                     observeParents:true,
-                    loop:true
+                    loop:true,
+                    effect : 'fade',
                 },
                 swiperSlides:''
             }

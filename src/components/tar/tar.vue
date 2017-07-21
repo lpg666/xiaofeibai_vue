@@ -3,7 +3,7 @@
         <li><router-link to="/home"><i class="ic1"></i><span>首页</span></router-link></li>
         <li><router-link to="/help"><i class="ic2"></i><span>求助</span></router-link></router-link></li>
         <li><router-link to="/activity"><i class="ic3"></i><span>活动</span></router-link></router-link></li>
-        <li><router-link :to="userInfo==null?'/product/info':'/product/list'"><i class="ic4"></i><span>管家</span></router-link></router-link></li>
+        <li><router-link to="/product/info1"><i class="ic4"></i><span>管家</span></router-link></router-link></li>
     </ul>
 </template>
 

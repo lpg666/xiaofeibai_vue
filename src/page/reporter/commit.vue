@@ -62,10 +62,10 @@ console.log();
                     this.loadType='alert';
                     this.loadText='标题字符长度不能小于5或大于30';
                     setTimeout(this.close,1500);
-                }else if(this.cent.length<20){
+                }else if(this.cent.length<30){
                     this.showLoad=true;
                     this.loadType='alert';
-                    this.loadText='内容字符长度不能小于20';
+                    this.loadText='内容字符长度不能小于30';
                     setTimeout(this.close,1500);
                 }else if(this.re==false){
                     this.close();
@@ -90,7 +90,6 @@ console.log();
                         'pics':this.picList,
                         'sign':this.userInfo.sign,
                         'is_open':this.gk,
-                        'source_type':1
                     })
                         .then(res =>{
                             this.re=false;

@@ -8,7 +8,8 @@ import {
     QUANJU_BUTAN,
     WECHAT,
     WECHAT_DEL,
-    EDIT_INFO
+    EDIT_INFO,
+    TOUSU_PRA
 } from './mutation-types.js'
 
 import {setStore,getStore,removeStore} from '../config/mUtils'
@@ -36,12 +37,19 @@ export default {
         setStore('autoRoute', info);
     },
     //
+    [TOUSU_PRA](state, info){
+        state.tousuPra = info;
+        setStore('tousuPra', info);
+    },
+    //
     [OUT_LOGIN](state){
         state.userInfo = null;
         state.editInfo = null;
         state.isDeclare = null;
         state.autoRoute = null;
+        state.tousuPra = null;
         removeStore('userInfo');
+        removeStore('tousuPra');
         removeStore('editInfo');
         removeStore('isDeclare');
         removeStore('autoRoute');

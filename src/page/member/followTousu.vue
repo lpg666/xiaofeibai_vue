@@ -16,7 +16,7 @@
                         <span class="status status1" v-else-if="data.status==1">企业处理</span>
                         <span class="status status2" v-else-if="data.status==2">结果审核</span>
                         <span class="status status3" v-else>完成</span>
-                        <div class="fx">分享</div>
+                        <!--<div class="fx">分享</div>-->
                         <!--<div class="bc">补充</div>-->
                     </div>
                 </router-link>
@@ -62,7 +62,7 @@
         },
         methods:{
             ajaxData(){
-                this.axios.get('/v4/member/complaint_list?page='+this.page,{'sign':this.userInfo.sign})
+                this.axios.get('/v4/member/list_complaint_collect?page='+this.page,{'sign':this.userInfo.sign})
                     .then(res =>{
                         if(res.data.data.length==0){
                             this.load='已加载完毕'
@@ -139,7 +139,6 @@
                     margin-right: .3rem;
                 }
                 .status{
-                    margin-top: .1rem;
                     float: left;
                     text-align: center;
                     width: 1.1rem;

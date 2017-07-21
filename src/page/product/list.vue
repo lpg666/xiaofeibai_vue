@@ -4,7 +4,7 @@
         <div v-if="detail=='a'" class="wu">您暂时没有录入数据哦</div>
         <div v-else class="box">
             <router-link :to="'/product/detail/'+data.id" class="list" v-for="data in detail" :key="data">
-                <div class="pic" v-if="data.pic.length>0" :style="{backgroundImage:'url('+data.pic+')'}"></div>
+                <div class="pic" v-if="data.pic.length>0" :style="{backgroundImage:'url('+data.pic[0].pic+')'}"></div>
                 <div class="pic" v-else style="background:#f6f7f9;"></div>
                 <div class="text">
                     <div class="title">{{data.brand.name}} {{data.subtype.name}}<!--<span v-for="item in data.property" v-if="item.name=='产品类型'">{{item.pivot.property_value}}--></span></div>
@@ -17,27 +17,32 @@
                     </div>
                     <div class="list_but">
                         <router-link :to="'/product/consult/'+data.id" class="list_but_r">联系客服</router-link>
-                        <router-link to="" class="list_but_l">我要投诉</router-link>
+                        <a @click="tousu" class="list_but_l">我要投诉</a>
                         <div class="dun"></div>
                     </div>
                 </div>
             </router-link>
         </div>
+        <alert-ios v-if="showAlertIos" :showHide="showAlertIos" @closeIos="closeIos" @parent="parent" @iosQd="iosQd" :alertIosText="alertIosText"></alert-ios>
     </div>
 </template>
 
 <script>
     import headI from '../../components/header/head'
+    import alertIos from '../../components/common/alertIos'
     import {mapState,mapMutations} from 'vuex'
 
     export default {
         data(){
             return {
-                detail:''
+                detail:'',
+                showAlertIos:false,
+                alertIosText:'您还没有填写真实姓名或者所在地区,点击“设置”前去补全信息'
             }
         },
         components:{
-            headI
+            headI,
+            alertIos
         },
         computed:{
             ...mapState([
@@ -48,6 +53,29 @@
             this.ajaxData();
         },
         methods:{
+            ...mapMutations([
+                'TOUSU_PRA'
+            ]),
+            tousu(e){
+                e.preventDefault();
+                console.log(this.userInfo.real_name,this.userInfo.address);
+                if(this.userInfo.real_name=='' || this.userInfo.address==''){
+                    this.showAlertIos = true;
+                }else{
+                    this.TOUSU_PRA(this.detail);
+                    this.$router.push({path:'/tousu/create1'});
+                    console.log(this.tousuPra);
+                }
+            },
+            iosQd(){
+                this.$router.push({path:'/member/edit'});
+            },
+            parent(){
+                this.showAlertIos = false;
+            },
+            closeIos(){
+                this.showAlertIos = false;
+            },
             ajaxData(){
                 this.showLoading = true;
                 this.axios.get('/v4/bulter/content_list?sign='+this.userInfo.sign)

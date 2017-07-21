@@ -1,5 +1,5 @@
 <template>
-    <div style="padding-top: 1rem; background: #F6F7F9;">
+    <div v-if="detail!=''" style="padding-top: 1rem; background: #F6F7F9;">
         <head-i><span class="head_title" slot="title_text">{{h}}</span></head-i>
         <div class="title">
             <p class="p1">{{detail.inquiry.title}}</p>
@@ -7,7 +7,7 @@
             <div class="p3">
                 {{detail.inquiry.content}}
                 <ul class="pic">
-                    <li v-for="data in detail.pics"><img :src="data.pic+'!/fh/230'"></li>
+                    <li v-for="data in detail.pics" :key="data"><img :src="data.pic+'!/fh/230'"></li>
                 </ul>
             </div>
         </div>
@@ -20,7 +20,7 @@
         </div>
         <div class="al">
             <div class="hear"><img src="../../images/icon_wangyouzixun@2x.png">资讯案例<img @click="fh($route.query.id)" style="float: right; margin-right: .1rem;" src="../../images/jt_hui.png"></div>
-            <div class="box" v-for="data in detail.lists">
+            <div class="box" v-for="data in detail.lists" :key="data">
                 <div class="tit">{{data.title}}</div>
                 <div class="cen">{{data.inquiry_content}}</div>
                 <div class="remind">
@@ -72,14 +72,13 @@
                 return new Date(parseInt(s) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
             },
             fetchData(){
-                this.axios.get('/v3/lawyer/example-deta?id='+this.$route.params.id+'&volunteer_type='+this.$route.query.id)
+                this.axios.get('/v4/lawyer/case_detail?id='+this.$route.params.id+'&volunteer_type='+this.$route.query.id)
                     .then(res =>{
-                        this.detail=res.data.data;
-                        this.h = this.detail.inquiry.title.substr(0,10);
+                        this.detail=res.data;
+                        this.h = res.data.inquiry.title.substr(0,10);
                         if(this.detail!=''){
                             this.showLoad=false;
                         }
-                        console.log(this.detail);
                     })
             }
         },

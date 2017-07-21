@@ -588,7 +588,7 @@
     input[type=date]::-webkit-inner-spin-button { visibility: hidden; }
     .text .sp{float: left;  display: block;  width: 1.4rem;}
     .text input{ width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; text-align: right; color: #999;}
-    .select input{ width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; text-align: right; color: #999;}
+    .select input{ width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; direction: rtl; color: #999;}
     .select select{ width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; direction: rtl; color: #999; appearance:none; -moz-appearance:none;  -webkit-appearance:none;}
     .lk{line-height: .425rem;}
     .text{ height: .85rem; line-height: .85rem; width: auto; margin: 0 .22rem; background-size:.18rem auto; font-size: .32rem;}

@@ -34,13 +34,6 @@ module.exports = {
           pathRewrite: {
               '^/v4': '/v4'
           }
-      },
-      '/v3': {
-          target: 'http://api.s1.xfb315.com',
-          changeOrigin:true,
-          pathRewrite: {
-              '^/v3': '/v3'
-          }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

@@ -18,6 +18,7 @@ const member = r => require.ensure([], () => r(require('../page/member/member'))
 const memberEdit = r => require.ensure([], () => r(require('../page/member/edit')), 'memberEdit')
 const memberFrom = r => require.ensure([], () => r(require('../page/member/editFrom')), 'memberFrom')
 const memberTousu = r => require.ensure([], () => r(require('../page/member/tousu')), 'memberTousu')
+const memberGrade = r => require.ensure([], () => r(require('../page/member/grade')), 'memberGrade')
 const followTousu = r => require.ensure([], () => r(require('../page/member/followTousu')), 'followTousu')
 const setting = r => require.ensure([], () => r(require('../page/member/setting')), 'setting')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
@@ -27,6 +28,7 @@ const articleDetail = r => require.ensure([], () => r(require('../page/article/d
 const cechoiceDetail = r => require.ensure([], () => r(require('../page/cechoice/detail')), 'cechoiceDetail')
 const tousuDetail = r => require.ensure([], () => r(require('../page/tousu/detail')), 'tousuDetail')
 const tousuCreate = r => require.ensure([], () => r(require('../page/tousu/create')), 'tousuCreate')
+const tousuCreate1 = r => require.ensure([], () => r(require('../page/tousu/create1')), 'tousuCreate1')
 const tousuSuccess = r => require.ensure([], () => r(require('../page/tousu/success')), 'tousuSuccess')
 const tousuError = r => require.ensure([], () => r(require('../page/member/error')), 'tousuError')
 const activity = r => require.ensure([], () => r(require('../page/activity/activity')), 'activity')
@@ -34,6 +36,7 @@ const productRecommend = r => require.ensure([], () => r(require('../page/produc
 const productIndex = r => require.ensure([], () => r(require('../page/product/index')), 'productIndex')
 const productList = r => require.ensure([], () => r(require('../page/product/list')), 'productList')
 const productInfo = r => require.ensure([], () => r(require('../page/product/info')), 'productInfo')
+const productInfo1 = r => require.ensure([], () => r(require('../page/product/info1')), 'productInfo1')
 const productConsult = r => require.ensure([], () => r(require('../page/product/consult')), 'productConsult')
 const productDetail = r => require.ensure([], () => r(require('../page/product/detail')), 'productDetail')
 
@@ -101,6 +104,11 @@ export default [{
         {
             path: '/product/info',
             component: productInfo,
+        },
+        //产品管家介绍页
+        {
+            path: '/product/info1',
+            component: productInfo1,
         },
         //产品管家-咨询客服
         {
@@ -183,7 +191,8 @@ export default [{
         //我的投诉页
         {
             path: '/member/tousu',
-            component: memberTousu
+            component: memberTousu,
+            meta: { aR:true },
         },
         //我的投诉错误页
         {
@@ -194,6 +203,12 @@ export default [{
         {
             path: '/member/followTousu',
             component: followTousu,
+            meta: { aR:true },
+        },
+        //关注的投诉页
+        {
+            path: '/member/grade',
+            component: memberGrade,
             meta: { aR:true },
         },
         //信息页
@@ -225,6 +240,14 @@ export default [{
         {
             path: '/tousu/create',
             component: tousuCreate,
+            meta:{
+                aR:true
+            }
+        },
+        //填写投诉1
+        {
+            path: '/tousu/create1',
+            component: tousuCreate1,
             meta:{
                 aR:true
             }

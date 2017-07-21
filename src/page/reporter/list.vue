@@ -99,7 +99,7 @@
                     })
             },
             examples(){
-                this.axios.get('/v4/lawyer/example?volunteer_type=reporter')
+                this.axios.get('/v4/lawyer/example?resource_type=reporter')
                     .then(res =>{
                         this.example=res.data.data;
                         if(this.example!=''){

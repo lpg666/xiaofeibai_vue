@@ -59,6 +59,7 @@
                 <div class="box_top">{{hanye.title}}</div>
             </router-link>
         </div>
+        <router-link to="/tousu/create" id="ts_btn"><span>一键<br/>投诉</span></router-link>
         <tar></tar>
     </div>
 </template>
@@ -145,6 +146,25 @@
 </script>
 
 <style lang="less" scoped>
+    #ts_btn{
+        margin: 0;
+        display: table;
+        position: fixed;
+        right: .2rem;
+        bottom: 1.32rem;
+        background: url("../../images/FAB@2x.png") no-repeat center;
+        background-size: 100%;
+        z-index: 999;
+        width: 1.22rem;
+        height: 1.22rem;
+    span{
+        text-align: center;
+        font-size: .24rem;
+        color: #fff;
+        vertical-align: middle;
+        display: table-cell;
+    }
+    }
     .img{
         background-repeat: no-repeat;
         background-size: cover;
