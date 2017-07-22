@@ -147,8 +147,14 @@
                 }else{
                     this.tc=true;
                     this.focusStatus=true;
+                    this.i();
                     document.querySelector('body').style.overflow='hidden';
                 }
+            },
+            i(){
+                 window.abc = setInterval(function() {
+                    document.body.scrollTop = document.body.scrollHeight;
+                }, 100);
             },
             dl(){
                 this.AUTO_ROUTE(this.$route.path);
@@ -159,6 +165,7 @@
             },
             gb(){
                 this.tc=false;
+                clearInterval(window.abc);
                 document.querySelector('body').style.overflow='';
             },
             shuaxin(){

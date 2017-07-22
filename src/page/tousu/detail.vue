@@ -81,9 +81,9 @@
                 </div>
                 <div class="good" v-if="detail.status==3">
                     <img v-if="!userInfo" src="../../images/lightGood.png" @click="dl">
-                    <img v-else-if="!detail.is_favour" @click="zang" src="../../images/lightGood.png">
+                    <img v-else-if="!this.isdz" @click="zang" src="../../images/lightGood.png">
                     <img src="../../images/good.png" @click="zang" v-else>
-                    <p>已有<span>{{detail.stat.favours}}</span>人点赞</p>
+                    <p>已有<span>{{dzs}}</span>人点赞</p>
                 </div>
             </div>
         </div>
@@ -108,6 +108,7 @@
                 type:'tousu',
                 isgz:'',
                 isdz:'',
+                dzs:'',
                 showLoad:false,
                 loadType:null,
                 loadText:null
@@ -171,6 +172,7 @@
                                 this.loadType='';
                                 this.loadText='点赞成功';
                                 this.isdz=true;
+                                this.dzs += 1;
                                 setTimeout(this.close,1500);
                             }
                         })
@@ -251,6 +253,7 @@
                         this.comment=res.data.data.comments;
                         this.isgz = this.detail.is_collect;
                         this.isdz = this.detail.is_favour;
+                        this.dzs = this.detail.stat.favours;
                         if(this.detail!=''){
                             this.showLoad=false;
                             this.fanhui();
