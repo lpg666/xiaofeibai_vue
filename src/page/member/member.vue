@@ -44,7 +44,7 @@
             <span class="xian"></span>
             <router-link to="" class="das"><img src="../../images/icon_xing.png">收藏</router-link>
         </div>
-        <div class="but">退出登陆</div>
+        <div v-if="userInfo" class="but">退出登陆</div>
         <!--<router-link to="/member/setting" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5);"><img src="../../images/myself_setting@2x.png">设置</router-link>-->
     </div>
 </template>
