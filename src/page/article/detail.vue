@@ -80,6 +80,10 @@
                                 this.loadType='alert';
                                 this.loadText=res.data.msg;
                                 setTimeout(this.close,1500);
+                                if(res.data.msg_type==401){
+                                    setTimeout(this.dl,1500);
+                                }
+
                             }else{
                                 this.showLoad=true;
                                 this.loadType='';
@@ -96,6 +100,9 @@
                                 this.loadType='alert';
                                 this.loadText=res.data.msg;
                                 setTimeout(this.close,1500);
+                                if(res.data.msg_type==401){
+                                    setTimeout(this.dl,1500);
+                                }
                             }else{
                                 this.showLoad=true;
                                 this.loadType='';
@@ -132,6 +139,10 @@
                             wx.onMenuShareTimeline(share_info);
                         });
                     });
+            },
+            dl(){
+                this.AUTO_ROUTE(this.$route.path);
+                this.$router.push({path:'/login?id=1'});
             },
             close(){
                 this.showLoad = false;

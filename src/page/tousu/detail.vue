@@ -166,6 +166,9 @@
                                 this.loadType='alert';
                                 this.loadText=res.data.msg;
                                 setTimeout(this.close,1500);
+                                if(res.data.msg_type==401){
+                                    setTimeout(this.dl,1500);
+                                }
                             }else{
                                 this.showLoad=true;
                                 this.loadType='';
@@ -199,6 +202,9 @@
                                 this.showLoad=true;
                                 this.loadType='alert';
                                 this.loadText=res.data.msg;
+                                if(res.data.msg_type==401){
+                                    setTimeout(this.dl,1500);
+                                }
                             }else{
                                 this.isgz=true;
                                 this.showLoad=true;
@@ -214,6 +220,9 @@
                                 this.showLoad=true;
                                 this.loadType='alert';
                                 this.loadText=res.data.msg;
+                                if(res.data.msg_type==401){
+                                    setTimeout(this.dl,1500);
+                                }
                             }else{
                                 this.isgz=false;
                                 this.showLoad=true;

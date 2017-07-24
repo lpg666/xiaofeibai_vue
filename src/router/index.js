@@ -216,7 +216,8 @@ export default [{
         //信息页
         {
             path: '/news',
-            component: news
+            component: news,
+            meta: { aR:true },
         },
         //搜索页
         {
