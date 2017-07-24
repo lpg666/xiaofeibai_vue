@@ -6,19 +6,20 @@
             <div class="plBut" @click="plBut">发送</div>
         </div>
         <div class="title"><i></i>网友评论({{type=='tousu'?detail.comments_count:detail.comments}})<div class="but" @click="pl">评论</div></div>
-        <ul>
+        <ul v-if="comment.length>0">
             <li v-if="key<3" v-for="data,key in comment">
                 <img :src="data.member?data.member.avatar:require('../../images/default_portrait.png')">
                 <div>
-                    <p class="name" v-if="data.member">{{data.member.name}}<span v-if="type=='tousu' && detail.id==data.member.id">(投诉人)</span></p>
+                    <p class="name" v-if="data.member">{{data.member.name}}<span v-if="type=='tousu' && detail.member_id==data.member.id">(投诉人)</span></p>
                     <p class="name" v-else>消费保保</p>
                     <p class="text">{{data.content}}</p>
                     <p class="date">{{data.add_time}}<span v-if="data.client">来自{{data.client}}</span></p>
                 </div>
             </li>
         </ul>
-        <div class="gd" v-if="comment.length>3">查看更多评论</div>
-        <p class="zhichi" v-if="type=='tousu'" style="margin-top:.4rem;">已经有<span>{{detail.clicks}}</span>人通过关注公众号支持</p>
+        <p v-else class="wupl">暂无评论</p>
+        <router-link :to="type=='tousu'?'/tousu/detail/comment/'+$route.params.id+'?id='+detail.member_id:'/article/detail/comment/'+$route.params.id" class="gd" v-if="comment.length>3">查看更多评论</router-link>
+        <!--<p class="zhichi" v-if="type=='tousu'" style="margin-top:.4rem;">已经有<span>{{detail.clicks}}</span>人通过关注公众号支持</p>-->
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
     </div>
 </template>
@@ -74,6 +75,9 @@
                 if(this.type=='tousu'){
                     if(this.re==false){
                         this.re=true;
+                        this.showLoad=true;
+                        this.loadType='load';
+                        this.loadText='正在提交评论...';
                         this.axios.post('/v4/complaint/comment', {
                             'complaint_id':this.$route.params.id,
                             'content':this.title,
@@ -107,9 +111,13 @@
                 }else{
                     if(this.re==false){
                         this.re=true;
+                        this.showLoad=true;
+                        this.loadType='load';
+                        this.loadText='正在提交评论...';
                         this.axios.post('/v4/member/add_article_comment', {
                             'article_id':this.$route.params.id,
-                            'content':this.title
+                            'content':this.title,
+                            'sign':this.userInfo.sign
                         })
                         .then(res =>{
                             if(res.data.error){
@@ -176,6 +184,12 @@
 </script>
 
 <style lang="less" scoped>
+    .wupl{
+        font-size: .28rem;
+        margin: 0 .22rem;
+        padding:.22rem 0 0 .0;
+        color: #999;
+    }
     .zhichi{
         padding-bottom: .4rem;
         text-align: center;
@@ -225,6 +239,7 @@
     }
     .comment{
         background: #fff;
+        padding-bottom: .22rem;
         margin-top: .2rem;
         width: 100%;
         .title{
@@ -304,8 +319,9 @@
             }
         }
         .gd{
+            display: block;
             text-indent: .34rem;
-            margin: .4rem auto .5rem auto;
+            margin: .22rem auto 0 auto;
             width: 2.6rem;
             height: .7rem;
             line-height: .7rem;

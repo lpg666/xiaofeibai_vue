@@ -44,7 +44,8 @@
             <span class="xian"></span>
             <router-link to="" class="das"><img src="../../images/icon_xing.png">收藏</router-link>
         </div>
-        <router-link to="/member/setting" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5);"><img src="../../images/myself_setting@2x.png">设置</router-link>
+        <div class="but">退出登陆</div>
+        <!--<router-link to="/member/setting" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5);"><img src="../../images/myself_setting@2x.png">设置</router-link>-->
     </div>
 </template>
 
@@ -92,6 +93,20 @@ export default {
 </script>
 
 <style lang="less" scoped>
+    .but{
+        position: fixed;
+        left: 5%;
+        bottom: .2rem;
+        width: 90%;
+        height: .73rem;
+        line-height: .73rem;
+        text-align: center;
+        font-size: .32rem;
+        color: #fff;
+        border-radius: .1rem;
+        background-image:-webkit-linear-gradient(to right, #37C078, #5BDC99);
+        background-image:linear-gradient(to right,#37C078,#5BDC99);
+    }
     .head{
         position: relative;
         width: 100%;
@@ -105,11 +120,13 @@ export default {
             font-size: .24rem;
             background: rgb(252,236,147);
             i{
+                background: url("../../images/myself_add_tip@2x.png") no-repeat center;
+                background-size: 100%;
                 width: .44rem;
                 height: .44rem;
                 display: block;
                 float: left;
-                margin-top: .16rem;
+                margin-top: .14rem;
                 margin-left: .3rem;
                 margin-right: .1rem;
             }

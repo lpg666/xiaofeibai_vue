@@ -102,6 +102,7 @@ export default {
                             this.loadText=res.data.msg;
                             setTimeout(this.close,1000);
                             if(this.$route.query.id){
+                                console.log(this.autoRoute);
                                 this.$router.replace(this.autoRoute);
                             }else{
                                 this.$router.push({path:'/member'});

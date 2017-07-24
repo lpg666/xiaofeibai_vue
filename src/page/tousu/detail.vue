@@ -148,7 +148,6 @@
             this.loadType='load';
             this.loadText='正在加载';
             this.fetchData();
-            this.commentData();
         },
         watch: {
             // 如果路由有变化，会再次执行该方法
@@ -235,17 +234,6 @@
             fanhui(){
                 document.body.scrollTop=0;
             },
-            /*commentData(){
-                this.axios.get('/v4/tousu/comments?id='+this.$route.params.id+'')
-                    .then(res =>{
-                        this.comment=res.data.data;
-                        console.log(this.comment);
-                    })
-                    .catch(err =>{
-
-                    });
-                console.log(this.$route.params.id);
-            },*/
             fetchData () {
                 this.axios.get('/v4/complaint/detail?complaint_id='+this.$route.params.id+'')
                     .then(res =>{

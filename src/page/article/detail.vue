@@ -1,6 +1,11 @@
 <template>
     <div style="padding-top: 1rem; background: #F6F7F9;">
-        <head-i><span class="head_title" slot="title_text" v-if="detail">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span></head-i>
+        <header id="headI">
+            <div id="head_go" @click="$router.go(-1)"></div>
+            <span class="head_title" v-if="detail">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span>
+            <div v-if="userInfo" class="head_a" @click="sc"><i :class="collected?'hover':''"></i></div>
+            <div v-else class="head_a" @click="dl"><i></i></div>
+        </header>
         <div class="armain">
             <div class="title">{{detail.title}}</div>
             <div class="info">
@@ -19,11 +24,13 @@
     import headI from '../../components/header/head'
     import comment from '../../components/common/comment'
     import loading from '../../components/common/loading'
+    import {mapState,mapMutations} from 'vuex'
 
     export default {
         data(){
             return{
                 detail:'',
+                collected:'',
                 comment:'',
                 type:'article',
                 showLoad:false,
@@ -51,13 +58,59 @@
             // 如果路由有变化，会再次执行该方法
             '$route': 'fetchData'
         },
+        computed:{
+            ...mapState([
+                'userInfo'
+            ])
+        },
         methods: {
+            ...mapMutations([
+                'AUTO_ROUTE'
+            ]),
+            dl(){
+                this.AUTO_ROUTE(this.$route.path);
+                this.$router.push({path:'/login?id=1'});
+            },
+            sc(){
+                if(this.collected){
+                    this.axios.get('/v4/member/drop_article_collect?article_id='+this.$route.params.id+'&sign='+this.userInfo.sign)
+                        .then(res=>{
+                            if(res.data.error){
+                                this.showLoad=true;
+                                this.loadType='alert';
+                                this.loadText=res.data.msg;
+                                setTimeout(this.close,1500);
+                            }else{
+                                this.showLoad=true;
+                                this.loadType='';
+                                this.loadText='取消收藏成功';
+                                this.collected=false;
+                                setTimeout(this.close,1500);
+                            }
+                        });
+                }else{
+                    this.axios.get('/v4/member/add_article_collect?article_id='+this.$route.params.id+'&sign='+this.userInfo.sign)
+                        .then(res=>{
+                            if(res.data.error){
+                                this.showLoad=true;
+                                this.loadType='alert';
+                                this.loadText=res.data.msg;
+                                setTimeout(this.close,1500);
+                            }else{
+                                this.showLoad=true;
+                                this.loadType='';
+                                this.loadText='收藏成功';
+                                this.collected=true;
+                                setTimeout(this.close,1500);
+                            }
+                        });
+                }
+            },
             fx(){
                 var url=encodeURIComponent(window.location.href.split('#')[0]);
                 //alert(url);
                 this.axios.get('/v4/weixin?url='+url)
                     .then(res =>{
-                        console.log(res.data);
                         wx.config({
                             debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                             appId: res.data.appId, // 必填，公众号的唯一标识
@@ -70,7 +123,7 @@
                             title: this.detail.title,
                             desc: this.detail.content,
                             imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
-                            link: window.location.href,
+                            link: url,
                         };
                         wx.ready(function(){
                             wx.onMenuShareWeibo(share_info);
@@ -87,9 +140,9 @@
                 document.body.scrollTop=0;
             },
             fetchData () {
-                this.axios.get('/v4/article/detail?article_id='+this.$route.params.id+'')
+                this.axios.get('/v4/article/detail?article_id='+this.$route.params.id)
                     .then(res =>{
-                        this.detail=res.data.data;
+                        this.detail=res.data.data.detail;
                         this.comment=res.data.data.comment;
                         if(this.detail!=''){
                             this.showLoad=false;
@@ -102,13 +155,68 @@
 
                     });
                     console.log(this.$route.params.id);
-            }
+                if(this.userInfo){
+                    this.axios.post('/v4/member/article_is_collected',{'article_id':this.$route.params.id,'sign':this.userInfo.sign})
+                        .then(res=>{
+                            this.collected = res.data.data;
+                            console.log(this.collected);
+                        })
+                }
+            },
         }
 
     }
 </script>
 
 <style lang="less" scoped>
+    #headI{
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 99;
+        width: 100%;
+        height: 1rem;
+        border-bottom: 1px solid #cccccc;
+        background: #fff;
+    #head_go{
+        float: left;
+        width: 1rem;
+        height: 1rem;
+        background: url("../../images/head_jt.png") no-repeat left .1rem center;
+        background-size: .4rem;
+    }
+    span.head_title{
+        float: left;
+        width: calc(~'100% - 2rem');
+        text-align: center;
+        display: block;
+        height: 1rem;
+        line-height: 1rem;
+        font-size: .34rem;
+        color: #37C078;
+    }
+    .head_a{
+        float: right;
+        width: 1rem;
+        height: 1rem;
+        i{
+            margin-left: .275rem;
+            margin-top: .29rem;
+            float: left;
+            width: .45rem;
+            height: .42rem;
+            display: block;
+            background-image: url("../../images/sc@2x.png");
+            background-repeat: no-repeat;
+            background-position: top center;
+            background-size: .45rem;
+        }
+        .hover{
+            background-position: bottom;
+        }
+    }
+
+    }
     .armain{
         width: auto;
         background: #fff;

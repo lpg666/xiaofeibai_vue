@@ -48,7 +48,23 @@ router.beforeEach((to, from, next) => {
 
                     function fu() {
                         store.commit('QUANJU_BUTAN');
-                        store.commit('AUTO_ROUTE',to.path);
+                        if(to.query){
+                            var arr = Object.keys(to.query);
+                            var diyi = arr[0];
+                            var cs = '';
+                            console.log(diyi);
+                            for(let key in to.query){
+                                if(key==diyi){
+                                    cs += '?'+key+'='+to.query[key];
+                                }else{
+                                    cs += '&'+key+'='+to.query[key];
+                                }
+                                console.log(cs);
+                            }
+                            store.commit('AUTO_ROUTE',to.path+cs);
+                        }else{
+                            store.commit('AUTO_ROUTE',to.path);
+                        }
                         next("/login?id=1");
                     }
 
@@ -59,7 +75,23 @@ router.beforeEach((to, from, next) => {
             });
             next();
         }else{
-            store.commit('AUTO_ROUTE',to.path);
+            if(to.query){
+                var arr = Object.keys(to.query);
+                var diyi = arr[0];
+                var cs = '';
+                console.log(diyi);
+                for(let key in to.query){
+                    if(key==diyi){
+                        cs += '?'+key+'='+to.query[key];
+                    }else{
+                        cs += '&'+key+'='+to.query[key];
+                    }
+                    console.log(cs);
+                }
+                store.commit('AUTO_ROUTE',to.path+cs);
+            }else{
+                store.commit('AUTO_ROUTE',to.path);
+            }
             next("/login?id=1");
         }
     }else{

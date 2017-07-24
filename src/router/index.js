@@ -25,8 +25,10 @@ const news = r => require.ensure([], () => r(require('../page/news/news')), 'new
 const search = r => require.ensure([], () => r(require('../page/search/search')), 'search')
 const article = r => require.ensure([], () => r(require('../page/article/list')), 'article')
 const articleDetail = r => require.ensure([], () => r(require('../page/article/detail')), 'articleDetail')
+const articleDetailComment = r => require.ensure([], () => r(require('../page/article/comment')), 'articleDetailComment')
 const cechoiceDetail = r => require.ensure([], () => r(require('../page/cechoice/detail')), 'cechoiceDetail')
 const tousuDetail = r => require.ensure([], () => r(require('../page/tousu/detail')), 'tousuDetail')
+const tousuDetailComment = r => require.ensure([], () => r(require('../page/tousu/comment')), 'tousuDetailComment')
 const tousuCreate = r => require.ensure([], () => r(require('../page/tousu/create')), 'tousuCreate')
 const tousuCreate1 = r => require.ensure([], () => r(require('../page/tousu/create1')), 'tousuCreate1')
 const tousuSuccess = r => require.ensure([], () => r(require('../page/tousu/success')), 'tousuSuccess')
@@ -231,6 +233,11 @@ export default [{
             path: '/article/detail/:id',
             component: articleDetail,
         },
+        //文章评论列表
+        {
+            path: '/article/detail/comment/:id',
+            component: articleDetailComment
+        },
         //消费电子详情页
         {
             path: '/cechoice/detail/:id',
@@ -261,6 +268,11 @@ export default [{
         {
             path: '/tousu/detail/:id',
             component: tousuDetail
+        },
+        //投诉评论列表
+        {
+            path: '/tousu/detail/comment/:id',
+            component: tousuDetailComment
         },
         //活动页
         {
