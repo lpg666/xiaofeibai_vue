@@ -119,7 +119,7 @@
                 this.axios.get('/v4/weixin?url='+url)
                     .then(res =>{
                         wx.config({
-                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                             appId: res.data.appId, // 必填，公众号的唯一标识
                             timestamp: res.data.timestamp, // 必填，生成签名的时间戳
                             nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
@@ -130,7 +130,7 @@
                             title: this.detail.title,
                             desc: this.detail.content,
                             imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
-                            link: url,
+                            link: window.location.href.split('#')[0],
                         };
                         wx.ready(function(){
                             wx.onMenuShareWeibo(share_info);
