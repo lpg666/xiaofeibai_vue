@@ -114,7 +114,7 @@
                 }
             },
             fx(){
-                var url=encodeURIComponent(window.location.href.split('#')[0]);
+                let url = encodeURIComponent(window.location.href.split('#')[0]);
                 //alert(url);
                 this.axios.get('/v4/weixin?url='+url)
                     .then(res =>{
@@ -126,12 +126,13 @@
                             signature: res.data.signature,// 必填，签名，见附录1
                             jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
-                        var share_info = {
+                        let share_info = {
                             title: this.detail.title,
                             desc: this.detail.content,
                             imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
                             link: window.location.href.split('#')[0],
                         };
+                        console.log(share_info);
                         wx.ready(function(){
                             wx.onMenuShareWeibo(share_info);
                             wx.onMenuShareAppMessage(share_info);
@@ -157,9 +158,9 @@
                         this.comment=res.data.data.comment;
                         if(this.detail!=''){
                             this.showLoad=false;
+                            this.fx();
                             this.fanhui();
                         }
-                        this.fx();
                         console.log(this.detail);
                     })
                     .catch(err =>{
