@@ -35,20 +35,22 @@
                 'QUANJU_BUTAN'
             ]),
             news(){
-                this.axios.get('/v4/member/message?sign='+this.userInfo.sign)
-                    .then(res =>{
-                        if(res.data.error){
-                            if(res.data.msg_type==401){
-                                this.QUANJU_TAN('该账号已在其他设备登录');
-                                setTimeout(this.ts,1500);
+                if(this.userInfo){
+                    this.axios.get('/v4/member/message?sign='+this.userInfo.sign)
+                        .then(res =>{
+                            if(res.data.error){
+                                if(res.data.msg_type==401){
+                                    this.QUANJU_TAN('该账号已在其他设备登录');
+                                    setTimeout(this.ts,1500);
+                                }
+                            }else{
+                                this.size=res.data.notify;
                             }
-                        }else{
-                            this.size=res.data.notify;
-                        }
-                    })
-                    .catch(err =>{
+                        })
+                        .catch(err =>{
 
-                    })
+                        })
+                }
             },
             ts(){
                 this.QUANJU_BUTAN();
@@ -56,9 +58,7 @@
             }
         },
         mounted() {
-            if(this.userInfo){
-                this.news();
-            }
+            this.news();
         },
         watch: {
             // 如果路由有变化，会再次执行该方法

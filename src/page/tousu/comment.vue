@@ -3,10 +3,10 @@
         <head-i><span class="head_title" slot="title_text">评论列表</span></head-i>
         <ul v-if="comment.length>0">
             <li v-for="data,key in comment">
-                <img :src="data.member.avatar?data.member.avatar:require('../../images/default_portrait.png')">
+                <img :src="data.member && data.member.avatar?data.member.avatar:require('../../images/default_portrait.png')">
                 <div>
-                    <p class="name" v-if="data.member.name">{{data.member.name}}<span v-if="$route.query.id==data.member.id">(投诉人)</span></p>
-                    <p class="name" v-else>网友保保<span v-if="$route.query.id==data.member.id">(投诉人)</span></p>
+                    <p class="name" v-if="data.member && data.member.name">{{data.member.name}}<span v-if="$route.query.id==data.member.id">(投诉人)</span></p>
+                    <p class="name" v-else>网友保保<span v-if="data.member && $route.query.id==data.member.id">(投诉人)</span></p>
                     <p class="text">{{data.content}}</p>
                     <p class="date">{{data.add_time}}<span v-if="data.client">来自{{data.client}}</span></p>
                 </div>

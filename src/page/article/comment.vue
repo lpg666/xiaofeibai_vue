@@ -3,9 +3,9 @@
         <head-i><span class="head_title" slot="title_text">评论列表</span></head-i>
         <ul v-if="comment.length>0">
             <li v-for="data,key in comment">
-                <img :src="data.member.avatar?data.member.avatar:require('../../images/default_portrait.png')">
+                <img :src="data.member && data.member.avatar?data.member.avatar:require('../../images/default_portrait.png')">
                 <div>
-                    <p class="name" v-if="data.member.name">{{data.member.name}}</p>
+                    <p class="name" v-if="data.member && data.member.name">{{data.member.name}}</p>
                     <p class="name" v-else>消费保保</p>
                     <p class="text">{{data.content}}</p>
                     <p class="date">{{data.add_time}}<span v-if="data.client">来自{{data.client}}</span></p>
@@ -72,7 +72,7 @@
                         }
                         setTimeout(this.close,1500);
                         this.re=false;
-                        console.log(res.data.data);
+                        console.log(this.comment);
                     })
                     .catch(err =>{
                         this.re=false;
