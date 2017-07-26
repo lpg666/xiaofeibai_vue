@@ -4,7 +4,7 @@
         <router-link to="/member" v-else class="user_info">152****77</router-link>
         <slot name="title_text"></slot>
         <router-link to="/search" class="head_search"><img src="../../images/icon_search.png"></router-link>
-        <router-link to="/news" v-if="userInfo!=null" class="head_news"><img src="../../images/icon_xiaoxi@2x.png"><span>1</span></router-link>
+        <router-link to="/news" v-if="userInfo!=null" class="head_news"><img src="../../images/icon_xiaoxi@2x.png"><span v-if="size==0" style="display: none"></span><span v-else-if="size<9">{{size}}</span><span v-else>9+</span></router-link>
     </header>
 </template>
 
@@ -14,7 +14,7 @@
     export default {
         data(){
             return{
-
+                size:null
             }
         },
         computed:{
@@ -29,12 +29,41 @@
         },
         methods:{
             ...mapMutations([
-                'RECORD_USERINFO'
-            ])
+                'RECORD_USERINFO',
+                'QUANJU_TAN',
+                'OUT_LOGIN',
+                'QUANJU_BUTAN'
+            ]),
+            news(){
+                this.axios.get('/v4/member/message?sign='+this.userInfo.sign)
+                    .then(res =>{
+                        if(res.data.error){
+                            if(res.data.msg_type==401){
+                                this.QUANJU_TAN('该账号已在其他设备登录');
+                                setTimeout(this.ts,1500);
+                            }
+                        }else{
+                            this.size=res.data.notify;
+                        }
+                    })
+                    .catch(err =>{
+
+                    })
+            },
+            ts(){
+                this.QUANJU_BUTAN();
+                this.OUT_LOGIN();
+            }
         },
         mounted() {
-
-        }
+            if(this.userInfo){
+                this.news();
+            }
+        },
+        watch: {
+            // 如果路由有变化，会再次执行该方法
+            '$route': 'news'
+        },
     }
 </script>
 
@@ -96,7 +125,7 @@
             right: -.16rem;
             top: -.16rem;
             width: .32rem;
-            line-height: .32rem;
+            line-height: .34rem;
             height: .32rem;
             text-align: center;
             display: block;

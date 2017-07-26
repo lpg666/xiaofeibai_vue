@@ -89,8 +89,8 @@
                 <section class="cechoice_list" v-if="cechoiceData.length>0">
                     <router-link :to="'/cechoice/detail/'+data.article_id" class="list" v-for="data in cechoiceData" :key="data">
                         <div class="list_left">
-                            <p class="p1">{{data.title}}</p>
-                            <p class="p2"><span class="cechoice_tag">{{data.type_name}}</span><!--<span>明星潮人</span>--><span>{{data.add_time}}</span></p>
+                            <p class="p1">{{escapeChars(data.title)}}</p>
+                            <p class="p2"><span class="cechoice_tag" :class="'cechoice_tag_'+data.type_id">{{data.type_name}}</span><!--<span>明星潮人</span>--><span>{{data.add_time}}</span></p>
                         </div>
                         <div class="list_right" :style="{backgroundImage:'url('+data.thumb+')'}"></div>
                     </router-link>
@@ -184,6 +184,11 @@ export default {
         }
     },
     methods:{
+        escapeChars(str) {
+            str = str.replace(/&nbsp;/g,'');
+            str = str.replace(/&quot;/g,'"');
+            return str;
+        },
         navClick(data){
             this.hover=data;
             switch (data){
@@ -378,6 +383,7 @@ export default {
                 height: auto;
                 float: left;
                 .p1{
+                    height: .9rem;
                     font-size: .32rem;
                     line-height: .45rem;
                     margin-bottom: .2rem;
@@ -392,15 +398,28 @@ export default {
                         float: left;
                     }
                     .cechoice_tag{
+
                         float: left;
                         width: 1.42rem;
                         height: .4rem;
                         line-height: .38rem;
                         border-radius: .1rem;
-                        border: 1px solid #999;
                         display: block;
                         text-align: center;
                         margin-top: -.05rem;
+                        color: #fff;
+                    }
+                    .cechoice_tag_14,.cechoice_tag_1,.cechoice_tag_13,.cechoice_tag_12,.cechoice_tag_9{
+                        background: #F8AD3F;
+                    }
+                    .cechoice_tag_11{
+                        background: #EC4035;
+                    }
+                    .cechoice_tag_2{
+                        background: #3BB548;
+                    }
+                    .cechoice_tag_3,.cechoice_tag_18,.cechoice_tag_16{
+                        background: #099CD3;
                     }
                 }
             }

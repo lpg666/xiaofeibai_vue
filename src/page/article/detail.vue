@@ -1,5 +1,5 @@
 <template>
-    <div style="padding-top: 1rem; background: #F6F7F9;">
+    <div id="wudi_detail" style="padding-top: 1rem; background: #F6F7F9;">
         <header id="headI">
             <div id="head_go" @click="$router.go(-1)"></div>
             <span class="head_title" v-if="detail">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span>
@@ -151,12 +151,22 @@
             fanhui(){
                 document.body.scrollTop=0;
             },
+            escapeChars(str) {
+                str = str.replace(/&/g, '&amp;');
+                str = str.replace(/</g, '&lt;');
+                str = str.replace(/>/g, '&gt;');
+                str = str.replace(/'/g, '&acute;');
+                str = str.replace(/"/g, '&quot;');
+                str = str.replace(/\|/g, '&brvbar;');
+                return str;
+            },
             fetchData () {
                 this.axios.get('/v4/article/detail?article_id='+this.$route.params.id)
                     .then(res =>{
                         this.detail=res.data.data.detail;
                         this.comment=res.data.data.comment;
                         if(this.detail!=''){
+                            //document.getElementsByClassName('cent')[0].innerHTML = this.escapeChars(this.detail.content);
                             this.showLoad=false;
                             this.fx();
                             this.fanhui();
@@ -180,7 +190,8 @@
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+#wudi_detail{
     #headI{
         position: fixed;
         left: 0;
@@ -255,6 +266,9 @@
                 margin-bottom: .2rem;
                 font-size: .3rem !important;
                 line-height: .5rem;
+                img{
+                    display: block;
+                }
             }
         span{
             text-align: justify;
@@ -266,4 +280,5 @@
             }
         }
     }
+}
 </style>

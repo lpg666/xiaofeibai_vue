@@ -44,19 +44,26 @@
             <span class="xian"></span>
             <router-link to="" class="das"><img src="../../images/icon_xing.png">收藏</router-link>
         </div>
-        <div v-if="userInfo" class="but">退出登陆</div>
+        <div v-if="userInfo" class="but" @click="outLogin">退出登陆</div>
+        <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
         <!--<router-link to="/member/setting" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5);"><img src="../../images/myself_setting@2x.png">设置</router-link>-->
     </div>
 </template>
 
 <script>
+import loading from '../../components/common/loading'
 import {mapState,mapMutations} from 'vuex'
 
 export default {
     data(){
         return{
-
+            showLoad:false,
+            loadType:null,
+            loadText:null
         }
+    },
+    components:{
+        loading
     },
     computed:{
         ...mapState([
@@ -76,10 +83,43 @@ export default {
     },
     methods:{
         ...mapMutations([
-            'RECORD_USERINFO'
+            'RECORD_USERINFO',
+            'OUT_LOGIN'
         ]),
         fh(){
             this.$router.push({path:'/home'});
+        },
+        outLogin(){
+            this.axios.post('/v4/auth/logout',{'sign':this.userInfo.sign})
+                .then(res =>{
+                    if(res.data.error){
+                        this.showLoad=true;
+                        if(res.data.msg=='请先登录'){
+                            this.loadType='';
+                            this.loadText='退出成功';
+                            setTimeout(this.then1,1500);
+                        }else{
+                            this.loadType='alert';
+                            this.loadText=res.data.msg;
+                            setTimeout(this.close,1500);
+                        }
+                    }else{
+                        this.showLoad=true;
+                        this.loadType='';
+                        this.loadText='退出成功';
+                        setTimeout(this.then1,1500);
+                        console.log(res.data);
+                    }
+
+                });
+
+        },
+        then1(){
+            this.showLoad = false;
+            this.OUT_LOGIN();
+        },
+        close(){
+            this.showLoad = false;
         }
     },
     created(){

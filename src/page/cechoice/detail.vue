@@ -52,11 +52,18 @@
             fanhui(){
                 document.body.scrollTop=0;
             },
+            escapeChars(str) {
+                str = str.replace(/&nbsp;/g,'');
+                str = str.replace(/&quot;/g,'"');
+                return str;
+            },
             fetchData () {
                 this.axios.get('/v4/cechoice_article/article_details?article_id='+this.$route.params.id+'')
                     .then(res =>{
                         this.detail=res.data.data;
                         if(this.detail!=''){
+                            this.detail.content=this.escapeChars(this.detail.content);
+                            this.detail.title=this.escapeChars(this.detail.title);
                             this.showLoad=false;
                             this.fanhui();
                         }
@@ -111,6 +118,10 @@
                 img{
                     display: block;
                 }
+            }
+            tr,td{
+                font-size: .3rem !important;
+                line-height: .5rem;
             }
         }
     }
