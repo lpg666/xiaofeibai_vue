@@ -2,14 +2,14 @@
     <div class="scroll" style="padding-top: 1rem;">
         <head-i><span class="head_title" slot="title_text">我的消息</span></head-i>
         <div class="news_list">
-            <router-link :to="url(data.message_type,data.parent_id)" class="news_box" v-for="data in detail" :key="data" v-if="data.message_type">
+            <div @click="read(data.id)" class="news_box" v-for="data in detail" :key="data" v-if="data.message_type">
                 <div class="box_l"><div class="tx" :style="{backgroundImage:'url('+data.volunteer_avatar+')'}"><span v-if="data.readed==0" class="yd"></span></div></div>
                 <div class="box_r">
                     <p class="p1">系统消息<span>{{data.add_time}}</span></p>
                     <p class="p2">{{contents(data.content)}}<span v-if="data.message_type">详情></span></p>
                 </div>
-            </router-link>
-            <div class="news_box" v-else>
+            </div>
+            <div @click="read(data.id)" class="news_box" v-else>
                 <div class="box_l"><div class="tx" :style="{backgroundImage:'url('+data.volunteer_avatar+')'}"><span v-if="data.readed==0" class="yd"></span></div></div>
                 <div class="box_r">
                     <p class="p1">系统消息<span>{{data.add_time}}</span></p>
@@ -51,6 +51,30 @@
             ]),
         },
         methods: {
+            read(id){
+                this.axios.post('/v4/member/read_message',{'sign':this.userInfo.sign,'content_id':id})
+                    .then(res =>{
+                        if(res.data.error){
+                            for(let i in this.detail){
+                                if(this.detail[i].message_type!='' && this.detail[i].id == id){
+                                    let rl = this.url(this.detail[i].message_type,this.detail[i].parent_id);
+                                    this.$router.push({'path':rl});
+                                }
+                            }
+                        }else{
+                            for(let i in this.detail){
+                                if(this.detail[i].id == id){
+                                    this.detail[i].readed=1;
+                                }
+                                if(this.detail[i].message_type!='' && this.detail[i].id == id){
+                                    let rl = this.url(this.detail[i].message_type,this.detail[i].parent_id);
+                                    this.$router.push({'path':rl});
+                                }
+                            }
+                        }
+                        console.log(res.data);
+                    })
+            },
             url(i,u){
                 var url = '';
                 if(i=='tousu'){
