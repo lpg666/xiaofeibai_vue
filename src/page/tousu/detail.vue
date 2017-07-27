@@ -21,10 +21,20 @@
                 <div class="c_text">
                     {{detail.content}}
                 </div>
-                <div v-if="detail.addons.length>0" class="c_neir" v-for="data in detail.addons">&nbsp;&nbsp;投诉补充内容<span>{{data.created_at}}</span>{{data.content}}</div>
+                <div v-if="detail.addons.length>0" class="c_neir" v-for="data in detail.addons">【补充{{data.created_at}}】<br/>{{data.content}}</div>
                 <div class="c_pic" v-if="detail.pic.length>0">
-                    <ul>
+                    <ul v-if="userInfo && userInfo.id==detail.member_id">
+                        <li v-for="data in detail.pic" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
+                    </ul>
+                    <ul v-else>
                         <li v-if="data.is_show==1" v-for="data in detail.pic" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
+                        <li class="yc" v-else>
+                            <span>
+                                <p>本图片</p>
+                                <p>其他用户</p>
+                                <p>不可见</p>
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -267,6 +277,22 @@
 </script>
 
 <style lang="less" scoped>
+.yc{
+    background: rgba(0,0,0,.8);
+    span{
+        width: 100%;
+        display: block;
+    }
+    p{
+        font-size: .26rem;
+        text-align: center;
+        line-height: .4rem;
+        color: #fff;
+    }
+    p:first-child{
+        margin-top: .2rem;
+    }
+}
 .main{
     width: auto;
     .title{
@@ -281,7 +307,8 @@
     .name .tx{ width: .8rem; height: .8rem; border-radius: 50%; overflow: hidden; float: left; margin: 0 .26rem 0 0;}
     .name .tx img{ width: 100%;}
     .name .sp_name{color: #1d2733; margin-right: .26rem; font-size:.28rem;}
-    .name .guanzhu{font-size: .26rem; color: #37c078; padding: .08rem .24rem .1rem .2rem; position: absolute; top: 0; right: .22rem; border: 1px solid #37c078; border-radius:4px;}
+    .name .guanzhu{font-size: .26rem; color: #fff; padding: .08rem .24rem .1rem .2rem; position: absolute; top: 0; right: .22rem; background-image:-webkit-linear-gradient(to right, #37C078, #5BDC99);
+        background-image:linear-gradient(to right,#37C078,#5BDC99); border-radius:4px;}
     .name .guanzhu1{font-size: .26rem; color: #999; padding: .08rem .2rem .1rem .2rem; position: absolute; top: 0; right: .22rem; border-radius:4px; background: #e0e0e0; border: 1px solid #e0e0e0;}
     .info{ font-size: .26rem; color: #1d2733; background: #fff; border-left:.06rem solid #37c078; margin: 0 .22rem;}
     .info span{color: #323232; margin-right: .24rem;}

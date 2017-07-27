@@ -6,8 +6,17 @@
             <p class="p2">{{item(detail.inquiry.add_time)}}</p>
             <div class="p3">
                 {{detail.inquiry.content}}
-                <ul class="pic">
+                <ul class="pic" v-if="userInfo && userInfo.id==detail.inquiry.member_id">
                     <li v-for="data in detail.pics" :key="data"><img :src="data.pic+'!/fh/230'"></li>
+                </ul>
+                <ul class="pic" v-else>
+                    <li class="yct">
+                        <span>
+                            <p>本图片</p>
+                            <p>其他用户</p>
+                            <p>不可见</p>
+                        </span>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -210,14 +219,32 @@
                 height: auto;
                 overflow: hidden;
                 li{
+                    width: 1.6rem;
+                    height: 1.6rem;
+                    margin: .2rem .2rem 0 0;
                     float: left;
                     img{
-                        width: 50px;
-                        height: 50px;
-                        margin: 15px 15px 0 0;
+                        display: block;
+                        width: 100%;
                     }
                 }
             }
+        }
+    }
+    .yct{
+        background: rgba(0,0,0,.8);
+        span{
+            width: 100%;
+            display: block;
+        }
+        p{
+            font-size: .26rem;
+            text-align: center;
+            line-height: .4rem;
+            color: #fff;
+        }
+        p:first-child{
+            margin-top: .2rem;
         }
     }
 </style>

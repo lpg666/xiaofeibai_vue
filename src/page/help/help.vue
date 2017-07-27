@@ -13,7 +13,8 @@
                     <div class="box_x">
                         <p class="name">{{lawyer.name}}</p>
                         <p class="dw">{{lawyer.organization}}</p>
-                        <p class="dt">3分钟前回复了Kelly</p>
+                        <p class="dt" v-if="lawyer.add_time && lawyer.user_name">{{getTimeWord(lawyer.add_time)}}回复了{{lawyer.user_name}}</p>
+                        <p class="dt" v-else>暂无咨询回复</p>
                         <router-link :to="'/lawyer/commit/'+lawyer.id+'?name='+lawyer.name">向Ta咨询</router-link>
                     </div>
                 </router-link>
@@ -26,7 +27,8 @@
                     <div class="box_x">
                         <p class="name">{{reporter.name}}</p>
                         <p class="dw">{{reporter.organization}}</p>
-                        <p class="dt">3分钟前回复了Kelly</p>
+                        <p class="dt" v-if="reporter.add_time && reporter.user_name">{{getTimeWord(reporter.add_time)}}回复了{{reporter.user_name}}</p>
+                        <p class="dt" v-else>暂无爆料回复</p>
                         <router-link :to="'/reporter/commit/'+reporter.id+'?name='+reporter.name">向Ta爆料</router-link>
                     </div>
                 </router-link>
@@ -139,6 +141,39 @@
                     .catch(err =>{
 
                     })
+            },
+            getTimeWord(time){
+                var time = new Date(time).getTime();
+                var curr = Date.parse(new Date());
+                var tmp = (curr - time)/1000;
+                var word = '';
+                var month = '';
+                if(tmp < 60){
+                    word = '刚刚';
+                }else if(tmp < 3600){
+                    word = Math.floor(tmp/60)+'分钟前';
+                }else if(tmp < 86400){
+                    word = Math.floor(tmp/3600)+'小时前';
+                }else if(tmp < 86400*2){
+                    word = Math.floor(tmp/86400)+'天前';
+                }else{
+                    if(new Date(time).getFullYear() >= new Date(curr).getFullYear()){
+                        if(new Date(time).getMonth()<9){
+                            month = '0'+ (new Date(time).getMonth()+1) + '月';
+                        }else{
+                            month = (new Date(time).getMonth()+1) + '月';
+                        }
+                        word = month+new Date(time).getDate()+'日';
+                    }else{
+                        if(new Date(time).getMonth()<9){
+                            month = '0'+ (new Date(time).getMonth()+1) + '月';
+                        }else{
+                            month = (new Date(time).getMonth()+1) + '月';
+                        }
+                        word = new Date(time).getFullYear()+'年'+month+new Date(time).getDate()+'日';
+                    }
+                }
+                return word;
             },
 
         }
