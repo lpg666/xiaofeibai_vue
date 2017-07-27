@@ -41,6 +41,7 @@ const productInfo = r => require.ensure([], () => r(require('../page/product/inf
 const productInfo1 = r => require.ensure([], () => r(require('../page/product/info1')), 'productInfo1')
 const productConsult = r => require.ensure([], () => r(require('../page/product/consult')), 'productConsult')
 const productDetail = r => require.ensure([], () => r(require('../page/product/detail')), 'productDetail')
+const dt = r => require.ensure([], () => r(require('../page/member/dt')), 'dt')
 
 
 export default [{
@@ -279,6 +280,12 @@ export default [{
         {
             path: '/activity',
             component: activity,
+            meta: { keepAlive: true }
+        },
+        //答题页
+        {
+            path: '/dt',
+            component: dt,
             meta: { keepAlive: true }
         }
     ]

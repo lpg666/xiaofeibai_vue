@@ -35,9 +35,9 @@
         </div>
         <router-link to="/product/list" class="box" style="margin-top: .2rem; border-top: 1px solid rgba(204,204,204,.5); font-weight: bolder; font-size: .32rem;"><img src="../../images/icon_fuwuguanjia@2x.png">我的服务管家</router-link>
         <div class="box1">
-            <router-link to="" class="das"><img src="../../images/myself_volunteer@2x.png">维权志愿者联盟</router-link>
+            <a href="http://m.xfb315.com/spread" class="das"><img src="../../images/myself_volunteer@2x.png">维权志愿者联盟</a>
             <span class="xian"></span>
-            <router-link to="" class="das"><img src="../../images/myself_game@2x.png">玩游戏拿大奖</router-link>
+            <router-link to="/dt" class="das"><img src="../../images/myself_game@2x.png">玩游戏拿大奖</router-link>
         </div>
         <div class="box1">
             <router-link to="/member/followTousu" class="das"><img src="../../images/myself_focus@2x.png">关注的投诉</router-link>

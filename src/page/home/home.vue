@@ -17,9 +17,10 @@
                         <div class="list_left" :style="data.default_pic==null?'width:100%':'height:1.4rem; position:relative;'">
                             <p class="p1">{{data.title}}</p>
                             <p class="p2" :style="data.default_pic!=null?'position:absolute; left:0; bottom:0; width:100%;':''">
-                                <span class="hot" v-if="data.is_hot==1">热</span>
-                                <span v-if="data.complaint_keyword">{{data.complaint_keyword.name}}</span>
-                                <span>{{data.add_time.substr(0,10)}}</span>
+                                <!--<span class="hot" v-if="data.is_hot==1">热</span>-->
+                                <span v-if="data.tousukeyword">{{data.tousukeyword.name}}</span>
+                                <span v-else>其他</span>
+                                <span>{{getTimeWord(data.add_time)}}</span>
                                 <span class="status status0" v-if="data.status==0">投诉受理</span>
                                 <span class="status status1" v-else-if="data.status==1">企业处理</span>
                                 <span class="status status2" v-else-if="data.status==2">结果审核</span>
@@ -32,7 +33,7 @@
                         <div v-if="data.pic==null">
                             <div class="list_left">
                                 <p class="p1" :style="data.pic==null?'min-height:.84rem;':''">【消费警示】{{data.title}}</p>
-                                <p class="p2">{{data.add_time.substr(0,10)}}</p>
+                                <p class="p2">{{getTimeWord(data.add_time)}}</p>
                             </div>
                             <div class="list_right" :style="{backgroundImage:'url('+data.thumb+'!/fh/230)'}">
                                 <!--<img :src="data.thumb+'!/fh/230'">-->
@@ -66,7 +67,7 @@
                             <p class="p1">{{result.title}}</p>
                             <p class="p2" v-if="result.resources_type==1"><span class="sp1">网友回音：</span>{{result.complaint_comment.content}}</p>
                             <p class="p2" v-if="result.resources_type==0"><span class="sp2">处理结果：</span>{{result.complaint_result.content}}</p>
-                            <p class="p3">{{result.add_time}}</p>
+                            <p class="p3">{{getTimeWord(result.add_time)}}</p>
                         </div>
                         <div v-if="result.default_pic" class="list_right" :style="{backgroundImage:'url('+result.default_pic.pic+'!/fh/230)'}">
                             <!--<img :src="result.default_pic.pic+'!/fh/230'">-->
@@ -90,7 +91,7 @@
                     <router-link :to="'/cechoice/detail/'+data.article_id" class="list" v-for="data in cechoiceData" :key="data">
                         <div class="list_left">
                             <p class="p1">{{escapeChars(data.title)}}</p>
-                            <p class="p2"><span class="cechoice_tag" :class="'cechoice_tag_'+data.type_id">{{data.type_name}}</span><!--<span>明星潮人</span>--><span>{{data.add_time}}</span></p>
+                            <p class="p2"><span class="cechoice_tag" :class="'cechoice_tag_'+data.type_id">{{data.type_name}}</span><!--<span>明星潮人</span>--><span>{{getTimeWord(data.add_time)}}</span></p>
                         </div>
                         <div class="list_right" :style="{backgroundImage:'url('+data.thumb+')'}"></div>
                     </router-link>
@@ -188,6 +189,39 @@ export default {
             str = str.replace(/&nbsp;/g,'');
             str = str.replace(/&quot;/g,'"');
             return str;
+        },
+        getTimeWord(time){
+            var time = new Date(time).getTime();
+            var curr = Date.parse(new Date());
+            var tmp = (curr - time)/1000;
+            var word = '';
+            var month = '';
+            if(tmp < 60){
+                word = '刚刚';
+            }else if(tmp < 3600){
+                word = Math.floor(tmp/60)+'分钟前';
+            }else if(tmp < 86400){
+                word = Math.floor(tmp/3600)+'小时前';
+            }else if(tmp < 86400*2){
+                word = Math.floor(tmp/86400)+'天前';
+            }else{
+                if(new Date(time).getFullYear() >= new Date(curr).getFullYear()){
+                    if(new Date(time).getMonth()<9){
+                        month = '0'+ (new Date(time).getMonth()+1) + '月';
+                    }else{
+                        month = (new Date(time).getMonth()+1) + '月';
+                    }
+                    word = month+new Date(time).getDate()+'日';
+                }else{
+                    if(new Date(time).getMonth()<9){
+                        month = '0'+ (new Date(time).getMonth()+1) + '月';
+                    }else{
+                        month = (new Date(time).getMonth()+1) + '月';
+                    }
+                    word = new Date(time).getFullYear()+'年'+month+new Date(time).getDate()+'日';
+                }
+            }
+            return word;
         },
         navClick(data){
             this.hover=data;
@@ -402,7 +436,7 @@ export default {
                         float: left;
                         width: 1.42rem;
                         height: .4rem;
-                        line-height: .38rem;
+                        line-height: .4rem;
                         border-radius: .1rem;
                         display: block;
                         text-align: center;

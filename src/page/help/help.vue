@@ -55,7 +55,7 @@
         <div class="tongj">
             <router-link to="/article?type=3" class="title">行业统计<span>消各行业投诉数据</span></router-link>
             <router-link :to="'/article/detail/'+hanye.id" class="box">
-                <div class="box_pic img" :style="{backgroundImage:'url('+hanye.thumb+'!/fh/230)'}"></div>
+                <div class="box_pic img" :style="{backgroundImage:'url('+hanye.thumb+')'}"></div>
                 <div class="box_top">{{hanye.title}}</div>
             </router-link>
         </div>
