@@ -6,17 +6,8 @@
             <p class="p2">{{item(detail.inquiry.add_time)}}</p>
             <div class="p3">
                 {{detail.inquiry.content}}
-                <ul class="pic" v-if="userInfo && userInfo.id==detail.inquiry.member_id">
+                <ul class="pic">
                     <li v-for="data in detail.pics" :key="data"><img :src="data.pic+'!/fh/230'"></li>
-                </ul>
-                <ul class="pic" v-else>
-                    <li class="yct">
-                        <span>
-                            <p>本图片</p>
-                            <p>其他用户</p>
-                            <p>不可见</p>
-                        </span>
-                    </li>
                 </ul>
             </div>
         </div>

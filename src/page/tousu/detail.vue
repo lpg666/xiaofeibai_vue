@@ -24,15 +24,21 @@
                 <div v-if="detail.addons.length>0" class="c_neir" v-for="data in detail.addons">【补充{{data.created_at}}】<br/>{{data.content}}</div>
                 <div class="c_pic" v-if="detail.pic.length>0">
                     <ul v-if="userInfo && userInfo.id==detail.member_id">
-                        <li v-for="data in detail.pic" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
-                    </ul>
-                    <ul v-else>
-                        <li v-if="data.is_show==1" v-for="data in detail.pic" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
+                        <li v-if="data.is_show==1" v-for="data in detail.pic" :key="data" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
                         <li class="yc" v-else>
                             <span>
                                 <p>本图片</p>
                                 <p>其他用户</p>
                                 <p>不可见</p>
+                            </span>
+                        </li>
+                    </ul>
+                    <ul v-else>
+                        <li v-if="data.is_show==1" v-for="data in detail.pic" :key="data" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
+                        <li class="yc1" v-else>
+                            <span>
+                                <p>该图片</p>
+                                <p>涉及隐私</p>
                             </span>
                         </li>
                     </ul>
@@ -277,7 +283,7 @@
 </script>
 
 <style lang="less" scoped>
-.yc{
+.yc,.yc1{
     background: rgba(0,0,0,.8);
     span{
         width: 100%;
@@ -291,6 +297,11 @@
     }
     p:first-child{
         margin-top: .2rem;
+    }
+}
+.yc1{
+    p:first-child{
+        margin-top: .4rem;
     }
 }
 .main{
