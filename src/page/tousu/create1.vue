@@ -1188,7 +1188,7 @@ export default {
                     float: left;
                     margin-top: .1rem;
                     padding-right: .25rem;
-                    background: url("../../images/icon_next@2x.png") no-repeat center right;
+                    background: url("../../images/icon_next@3x.png") no-repeat center right;
                     background-size: .14rem;
                 }
             }

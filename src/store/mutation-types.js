@@ -9,4 +9,6 @@ export const WECHAT = 'WECHAT'
 export const WECHAT_DEL = 'WECHAT_DEL'
 export const EDIT_INFO = 'EDIT_INFO'
 export const TOUSU_PRA = 'TOUSU_PRA'
+export const SEARCH_LISHI = 'SEARCH_LISHI'
+export const SEARCH_DEL = 'SEARCH_DEL'
 

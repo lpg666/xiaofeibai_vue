@@ -13,7 +13,8 @@ const state = {
     tanQzi:'',
     wechat:'',
     editInfo:JSON.parse(localStorage.getItem('editInfo')),
-    tousuPra:JSON.parse(localStorage.getItem('tousuPra'))
+    tousuPra:JSON.parse(localStorage.getItem('tousuPra')),
+    search:JSON.parse(localStorage.getItem('search')),
 }
 
 export default new Vuex.Store({

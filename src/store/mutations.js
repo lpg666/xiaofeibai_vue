@@ -9,7 +9,9 @@ import {
     WECHAT,
     WECHAT_DEL,
     EDIT_INFO,
-    TOUSU_PRA
+    TOUSU_PRA,
+    SEARCH_LISHI,
+    SEARCH_DEL
 } from './mutation-types.js'
 
 import {setStore,getStore,removeStore} from '../config/mUtils'
@@ -77,5 +79,14 @@ export default {
     [QUANJU_BUTAN](state){
         state.tanQ = false;
         state.tanQzi = '';
+    },
+    //
+    [SEARCH_LISHI](state,info){
+        state.search = info;
+        setStore('search', info);
+    },
+    [SEARCH_DEL](state){
+        state.search = '';
+        removeStore('search');
     }
 }

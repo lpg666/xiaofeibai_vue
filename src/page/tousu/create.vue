@@ -8,7 +8,8 @@
                     <p>2.投诉人应当对投诉内容的真实性负责，因虚假投诉引起的法律责任，由投诉人承担。</p>
                     <p>3.不得使用诋毁，辱骂性的语言损害他人声誉，否则引起的法律责任，由投诉人承担。</p>
                     <p>4.请不要重复投诉，消费保在收到投诉后会在第一时间联系您并协助维权。</p>
-                    <p style="color:#FD9C33; margin-bottom: 0;">5.投诉时请注意保护个人隐私，不要在投诉内容里面填写个人联系电话或帐号信息，涉及个人隐私或者敏感照片请选择不公开。</p>
+                    <p style="color:#FD9C33;">5.投诉时请注意保护个人隐私，不要在投诉内容里面填写个人联系电话或帐号信息，涉及个人隐私或者敏感照片请选择不公开。</p>
+                    <p style="color:#FD9C33; margin-bottom: 0;">6.消费保有权对您提交投诉中的过激或不当用语进行编辑。</p>
                     <div class="check"><span :class="{sp1:declareSp}" @click="Declare"></span>下次不再提醒</div>
                     <div class="btn" @click="declareG">我知道了</div>
                 </div>
@@ -96,7 +97,7 @@
                 <div class="type" v-if="tkData.name=='type'">
                     <div class="mbl"></div>
                     <div v-for="data in tkData.data" :key="data" :value="data.id">
-                        <img :src="require('../../images/icon_'+data.id+'.png')">
+                        <img :src="data.logo">
                         <p>{{data.name}}</p>
                         <ul>
                             <li v-for="list in data.sub_type" :class="{'hover':from.value.subtype_id==list.id}" @click="radio('subtype_id',list.id,list.name,data)">{{list.name}}</li>
@@ -1160,6 +1161,7 @@ export default {
                     float: left;
                     margin-left: .2rem;
                     margin-right: .3rem;
+                    border-radius: 100%;
                 }
             }
             p{
@@ -1174,7 +1176,7 @@ export default {
                     float: left;
                     margin-top: .1rem;
                     padding-right: .25rem;
-                    background: url("../../images/icon_next@2x.png") no-repeat center right;
+                    background: url("../../images/icon_next@3x.png") no-repeat center right;
                     background-size: .14rem;
                 }
             }
