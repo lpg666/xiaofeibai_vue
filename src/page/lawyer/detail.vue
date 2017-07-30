@@ -3,7 +3,7 @@
         <head-i><span class="head_title" slot="title_text">律师详情</span></head-i>
         <div class="tx" :style="{backgroundImage:'url('+detail.avatar+'!/fh/230)'}"></div>
         <p class="name">{{detail.name}}</p>
-        <p class="mobile">{{detail.license_number}}</p>
+        <p class="mobile">律师证号：{{detail.license_number}}</p>
         <p class="good">{{detail.good_at}}</p>
         <p class="memo">{{detail.memo}}</p>
         <router-link :to="'/lawyer/commit/'+detail.id+'?name='+detail.name">我要咨询</router-link>

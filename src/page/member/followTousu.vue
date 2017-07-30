@@ -62,7 +62,7 @@
         },
         methods:{
             ajaxData(){
-                this.axios.get('/v4/member/list_complaint_collect?page='+this.page,{'sign':this.userInfo.sign})
+                this.axios.get('/v4/member/list_complaint_collect?page='+this.page+'&sign='+this.userInfo.sign)
                     .then(res =>{
                         if(res.data.data.length==0){
                             this.load='已加载完毕'

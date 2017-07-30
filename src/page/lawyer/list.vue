@@ -14,7 +14,7 @@
                     <div class="tx" :style="{backgroundImage:'url('+data.avatar+'!/fh/230)'}"></div>
                     <div class="info">
                         <p class="p1">{{data.name}}</p>
-                        <p class="p2">执业证号{{data.license_number}}</p>
+                        <p class="p2">律师证号:{{data.license_number}}</p>
                     </div>
                     <router-link :to="'/lawyer/commit/'+data.id" class="but">咨询我</router-link>
                     <div class="p3">擅长领域：{{data.good_at}}</div>

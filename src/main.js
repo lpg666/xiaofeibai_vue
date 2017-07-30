@@ -8,6 +8,7 @@ import FastClick from 'fastclick'
 import './config/rem'
 //import './config/vconsole.min'
 import axios from 'axios'
+import Qs from 'qs'
 import VueAxios from 'vue-axios'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 //import 'element-ui/lib/theme-default/index.css'
@@ -19,6 +20,41 @@ if('addEventListener' in document){                           //document.addEven
   document.addEventListener('DOMContentLoaded',function () {  //document.addEventListener("事件名称", 函数, false);
       FastClick.attach(document.body);                        //如果为true事件执行顺序为 addEventListener ---- 标签的onclick事件 ---- document.onclick　
   },false);                                                   //如果为false事件的顺序为 标签的onclick事件 ---- document.onclick  ---- addEventListener
+}
+/*全局转换时间方法*/
+Vue.prototype.getTimeWord = function (time){
+    let times = time.replace(/\s/, 'T');
+    times = new Date(times).getTime();
+    let curr = Date.parse(new Date());
+    let tmp = (curr - times)/1000;
+    let word = '';
+    let month = '';
+    if(tmp < 60){
+        word = '刚刚';
+    }else if(tmp < 3600){
+        word = Math.floor(tmp/60)+'分钟前';
+    }else if(tmp < 86400){
+        word = Math.floor(tmp/3600)+'小时前';
+    }else if(tmp < 86400*2){
+        word = Math.floor(tmp/86400)+'天前';
+    }else{
+        if(new Date(times).getFullYear() >= new Date(curr).getFullYear()){
+            if(new Date(times).getMonth()<9){
+                month = '0'+ (new Date(times).getMonth()+1) + '月';
+            }else{
+                month = (new Date(times).getMonth()+1) + '月';
+            }
+            word = month+new Date(times).getDate()+'日';
+        }else{
+            if(new Date(times).getMonth()<9){
+                month = '0'+ (new Date(times).getMonth()+1) + '月';
+            }else{
+                month = (new Date(times).getMonth()+1) + '月';
+            }
+            word = new Date(times).getFullYear()+'年'+month+new Date(times).getDate()+'日';
+        }
+    }
+    return word;
 }
 
 Vue.use(VueRouter);
@@ -35,6 +71,17 @@ if (process.env.NODE_ENV == 'development') {
 
 }else if(process.env.NODE_ENV == 'production'){
     axios.defaults.baseURL = 'http://api.test.xfb315.com';
+    axios.defaults.transformRequest = function (data) {
+        return Qs.stringify(data);
+    };
+    //POST传参序列化(添加请求拦截器)
+    /*axios.interceptors.request.use((config) => {
+        //在发送请求之前做某件事
+        if(config.method  === 'post'){
+            config.data = qs.stringify(config.data);
+        }
+        return config;
+    });*/
 }
 
 router.beforeEach((to, from, next) => {
@@ -49,9 +96,9 @@ router.beforeEach((to, from, next) => {
                     function fu() {
                         store.commit('QUANJU_BUTAN');
                         if(to.query){
-                            var arr = Object.keys(to.query);
-                            var diyi = arr[0];
-                            var cs = '';
+                            let arr = Object.keys(to.query);
+                            let diyi = arr[0];
+                            let cs = '';
                             console.log(diyi);
                             for(let key in to.query){
                                 if(key==diyi){
@@ -76,9 +123,9 @@ router.beforeEach((to, from, next) => {
             next();
         }else{
             if(to.query){
-                var arr = Object.keys(to.query);
-                var diyi = arr[0];
-                var cs = '';
+                let arr = Object.keys(to.query);
+                let diyi = arr[0];
+                let cs = '';
                 console.log(diyi);
                 for(let key in to.query){
                     if(key==diyi){

@@ -233,6 +233,9 @@
                             console.log(res.data);
                             document.querySelector('.ts_list').addEventListener('scroll', this.menuA);
                             document.querySelector('.ar_list').addEventListener('scroll', this.menuB);
+                            document.querySelector('.list_nav').addEventListener("touchmove", function (event) {
+                                event.preventDefault();
+                            },false);
                         })
                         .catch(err =>{
 
@@ -310,6 +313,9 @@
 
         },
         mounted() {
+            document.querySelector('.hear').addEventListener("touchmove", function (event) {
+                event.preventDefault();
+            },false);
             this.lishi=this.search;
             this.rm();
             this.focusStatus=true;
@@ -344,6 +350,7 @@
         width: 100%;
         height: calc(~'100vh - 2rem - 1px');
         overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
 
         .list_b{
             display: block;

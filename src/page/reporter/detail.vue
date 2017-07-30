@@ -3,7 +3,7 @@
         <head-i><span class="head_title" slot="title_text">记者详情</span></head-i>
         <div class="tx" :style="{backgroundImage:'url('+detail.avatar+'!/fh/230)'}"></div>
         <p class="name">{{detail.name}}</p>
-        <p class="mobile">{{detail.license_number}}</p>
+        <p class="mobile">记者证号：{{detail.license_number}}</p>
         <p class="good">{{detail.good_at}}</p>
         <p class="memo">{{detail.memo}}</p>
         <router-link :to="'/reporter/commit/'+detail.id+'?name='+detail.name">我要爆料</router-link>

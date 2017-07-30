@@ -1,28 +1,30 @@
 <template>
-    <div class="scroll" style="padding-top: 1rem; background: #fff;">
+    <div style="padding-top: 1rem; background: #fff;">
         <head-i>
             <span v-if="$route.query.type==1" class="head_title" slot="title_text">消费警示</span>
             <span v-else class="head_title" slot="title_text">行业统计</span>
         </head-i>
-        <section class="recommend_list" v-if="recommendData.length>0">
-            <router-link v-for="data in recommendData" :key="data" :to="'/article/detail/'+data.id" class="list">
-                <div v-if="data.default_pics==null">
-                    <div class="list_left">
-                        <p class="p1">{{data.title}}</p>
-                        <p class="p2">{{data.add_time}}</p>
+        <section class="recommend_list">
+            <div class="list_h">
+                <router-link v-for="data in recommendData" :key="data" :to="'/article/detail/'+data.id" class="list">
+                    <div v-if="data.default_pics==null">
+                        <div class="list_left">
+                            <p class="p1">{{data.title}}</p>
+                            <p class="p2">{{data.add_time}}</p>
+                        </div>
+                        <div class="list_right" :style="{backgroundImage:'url('+data.thumb+'!/fh/230)'}">
+                            <!--<img :src="data.thumb+'!/fh/230'">-->
+                        </div>
                     </div>
-                    <div class="list_right" :style="{backgroundImage:'url('+data.thumb+'!/fh/230)'}">
-                        <!--<img :src="data.thumb+'!/fh/230'">-->
+                    <div v-else>
+                        <p class="p3">{{data.title}}</p>
+                        <ul class="pic">
+                            <li v-if="key<3" v-for="src,key in data.default_pics" :style="{backgroundImage:'url('+src.pic+'!/fh/230)'}"><!--<img :src="src.pic">--></li>
+                        </ul>
                     </div>
-                </div>
-                <div v-else>
-                    <p class="p3">{{data.title}}</p>
-                    <ul class="pic">
-                        <li v-if="key<3" v-for="src,key in data.default_pics" :style="{backgroundImage:'url('+src.pic+'!/fh/230)'}"><!--<img :src="src.pic">--></li>
-                    </ul>
-                </div>
-            </router-link>
-            <p v-if="showLoading" class="loading">正在加载更多数据...</p>
+                </router-link>
+                <p v-if="showLoading" class="loading">正在加载更多数据...</p>
+            </div>
         </section>
     </div>
 </template>
@@ -64,8 +66,8 @@
                     })
             },
             menuA() {
-                this.scrollA = document.querySelectorAll('.scroll')[0].scrollTop;
-                if(document.querySelector('.scroll').clientHeight + this.scrollA +2 >= document.querySelector('.recommend_list').offsetHeight && this.recommendRepeat==false){
+                this.scrollA = document.querySelector('.recommend_list').scrollTop;
+                if(document.querySelector('.recommend_list').clientHeight + this.scrollA +2 >= document.querySelector('.list_h').offsetHeight && this.recommendRepeat==false){
                     this.recommendRepeat = true;
                     this.recommendI += 1;
                     this.recommendAjax();
@@ -74,11 +76,11 @@
             }
         },
         mounted(){
-            document.querySelectorAll('.scroll')[0].addEventListener('scroll', this.menuA);
             document.getElementById('headI').addEventListener("touchmove", function (event) {
                 event.preventDefault();
             },false);
             this.recommendAjax();
+            document.querySelector('.recommend_list').addEventListener('scroll', this.menuA);
         }
     }
 </script>
@@ -86,11 +88,14 @@
 <style lang="less" scoped>
     .scroll{
         width: 100%;
-        height: calc(100vh);
+        height: calc(100vh - 1rem);
         overflow-y: scroll;
         -webkit-overflow-scrolling: touch;
     }
     .recommend_list{
+        height: calc(~'100vh - 1rem');
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
     .list:last-child{
         border-bottom: none;
     }
