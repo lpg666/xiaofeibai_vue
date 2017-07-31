@@ -64,7 +64,7 @@ Vue.use(VueAwesomeSwiper);
 Vue.use(vuePicturePreview)
 
 const router = new VueRouter({
-    //mode: 'history',
+    mode: 'history',
     routes,
 });
 
