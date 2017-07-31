@@ -82,7 +82,10 @@
                             </div>
                         </li>
                     </ul>
-                    <form enctype="multipart/form-data" id="upload"><input @change="onFileChange" type="file" accept="image/png,image/jpeg,image/gif,image/jpg" multiple="true" /></form>
+                    <form enctype="multipart/form-data" id="upload" v-if="inputShows">
+                        <div @click="jsdk" style="width: 100%; height: 100%;" v-if="isWeiXin && isAndroid"></div>
+                        <input v-else @change="onFileChange" type="file" accept="image/png,image/jpeg,image/gif,image/jpg" multiple="true" />
+                    </form>
                 </div>
                 <div class="tousuInfo">*投诉时，请注意保护个人隐私，涉及个人隐私或者敏感照片请选择不公开。</div>
                 <div class="fromBut" @click="fromBut">提交</div>
@@ -183,6 +186,7 @@ import {mapState,mapMutations} from 'vuex'
 export default {
     data(){
         return {
+            inputShows:true,
             types:'',
             brands:'',
             problems:'',
@@ -232,6 +236,19 @@ export default {
             'userInfo',
             'tousuData'
         ]),
+        isAndroid(){
+            let u = navigator.userAgent;
+            let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+            return isAndroid;
+        },
+        isWeiXin(){
+            let ua = window.navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                return true;
+            }else{
+                return false;
+            }
+        },
         userInfos(){
             return JSON.parse(this.userInfo);
         },
@@ -394,16 +411,64 @@ export default {
         //图片上传
         picShow(key){
             this.picList[key].show=!this.picList[key].show;
-            console.log(this.picList[key].show);
         },
         delPic(key){
             this.picList.splice(key,1);
-            console.log(this.picList);
+            if(5 - this.picList.length > 0){
+                this.inputShows=true;
+            }
+        },
+        jsdk(){
+            const vm = this;
+            let size = 5 - vm.picList.length;
+            wx.chooseImage({
+                count: size, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    for(let i=0; i<res.localIds.length;i++){
+                        wx.uploadImage({
+                            localId: res.localIds[i], // 需要上传的图片的本地ID，由chooseImage接口获得
+                            isShowProgressTips: 0, // 默认为1，显示进度提示
+                            success: function (res) {
+                                let serverId = res.serverId; // 返回图片的服务器端ID
+                                console.log(serverId);
+                                vm.showLoad=true;
+                                vm.loadType='load';
+                                vm.loadText='上传中';
+                                vm.axios.get('/v4/weixin/upload?media_id='+serverId)
+                                    .then(res =>{
+                                        vm.picList.push({'src':res.data,'show':'1'});
+                                        vm.showLoad=false;
+                                        console.log(res.data);
+                                    })
+                                    .catch(err =>{
+                                        vm.showLoad=true;
+                                        vm.loadType='alert';
+                                        vm.loadText='网络出错';
+                                        setTimeout(vm.close,1500);
+                                    })
+                            }
+                        });
+                    }
+                    console.log(vm.picList);
+                    if(vm.picList.length >= 5){
+                        vm.inputShows=false;
+                    }
+                }
+            });
         },
         onFileChange(e){
             var files = e.target.files || e.dataTransfer.files;
             console.log(files,length);
             if (!files.length) return;
+            if (parseInt(this.picList.length + files.length) > 5){
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='上传图片最大数为5';
+                setTimeout(this.close,1500);
+                return;
+            }
             this.createImage(files);
         },
         createImage(file) {
@@ -439,6 +504,11 @@ export default {
                             vm.axios.post('/v4/complaint/upload_pic',{'pic':e.target.result})
                                 .then(res =>{
                                     vm.picList.push({'src':res.data,'show':'1'});
+                                    if(vm.picList.length>=5){
+                                        vm.inputShows=false;
+                                    }else{
+                                        vm.inputShows=true;
+                                    }
                                     console.log(res,vm.picList);
                                     console.log('上传成功');
                                     vm.showLoad=false;

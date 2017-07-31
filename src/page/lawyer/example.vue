@@ -7,7 +7,7 @@
             <div class="p3">
                 {{detail.inquiry.content}}
                 <ul class="pic">
-                    <li v-for="data in detail.pics" :key="data"><img :src="data.pic+'!/fh/230'"></li>
+                    <li v-for="data in detail.pics" :key="data"><img v-preview="data.pic" :src="data.pic+'!/fh/230'"></li>
                 </ul>
             </div>
         </div>

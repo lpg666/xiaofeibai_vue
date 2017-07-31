@@ -11,6 +11,7 @@ import axios from 'axios'
 import Qs from 'qs'
 import VueAxios from 'vue-axios'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+import vuePicturePreview from 'vue-picture-preview'
 //import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false;
@@ -60,6 +61,7 @@ Vue.prototype.getTimeWord = function (time){
 Vue.use(VueRouter);
 Vue.use(VueAxios,axios);
 Vue.use(VueAwesomeSwiper);
+Vue.use(vuePicturePreview)
 
 const router = new VueRouter({
     //mode: 'history',

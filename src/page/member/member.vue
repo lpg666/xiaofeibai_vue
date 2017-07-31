@@ -42,7 +42,7 @@
         <div class="box1">
             <router-link to="/member/followTousu" class="das"><img src="../../images/myself_focus@2x.png">关注的投诉</router-link>
             <span class="xian"></span>
-            <router-link to="" class="das"><img src="../../images/icon_xing.png">收藏</router-link>
+            <router-link to="/member/collectArticle" class="das"><img src="../../images/icon_xing.png">收藏</router-link>
         </div>
         <div v-if="userInfo" class="but" @click="outLogin">退出登陆</div>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>

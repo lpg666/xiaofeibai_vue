@@ -14,6 +14,7 @@
                 <span v-if="detail.editor">{{detail.editor}}</span>
             </div>
             <div class="cent" v-html="detail.content"></div>
+            <img v-for="data in src" :key="data" v-preview="data" :src="data">
         </div>
         <comment :comment="comment" :detail="detail" :type="type"></comment>
         <loading v-if="showLoad" :showHide="showLoad" @close="close" :loadType="loadType" :loadText="loadText"></loading>
@@ -36,6 +37,7 @@
                 showLoad:false,
                 loadType:null,
                 loadText:null,
+                src:[]
             }
         },
         components:{
@@ -137,22 +139,39 @@
             fanhui(){
                 document.body.scrollTop=0;
             },
+            preview(cur,list){
+                wx.previewImage({
+                    current: cur, // 当前显示图片的http链接
+                    urls: list // 需要预览的图片http链接列表
+                });
+            },
             escapeChars(str) {
-                str = str.replace(/&/g, '&amp;');
-                str = str.replace(/</g, '&lt;');
-                str = str.replace(/>/g, '&gt;');
-                str = str.replace(/'/g, '&acute;');
-                str = str.replace(/"/g, '&quot;');
-                str = str.replace(/\|/g, '&brvbar;');
+                let i = 0;
+                let arr = this.src;
+                str = str.replace(new RegExp('<img','g'),function (word, $1) {
+                    //let pj = '<img v-preview="'+this.src[i]+'"';
+                    //i++;
+                    //console.log(i);
+                    return '<img @click="aaa" v-preview="'+arr[i]+'"';
+                });
                 return str;
+            },
+            srcm(str){
+                let reg = /<img[^>]*src[=\'\"\s]+([^\"\']*)[\"\']?[^>]*>/gi;
+                let i = 0;
+                while (reg.exec(str))
+                {
+                    this.src[i] = RegExp.$1;
+                    i +=1;
+                }
             },
             fetchData () {
                 this.axios.get('/v4/article/detail?article_id='+this.$route.params.id)
                     .then(res =>{
                         this.detail=res.data.data.detail;
                         this.comment=res.data.data.comment;
+                        //this.srcm(this.detail.content);
                         if(this.detail!=''){
-                            //document.getElementsByClassName('cent')[0].innerHTML = this.escapeChars(this.detail.content);
                             this.showLoad=false;
                             this.fx();
                             this.fanhui();

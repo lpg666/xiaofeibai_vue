@@ -19,6 +19,7 @@ const memberEdit = r => require.ensure([], () => r(require('../page/member/edit'
 const memberFrom = r => require.ensure([], () => r(require('../page/member/editFrom')), 'memberFrom')
 const memberTousu = r => require.ensure([], () => r(require('../page/member/tousu')), 'memberTousu')
 const memberGrade = r => require.ensure([], () => r(require('../page/member/grade')), 'memberGrade')
+const collectArticle = r => require.ensure([], () => r(require('../page/member/collectArticle')), 'collectArticle')
 const followTousu = r => require.ensure([], () => r(require('../page/member/followTousu')), 'followTousu')
 const setting = r => require.ensure([], () => r(require('../page/member/setting')), 'setting')
 const news = r => require.ensure([], () => r(require('../page/news/news')), 'news')
@@ -208,7 +209,13 @@ export default [{
             component: followTousu,
             meta: { aR:true },
         },
-        //关注的投诉页
+        //我的收藏文章列表
+        {
+            path: '/member/collectArticle',
+            component: collectArticle,
+            meta: { aR:true },
+        },
+        //投诉评价页
         {
             path: '/member/grade',
             component: memberGrade,

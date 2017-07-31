@@ -24,7 +24,7 @@
                 <div v-if="detail.addons.length>0" class="c_neir" v-for="data in detail.addons">【补充{{data.created_at}}】<br/>{{data.content}}</div>
                 <div class="c_pic" v-if="detail.pic.length>0">
                     <ul v-if="userInfo && userInfo.id==detail.member_id">
-                        <li v-if="data.is_show==1" v-for="data in detail.pic" :key="data" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
+                        <li v-if="data.is_show==1" v-for="data in detail.pic" v-preview="data.pic" :key="data" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
                         <li class="yc" v-else>
                             <span>
                                 <p>本图片</p>
@@ -34,7 +34,7 @@
                         </li>
                     </ul>
                     <ul v-else>
-                        <li v-if="data.is_show==1" v-for="data in detail.pic" :key="data" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
+                        <li v-if="data.is_show==1" v-for="data in detail.pic" v-preview="data.pic" :key="data" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
                         <li class="yc1" v-else>
                             <span>
                                 <p>该图片</p>
@@ -173,6 +173,14 @@
             ...mapMutations([
                 'AUTO_ROUTE'
             ]),
+            escapeChars(str) {
+                str = str.replace(/(\n)/g, "");
+                str = str.replace(/(\t)/g, "");
+                str = str.replace(/(\r)/g, "");
+                str = str.replace(/<\/?[^>]*>/g, "");
+                str = str.replace(/\s*/g, "");
+                return str;
+            },
             zang(){
                 if(!this.isdz){
                     this.axios.post('/v4/member/add_complaint_favour',{'complaint_id':this.$route.params.id})
@@ -259,6 +267,20 @@
             fanhui(){
                 document.body.scrollTop=0;
             },
+            fx(){
+                let share_info = {
+                    title: this.detail.title+'-消费保',
+                    desc: this.escapeChars(this.detail.content),
+                    imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
+                    link: window.location.href.split('#')[0],
+                };
+                wx.ready(function(){
+                    wx.onMenuShareWeibo(share_info);
+                    wx.onMenuShareAppMessage(share_info);
+                    wx.onMenuShareQQ(share_info);
+                    wx.onMenuShareTimeline(share_info);
+                });
+            },
             fetchData () {
                 this.axios.get('/v4/complaint/detail?complaint_id='+this.$route.params.id+'')
                     .then(res =>{
@@ -270,6 +292,7 @@
                         if(this.detail!=''){
                             this.showLoad=false;
                             this.fanhui();
+                            this.fx();
                         }
                         console.log(this.detail,this.isgz);
                     })
