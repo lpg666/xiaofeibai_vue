@@ -4,13 +4,13 @@
         <img class="zhutu" src="../../images/img_fabuchengong@2x.png">
         <p class="p1">分享到社交圈，让更多人支持关注</p>
         <p class="p1">扩大影响力，维权诉求更容易解决</p>
-        <ul class="shareIcon">
+        <!--<ul class="shareIcon">
             <li><img src="../../images/share_wechat@2x.png"></li>
             <li><img src="../../images/share_weibo@2x.png"></li>
             <li><img src="../../images/share_pengyouquan@2x.png"></li>
             <li><img src="../../images/share_qq@2x.png"></li>
             <li><img src="../../images/share_qzone@2x.png"></li>
-        </ul>
+        </ul>-->
         <similars v-if="detail.similars" :detail="detail"></similars>
     </div>
 </template>

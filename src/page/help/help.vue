@@ -10,11 +10,11 @@
                 <router-link :to="'/lawyer/detail/'+lawyer.id" class="box_info">
                     <div class="img" :style="{backgroundImage:'url('+lawyer.avatar+'!/fh/230)'}"></div>
                     <!--<img :src="lawyer.avatar">-->
-                    <div class="box_x">
+                    <div class="box_x" v-if="lawyer">
                         <p class="name">{{lawyer.name}}</p>
                         <p class="dw">{{lawyer.organization}}</p>
                         <p class="dt" v-if="lawyer.add_time && lawyer.user_name">{{getTimeWord(lawyer.add_time)}}回复了{{lawyer.user_name}}</p>
-                        <p class="dt" v-else>暂无咨询回复</p>
+                        <p class="dt" v-else>&nbsp;</p>
                         <router-link :to="'/lawyer/commit/'+lawyer.id+'?name='+lawyer.name">向Ta咨询</router-link>
                     </div>
                 </router-link>
@@ -24,11 +24,11 @@
                 <router-link :to="'/reporter/detail/'+reporter.id" class="box_info" style="border-bottom: none;">
                     <div class="img" :style="{backgroundImage:'url('+reporter.avatar+'!/fh/230)'}"></div>
                     <!--<img :src="reporter.avatar">-->
-                    <div class="box_x">
+                    <div class="box_x" v-if="reporter">
                         <p class="name">{{reporter.name}}</p>
                         <p class="dw">{{reporter.organization}}</p>
                         <p class="dt" v-if="reporter.add_time && reporter.user_name">{{getTimeWord(reporter.add_time)}}回复了{{reporter.user_name}}</p>
-                        <p class="dt" v-else>暂无爆料回复</p>
+                        <p class="dt" v-else>&nbsp;</p>
                         <router-link :to="'/reporter/commit/'+reporter.id+'?name='+reporter.name">向Ta爆料</router-link>
                     </div>
                 </router-link>

@@ -10,15 +10,18 @@
         </div>
         <swiper id="swiper-nav" :options="swiperNav" ref="mySwiper">
             <swiper-slide class="list lis">
-                <router-link :to="'/reporter/detail/'+data.id" v-for="data in list" :key="data">
-                    <div class="tx" :style="{backgroundImage:'url('+data.avatar+'!/fh/230)'}"></div>
-                    <div class="info">
-                        <p class="p1">{{data.name}}<span style="font-size: .24rem; margin-left: .6rem;">媒体志愿者</span></p>
-                        <p class="p2">已爆料{{data.inquiries}}件热点投诉</p>
-                    </div>
-                    <router-link :to="'/reporter/commit/'+data.id" class="but">爆料</router-link>
-                    <div class="p3">擅长领域：{{data.good_at}}</div>
-                </router-link>
+                <div class="data_list">
+                    <router-link :to="'/reporter/detail/'+data.id" v-for="data in list" :key="data">
+                        <div class="tx" :style="{backgroundImage:'url('+data.avatar+'!/fh/230)'}"></div>
+                        <div class="info">
+                            <p class="p1">{{data.name}}<span style="font-size: .24rem; margin-left: .6rem;">媒体志愿者</span></p>
+                            <p class="p2">已爆料{{data.inquiries}}件热点投诉</p>
+                        </div>
+                        <router-link :to="'/reporter/commit/'+data.id+'?name='+data.name" class="but">爆料</router-link>
+                        <div class="p3">擅长领域：{{data.good_at}}</div>
+                    </router-link>
+                    <p v-if="showLoading" class="loading">{{load}}</p>
+                </div>
             </swiper-slide>
             <swiper-slide class="example lis">
                 <router-link :to="'/example/'+data.id+'?id=reporter'" v-for="data in example" :key="data">
@@ -59,7 +62,12 @@
                 hover:'list',
                 showLoad:false,
                 loadType:null,
-                loadText:null
+                loadText:null,
+                scroll:0,
+                repeat:false,
+                page:0,
+                load:'正在加载更多数据...',
+                showLoading:false,
             }
         },
         components:{
@@ -89,12 +97,24 @@
                 }
             },
             fetchData(){
-                this.axios.get('/v4/reporter/reporter_list')
+                this.axios.get('/v4/reporter/reporter_list?page='+this.page)
                     .then(res =>{
-                        this.list=res.data.data;
-                        if(this.list!=''){
-                            this.showLoad=false;
+                        if(res.data.error){
+                            this.load=res.data.msg;
+                        }else{
+                            if(this.page==0){
+                                this.list=res.data.data;
+                            }else{
+                                this.list=this.list.concat(res.data.data);
+                            }
+                            this.repeat=false;
+                            this.showLoading=false;
+                            if(this.list!=''){
+                                this.showLoad=false;
+                                document.querySelector('.lis').addEventListener('scroll', this.menu);
+                            }
                         }
+
                         console.log(this.list);
                     })
             },
@@ -112,7 +132,17 @@
                         }
                         console.log(this.example);
                     })
-            }
+            },
+            menu() {
+                this.scroll = document.querySelector('.lis').scrollTop;
+                if(document.querySelector('.lis').clientHeight + this.scroll +2 >= document.querySelector('.data_list').offsetHeight && this.repeat==false){
+                    this.repeat = true;
+                    this.page += 1;
+                    this.showLoading=true;
+                    this.fetchData();
+                    console.log(this.page);
+                }
+            },
         }
     }
 

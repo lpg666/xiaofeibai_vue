@@ -24,12 +24,15 @@
                     <li v-for="data,key in picList">
                         <i class="dl" @click="delPic(key)"></i>
                         <img :src="'http://xiaofeibao.b0.upaiyun.com'+data.src.data">
-                        <div class="lk" @click="picShow(key)">
+                        <div class="lk">
                             <input type="text" v-model="data.text" value="">
                         </div>
                     </li>
                 </ul>
-                <div id="upload" v-if="picList.length<5"><input @click="onFileChange" @change="onFileChange" type="file" multiple></div>
+                <div id="upload" v-if="picList.length<5">
+                    <div @click="jsdk" style="width: 100%; height: 100%;" v-if="isWeiXin && isAndroid"></div>
+                    <input v-else @click="onFileChange" @change="onFileChange" type="file" multiple>
+                </div>
             </div>
             <div class="up_info"><img src="../../images/icon_tishi@2x.png">产品录入后可以直接与企业售后平台联系或者投诉产品</div>
         </div>
@@ -116,6 +119,19 @@
             ...mapState([
                 'userInfo'
             ]),
+            isAndroid(){
+                let u = navigator.userAgent;
+                let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                return isAndroid;
+            },
+            isWeiXin(){
+                let ua = window.navigator.userAgent.toLowerCase();
+                if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                    return true;
+                }else{
+                    return false;
+                }
+            },
         },
         created(){
             this.ajaxData();
@@ -189,11 +205,49 @@
             //图片上传
             picShow(key){
                 this.picList[key].show=!this.picList[key].show;
-                console.log(this.picList[key].show);
             },
             delPic(key){
                 this.picList.splice(key,1);
-                console.log(this.picList);
+            },
+            jsdk(){
+                const vm = this;
+                let size = 5 - vm.picList.length;
+                wx.chooseImage({
+                    count: size, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        for(let i=0; i<res.localIds.length;i++){
+                            wx.uploadImage({
+                                localId: res.localIds[i], // 需要上传的图片的本地ID，由chooseImage接口获得
+                                isShowProgressTips: 0, // 默认为1，显示进度提示
+                                success: function (res) {
+                                    let serverId = res.serverId; // 返回图片的服务器端ID
+                                    console.log(serverId);
+                                    vm.showLoad=true;
+                                    vm.loadType='load';
+                                    vm.loadText='上传中';
+                                    vm.axios.get('/v4/weixin/upload?media_id='+serverId)
+                                        .then(res =>{
+                                            vm.picList.push({'src':res.data,'text':''});
+                                            vm.showLoad=false;
+                                            console.log(res.data);
+                                        })
+                                        .catch(err =>{
+                                            vm.showLoad=true;
+                                            vm.loadType='alert';
+                                            vm.loadText='网络出错';
+                                            setTimeout(vm.close,1500);
+                                        })
+                                }
+                            });
+                        }
+                        console.log(vm.picList);
+                        if(vm.picList.length >= 5){
+                            vm.inputShows=false;
+                        }
+                    }
+                });
             },
             onFileChange(e){
                 var files = e.target.files || e.dataTransfer.files;
@@ -335,8 +389,8 @@
                         this.fenlei=this.type_name+' '+this.subtype_name;
                         this.tjid1=this.type_id;
                         this.tjid2=this.subtype_id;
-                        this.ajaxBrand(this.type_id);
-                        this.ajaxFujia(this.type_id);
+                        this.ajaxBrand(this.subtype_id);
+                        this.ajaxFujia(this.subtype_id);
                         this.qx();
                         console.log(this.tjid1,this.tjid2);
                     }else{
@@ -393,7 +447,7 @@
             },
             close(){
                 this.showLoad=false;
-            }
+            },
         },
         mounted(){
 
@@ -587,9 +641,9 @@
     .select .sp{float: left;  display: block;  width: 1.4rem;}
     input[type=date]::-webkit-inner-spin-button { visibility: hidden; }
     .text .sp{float: left;  display: block;  width: 1.4rem;}
-    .text input{ width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; text-align: right; color: #999;}
-    .select input{ width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; direction: rtl; color: #999;}
-    .select select{ width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; direction: rtl; color: #999; appearance:none; -moz-appearance:none;  -webkit-appearance:none;}
+    .text input{background: none; width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; text-align: right; color: #999;}
+    .select input{background: none; width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; direction: rtl; color: #999;}
+    .select select{background: none; width: calc(~'100% - 1.7rem'); font-size: .28rem; height: .83rem; float: left; direction: rtl; color: #999; appearance:none; -moz-appearance:none;  -webkit-appearance:none;}
     .lk{line-height: .425rem;}
     .text{ height: .85rem; line-height: .85rem; width: auto; margin: 0 .22rem; background-size:.18rem auto; font-size: .32rem;}
     .pt{ height: .56rem; line-height: .56rem; background: #f6f7f9; font-size:.26rem; color: #b6b6b6;}

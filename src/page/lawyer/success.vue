@@ -1,7 +1,7 @@
 <template>
     <div>
         <header id="headI">
-            <div id="head_go" @click="fh($route.query.id)"></div>
+            <div id="head_go" @click="fh($route.params.id)"></div>
             <span class="head_title">提交成功</span>
             <span class="head_a"></span>
         </header>

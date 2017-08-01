@@ -10,14 +10,17 @@
                 <li v-for="data,key in picList">
                     <i class="dl" @click="delPic(key)"></i>
                     <img :src="'http://xiaofeibao.b0.upaiyun.com'+data.src.data">
-                    <div class="lk" @click="picShow(key)">
+                    <!--<div class="lk" @click="picShow(key)">
                         <i :class="data.show==1?'hover':''"></i>
                         <span v-if="data.show==1">公开</span>
                         <span v-else>不公开</span>
-                    </div>
+                    </div>-->
                 </li>
             </ul>
-            <div id="upload"><input @change="onFileChange" type="file" multiple></div>
+            <div id="upload" v-if="inputShows">
+                <div @click="jsdk" style="width: 100%; height: 100%;" v-if="isWeiXin && isAndroid"></div>
+                <input v-else @change="onFileChange" type="file" accept="image/png,image/jpeg,image/gif,image/jpg" multiple>
+            </div>
         </div>
         <div class="gk"><i :class="gk==false?'bt':''" @click="gkc"></i>对外公开<span>您的事件可作为典型案例对所有人显示</span></div>
         <div style="background: #fff;"><div class="but" @click="but">提交</div></div>
@@ -33,6 +36,7 @@
     export default {
         data(){
             return {
+                inputShows:true,
                 title:'',
                 cent:'',
                 picList:[],
@@ -50,10 +54,23 @@
         computed:{
             ...mapState([
                 'userInfo'
-            ])
+            ]),
+            isAndroid(){
+                let u = navigator.userAgent;
+                let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                return isAndroid;
+            },
+            isWeiXin(){
+                let ua = window.navigator.userAgent.toLowerCase();
+                if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                    return true;
+                }else{
+                    return false;
+                }
+            },
         },
         created(){
-console.log();
+
         },
         methods:{
             but(){
@@ -62,10 +79,10 @@ console.log();
                     this.loadType='alert';
                     this.loadText='标题字符长度不能小于5或大于30';
                     setTimeout(this.close,1500);
-                }else if(this.cent.length<30){
+                }else if(this.cent.length<20){
                     this.showLoad=true;
                     this.loadType='alert';
-                    this.loadText='内容字符长度不能小于30';
+                    this.loadText='内容字符长度不能小于20';
                     setTimeout(this.close,1500);
                 }else if(this.re==false){
                     this.close();
@@ -74,22 +91,20 @@ console.log();
                     this.showLoad=true;
                     this.loadType='load';
                     this.loadText='提交中';
-
                     var text = [];
                     if(this.picList.length>0){
                         for(let i=0;i<this.picList.length;i++){
-                            text[i] = 'http://xiaofeibao.b0.upaiyun.com'+this.picList[i].src.data+'###'+this.picList[i].show;
+                            text[i] = 'http://xiaofeibao.b0.upaiyun.com'+this.picList[i].src.data;//+'###'+this.picList[i].show
                         }
                         this.picList = text.join('|||');
                     }
-
                     this.axios.post('/v4/reporter/commit',{
                         'reporter_id':parseInt(this.$route.params.id),
                         'title':this.title,
                         'content':this.cent,
                         'pics':this.picList,
                         'sign':this.userInfo.sign,
-                        'is_open':this.gk,
+                        'is_show':this.gk,
                     })
                         .then(res =>{
                             this.re=false;
@@ -99,7 +114,7 @@ console.log();
                                 this.loadText=res.data.msg;
                                 setTimeout(this.close,1500);
                             }else{
-                                this.$router.push({path:'/commit/success/lawyer?id='+this.$route.params.id+'&name='+this.$route.query.name});
+                                this.$router.push({path:'/commit/success/reporter?id='+this.$route.params.id+'&name='+this.$route.query.name});
                             }
                             console.log(res.data);
                         })
@@ -110,7 +125,6 @@ console.log();
                 console.log(this.title,this.cent,this.picList,this.gk,this.$route.params.id);
             },
             close(){
-                alert(1);
                 this.showLoad = false;
             },
             gkc(){
@@ -119,15 +133,64 @@ console.log();
             //图片上传
             picShow(key){
                 this.picList[key].show=!this.picList[key].show;
-                console.log(this.picList[key].show);
             },
             delPic(key){
                 this.picList.splice(key,1);
-                console.log(this.picList);
+                if(5 - this.picList.length > 0){
+                    this.inputShows=true;
+                }
+            },
+            jsdk(){
+                const vm = this;
+                let size = 5 - vm.picList.length;
+                wx.chooseImage({
+                    count: size, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        for(let i=0; i<res.localIds.length;i++){
+                            wx.uploadImage({
+                                localId: res.localIds[i], // 需要上传的图片的本地ID，由chooseImage接口获得
+                                isShowProgressTips: 0, // 默认为1，显示进度提示
+                                success: function (res) {
+                                    let serverId = res.serverId; // 返回图片的服务器端ID
+                                    console.log(serverId);
+                                    vm.showLoad=true;
+                                    vm.loadType='load';
+                                    vm.loadText='上传中';
+                                    vm.axios.get('/v4/weixin/upload?media_id='+serverId)
+                                        .then(res =>{
+                                            //vm.picList.push({'src':res.data,'show':'1'});
+                                            vm.picList.push({'src':res.data});
+                                            vm.showLoad=false;
+                                            console.log(res.data);
+                                        })
+                                        .catch(err =>{
+                                            vm.showLoad=true;
+                                            vm.loadType='alert';
+                                            vm.loadText='网络出错';
+                                            setTimeout(vm.close,1500);
+                                        })
+                                }
+                            });
+                        }
+                        console.log(vm.picList);
+                        if(vm.picList.length >= 5){
+                            vm.inputShows=false;
+                        }
+                    }
+                });
             },
             onFileChange(e){
                 var files = e.target.files || e.dataTransfer.files;
                 if (!files.length) return;
+                if (parseInt(this.picList.length + files.length) > 5){
+                    this.showLoad=true;
+                    this.loadType='alert';
+                    this.loadText='上传图片最大数为5';
+                    setTimeout(this.close,1500);
+                    return;
+                }
                 this.createImage(files);
             },
             createImage(file) {
@@ -162,7 +225,13 @@ console.log();
                             reader.onload =function(e){
                                 vm.axios.post('/v4/complaint/upload_pic',{'pic':e.target.result})
                                     .then(res =>{
-                                        vm.picList.push({'src':res.data,'show':'1'});
+                                        //vm.picList.push({'src':res.data,'show':'1'});
+                                        vm.picList.push({'src':res.data});
+                                        if(vm.picList.length>=5){
+                                            vm.inputShows=false;
+                                        }else{
+                                            vm.inputShows=true;
+                                        }
                                         vm.close();
                                     })
                                     .catch(err =>{

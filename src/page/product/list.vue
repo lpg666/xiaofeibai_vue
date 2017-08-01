@@ -3,7 +3,7 @@
         <head-i><span class="head_title" slot="title_text">我的产品列表</span><router-link class="head_a" slot="head_a" to="/product"></router-link></head-i>
         <div v-if="detail=='a'" class="wu">您暂时没有录入数据哦</div>
         <div v-else class="box">
-            <router-link :to="'/product/detail/'+data.id" class="list" v-for="data in detail" :key="data">
+            <router-link :to="'/product/detail/'+data.id" class="list" v-for="data,key in detail" :key="data">
                 <div class="pic" v-if="data.pic.length>0" :style="{backgroundImage:'url('+data.pic[0].pic+')'}"></div>
                 <div class="pic" v-else style="background:#f6f7f9;"></div>
                 <div class="text">
@@ -17,7 +17,7 @@
                     </div>
                     <div class="list_but">
                         <router-link :to="'/product/consult/'+data.id" class="list_but_r">联系客服</router-link>
-                        <a @click="tousu" class="list_but_l">我要投诉</a>
+                        <a @click="tousu(key,$event)" class="list_but_l">我要投诉</a>
                         <div class="dun"></div>
                     </div>
                 </div>
@@ -56,13 +56,13 @@
             ...mapMutations([
                 'TOUSU_PRA'
             ]),
-            tousu(e){
+            tousu(key,e){
                 e.preventDefault();
                 console.log(this.userInfo.real_name,this.userInfo.address);
                 if(this.userInfo.real_name=='' || this.userInfo.address==''){
                     this.showAlertIos = true;
                 }else{
-                    this.TOUSU_PRA(this.detail);
+                    this.TOUSU_PRA(this.detail[key]);
                     this.$router.push({path:'/tousu/create1'});
                     console.log(this.tousuPra);
                 }

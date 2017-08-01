@@ -9,6 +9,7 @@
                     <p>3.不得使用诋毁，辱骂性的语言损害他人声誉，否则引起的法律责任，由投诉人承担。</p>
                     <p>4.请不要重复投诉，消费保在收到投诉后会在第一时间联系您并协助维权。</p>
                     <p style="color:#FD9C33; margin-bottom: 0;">5.投诉时请注意保护个人隐私，不要在投诉内容里面填写个人联系电话或帐号信息，涉及个人隐私或者敏感照片请选择不公开。</p>
+                    <p style="color:#FD9C33; margin-bottom: 0;">6.消费保有权对您提交投诉中的过激或不当用语进行编辑。</p>
                     <div class="check"><span :class="{sp1:declareSp}" @click="Declare"></span>下次不再提醒</div>
                     <div class="btn" @click="declareG">我知道了</div>
                 </div>
@@ -71,7 +72,10 @@
                             </div>
                         </li>
                     </ul>
-                    <form enctype="multipart/form-data" id="upload"><input @change="onFileChange" type="file" accept="image/png,image/jpeg,image/gif,image/jpg" multiple="true" /></form>
+                    <form enctype="multipart/form-data" id="upload" v-if="inputShows">
+                        <div @click="jsdk" style="width: 100%; height: 100%;" v-if="isWeiXin && isAndroid"></div>
+                        <input v-else @change="onFileChange" type="file" accept="image/png,image/jpeg,image/gif,image/jpg" multiple="true" />
+                    </form>
                 </div>
                 <div class="tousuInfo">*投诉时，请注意保护个人隐私，涉及个人隐私或者敏感照片请选择不公开。</div>
                 <div class="fromBut" @click="fromBut">提交</div>
@@ -172,6 +176,7 @@ import {mapState,mapMutations} from 'vuex'
 export default {
     data(){
         return {
+            inputShows:true,
             types:'',
             brands:'',
             problems:'',
@@ -222,6 +227,19 @@ export default {
             'tousuData',
             'tousuPra'
         ]),
+        isAndroid(){
+            let u = navigator.userAgent;
+            let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+            return isAndroid;
+        },
+        isWeiXin(){
+            let ua = window.navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                return true;
+            }else{
+                return false;
+            }
+        },
         userInfos(){
             return JSON.parse(this.userInfo);
         },
@@ -342,7 +360,7 @@ export default {
                 this.from.value.sign = this.userInfo.sign;
                 this.from.value.source_type = 'wechat';
                 this.from.value.version='ios';
-
+                this.from.value.is_repeat=new Date().getTime();
                 this.showLoad=true;
                 this.loadType='load';
                 this.loadText='正在提交';
@@ -374,16 +392,64 @@ export default {
         //图片上传
         picShow(key){
             this.picList[key].show=!this.picList[key].show;
-            console.log(this.picList[key].show);
         },
         delPic(key){
             this.picList.splice(key,1);
-            console.log(this.picList);
+            if(5 - this.picList.length > 0){
+                this.inputShows=true;
+            }
+        },
+        jsdk(){
+            const vm = this;
+            let size = 5 - vm.picList.length;
+            wx.chooseImage({
+                count: size, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    for(let i=0; i<res.localIds.length;i++){
+                        wx.uploadImage({
+                            localId: res.localIds[i], // 需要上传的图片的本地ID，由chooseImage接口获得
+                            isShowProgressTips: 0, // 默认为1，显示进度提示
+                            success: function (res) {
+                                let serverId = res.serverId; // 返回图片的服务器端ID
+                                console.log(serverId);
+                                vm.showLoad=true;
+                                vm.loadType='load';
+                                vm.loadText='上传中';
+                                vm.axios.get('/v4/weixin/upload?media_id='+serverId)
+                                    .then(res =>{
+                                        vm.picList.push({'src':res.data,'show':'1'});
+                                        vm.showLoad=false;
+                                        console.log(res.data);
+                                    })
+                                    .catch(err =>{
+                                        vm.showLoad=true;
+                                        vm.loadType='alert';
+                                        vm.loadText='网络出错';
+                                        setTimeout(vm.close,1500);
+                                    })
+                            }
+                        });
+                    }
+                    console.log(vm.picList);
+                    if(vm.picList.length >= 5){
+                        vm.inputShows=false;
+                    }
+                }
+            });
         },
         onFileChange(e){
             var files = e.target.files || e.dataTransfer.files;
             console.log(files,length);
             if (!files.length) return;
+            if (parseInt(this.picList.length + files.length) > 5){
+                this.showLoad=true;
+                this.loadType='alert';
+                this.loadText='上传图片最大数为5';
+                setTimeout(this.close,1500);
+                return;
+            }
             this.createImage(files);
         },
         createImage(file) {
@@ -419,6 +485,11 @@ export default {
                             vm.axios.post('/v4/complaint/upload_pic',{'pic':e.target.result})
                                 .then(res =>{
                                     vm.picList.push({'src':res.data,'show':'1'});
+                                    if(vm.picList.length>=5){
+                                        vm.inputShows=false;
+                                    }else{
+                                        vm.inputShows=true;
+                                    }
                                     console.log(res,vm.picList);
                                     console.log('上传成功');
                                     vm.showLoad=false;
@@ -633,6 +704,7 @@ export default {
                     this.properties=res.data.data.properties;
                     for(let i=0;i<this.properties.length;i++){
                         for(let o=0;o<this.tousuPra.property.length;o++){
+                            console.log(o);
                             if(this.tousuPra.property[o].id==this.properties[i].id){
                                 this.$set(this.textId,''+this.properties[i].id+'',this.tousuPra.property[o].pivot.property_value);
                             }
@@ -843,9 +915,38 @@ export default {
                     setTimeout(this.close,1500);
                 }
             }
-        }
+        },
+        fx(){
+            let url = encodeURIComponent(window.location.href.split('#')[0]);
+            //alert(url);
+            this.axios.get('/v4/weixin?url='+url)
+                .then(res =>{
+                    console.log(res.data);
+                    wx.config({
+                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: res.data.appId, // 必填，公众号的唯一标识
+                        timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
+                        signature: res.data.signature,// 必填，签名，见附录1
+                        jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                    });
+                    let share_info = {
+                        title: '消费保',
+                        desc: '消费保',
+                        imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
+                        link: window.location.href.split('#')[0],
+                    };
+                    wx.ready(function(){
+                        wx.onMenuShareWeibo(share_info);
+                        wx.onMenuShareAppMessage(share_info);
+                        wx.onMenuShareQQ(share_info);
+                        wx.onMenuShareTimeline(share_info);
+                    });
+                });
+        },
     },
     created(){
+        this.fx();
         this.show;
         //this.tk=true;
         this.showLoad=true;

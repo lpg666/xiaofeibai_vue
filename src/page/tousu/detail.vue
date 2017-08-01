@@ -167,7 +167,7 @@
         },
         watch: {
             // 如果路由有变化，会再次执行该方法
-            '$route': 'fetchData'
+            '$route': ['fetchData']
         },
         methods: {
             ...mapMutations([
@@ -179,6 +179,8 @@
                 str = str.replace(/(\r)/g, "");
                 str = str.replace(/<\/?[^>]*>/g, "");
                 str = str.replace(/\s*/g, "");
+                str = str.replace(/&nbsp;/g,'');
+                str = str.replace(/&quot;/g,'"');
                 return str;
             },
             zang(){
@@ -268,36 +270,26 @@
                 document.body.scrollTop=0;
             },
             fx(){
-                let url = encodeURIComponent(window.location.href.split('#')[0]);
-                this.axios.get('/v4/weixin?url='+url)
-                    .then(res =>{
-                        console.log(res.data);
-                        wx.config({
-                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                            appId: res.data.appId, // 必填，公众号的唯一标识
-                            timestamp: res.data.timestamp, // 必填，生成签名的时间戳
-                            nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
-                            signature: res.data.signature,// 必填，签名，见附录1
-                            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-                        });
-                        let share_info = {
-                            title: this.detail.title+'-消费保',
-                            desc: this.escapeChars(this.detail.content),
-                            imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
-                            link: window.location.href.split('#')[0],
-                        };
-                        wx.ready(function(){
-                            wx.onMenuShareWeibo(share_info);
-                            wx.onMenuShareAppMessage(share_info);
-                            wx.onMenuShareQQ(share_info);
-                            wx.onMenuShareTimeline(share_info);
-                        });
-                    });
+                let share_info = {
+                    title: this.detail.title+'-消费保',
+                    desc: this.detail.content,
+                    imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
+                    link: window.location.href,
+                };
+                console.log(share_info);
+                wx.ready(function(){
+                    wx.onMenuShareWeibo(share_info);
+                    wx.onMenuShareAppMessage(share_info);
+                    wx.onMenuShareQQ(share_info);
+                    wx.onMenuShareTimeline(share_info);
+                });
             },
             fetchData () {
                 this.axios.get('/v4/complaint/detail?complaint_id='+this.$route.params.id+'')
                     .then(res =>{
                         this.detail=res.data.data;
+                        this.detail.content = this.escapeChars(this.detail.content);
+                        this.detail.title = this.escapeChars(this.detail.title);
                         this.comment=res.data.data.comments;
                         this.isgz = this.detail.is_collect;
                         this.isdz = this.detail.is_favour;

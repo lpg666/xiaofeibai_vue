@@ -10,15 +10,18 @@
         </div>
         <swiper id="swiper-nav" :options="swiperNav" ref="mySwiper">
             <swiper-slide class="list lis">
-                <router-link :to="'/lawyer/detail/'+data.id" v-for="data in list" :key="data">
-                    <div class="tx" :style="{backgroundImage:'url('+data.avatar+'!/fh/230)'}"></div>
-                    <div class="info">
-                        <p class="p1">{{data.name}}</p>
-                        <p class="p2">律师证号:{{data.license_number}}</p>
-                    </div>
-                    <router-link :to="'/lawyer/commit/'+data.id" class="but">咨询我</router-link>
-                    <div class="p3">擅长领域：{{data.good_at}}</div>
-                </router-link>
+                <div class="data_list">
+                    <router-link :to="'/lawyer/detail/'+data.id" v-for="data in list" :key="data">
+                        <div class="tx" :style="{backgroundImage:'url('+data.avatar+'!/fh/230)'}"></div>
+                        <div class="info">
+                            <p class="p1">{{data.name}}</p>
+                            <p class="p2">律师证号:{{data.license_number}}</p>
+                        </div>
+                        <router-link :to="'/lawyer/commit/'+data.id+'?name='+data.name" class="but">咨询我</router-link>
+                        <div class="p3">擅长领域：{{data.good_at}}</div>
+                    </router-link>
+                    <p v-if="showLoading" class="loading">{{load}}</p>
+                </div>
             </swiper-slide>
             <swiper-slide class="example lis">
                 <router-link :to="'/example/'+data.id+'?id=lawyer'" v-for="data in example" :key="data">
@@ -59,7 +62,13 @@
                 hover:'list',
                 showLoad:false,
                 loadType:null,
-                loadText:null
+                loadText:null,
+                scroll:0,
+                repeat:false,
+                page:0,
+                load:'正在加载更多数据...',
+                showLoading:false,
+
             }
         },
         components:{
@@ -89,12 +98,24 @@
                 }
             },
             fetchData(){
-                this.axios.get('/v4/lawyer/lawyer_list')
+                this.axios.get('/v4/lawyer/lawyer_list?page='+this.page)
                     .then(res =>{
-                        this.list=res.data.data;
-                        if(this.list!=''){
-                            this.showLoad=false;
+                        if(res.data.error){
+                            this.load=res.data.msg;
+                        }else{
+                            if(this.page==0){
+                                this.list=res.data.data;
+                            }else{
+                                this.list=this.list.concat(res.data.data);
+                            }
+                            this.repeat=false;
+                            this.showLoading=false;
+                            if(this.list!=''){
+                                this.showLoad=false;
+                                document.querySelector('.lis').addEventListener('scroll', this.menu);
+                            }
                         }
+
                         console.log(this.list);
                     })
             },
@@ -112,7 +133,17 @@
                         }
                         console.log(this.example);
                     })
-            }
+            },
+            menu() {
+                this.scroll = document.querySelector('.lis').scrollTop;
+                if(document.querySelector('.lis').clientHeight + this.scroll +2 >= document.querySelector('.data_list').offsetHeight && this.repeat==false){
+                    this.repeat = true;
+                    this.page += 1;
+                    this.showLoading=true;
+                    this.fetchData();
+                    console.log(this.page);
+                }
+            },
         }
     }
 
@@ -231,7 +262,7 @@
     }
     .list{
         background: #fff;
-        >a{
+        >.data_list>a{
             padding-top: .15rem;
             overflow: hidden;
             margin-left: .22rem;
@@ -285,5 +316,14 @@
         a:last-child{
             border-bottom: none;
         }
+    }
+    .loading{
+        width: 100%;
+        height: .6rem;
+        line-height: .6rem;
+        font-size: .26rem;
+        color: #333;
+        text-align: center;
+        background: rgba(153,153,153,.2);
     }
 </style>

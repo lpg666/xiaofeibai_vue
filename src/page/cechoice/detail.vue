@@ -66,6 +66,7 @@
                             this.detail.title=this.escapeChars(this.detail.title);
                             this.showLoad=false;
                             this.fanhui();
+                            this.fx();
                         }
                         console.log(this.detail);
                     })
@@ -73,7 +74,22 @@
 
                     });
                 console.log(this.$route.params.id);
-            }
+            },
+            fx(){
+                let share_info = {
+                    title: this.detail.title+'-消费保',
+                    desc: this.detail.content,
+                    imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
+                    link: window.location.href,
+                };
+                console.log(share_info);
+                wx.ready(function(){
+                    wx.onMenuShareWeibo(share_info);
+                    wx.onMenuShareAppMessage(share_info);
+                    wx.onMenuShareQQ(share_info);
+                    wx.onMenuShareTimeline(share_info);
+                });
+            },
         }
 
     }

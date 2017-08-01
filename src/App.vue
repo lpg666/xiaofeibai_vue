@@ -45,18 +45,6 @@ export default {
                     signature: res.data.signature,// 必填，签名，见附录1
                     jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                 });
-                let share_info = {
-                    title: '消费保',
-                    desc: '消费保',
-                    imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
-                    link: window.location.href.split('#')[0],
-                };
-                wx.ready(function(){
-                    wx.onMenuShareWeibo(share_info);
-                    wx.onMenuShareAppMessage(share_info);
-                    wx.onMenuShareQQ(share_info);
-                    wx.onMenuShareTimeline(share_info);
-                });
             });
     }
 
