@@ -122,6 +122,7 @@
                     imgUrl: this.detail.thumb?this.detail.thumb:'http://m.xfb315.com/wap/img/share_icon.jpg',
                     link: window.location.href,
                 };
+                console.log(share_info);
                 wx.ready(function(){
                     wx.onMenuShareWeibo(share_info);
                     wx.onMenuShareAppMessage(share_info);

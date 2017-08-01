@@ -46,7 +46,7 @@ const dt = r => require.ensure([], () => r(require('../page/member/dt')), 'dt')
 
 
 export default [{
-    path: '/',
+    path: '',
     component: App, //顶层路由，对应index.html
     children: [ //二级路由。对应App.vue
         //地址为空时跳转home页面
