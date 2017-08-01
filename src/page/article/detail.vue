@@ -115,21 +115,6 @@
                         });
                 }
             },
-            fx(){
-                let share_info = {
-                    title: this.detail.title,
-                    desc: this.detail.content,
-                    imgUrl: this.detail.thumb?this.detail.thumb:'http://m.xfb315.com/wap/img/share_icon.jpg',
-                    link: window.location.href,
-                };
-                console.log(share_info);
-                wx.ready(function(){
-                    wx.onMenuShareWeibo(share_info);
-                    wx.onMenuShareAppMessage(share_info);
-                    wx.onMenuShareQQ(share_info);
-                    wx.onMenuShareTimeline(share_info);
-                });
-            },
             dl(){
                 this.AUTO_ROUTE(this.$route.path);
                 this.$router.push({path:'/login?id=1'});
@@ -191,6 +176,21 @@
                             console.log(this.collected);
                         })
                 }
+            },
+            fx(){
+                let share_info = {
+                    title: this.detail.title,
+                    desc: this.detail.content,
+                    imgUrl: this.detail.thumb?this.detail.thumb:'http://m.xfb315.com/wap/img/share_icon.jpg',
+                    link: window.location.href,
+                };
+                console.log(share_info);
+                wx.ready(function(){
+                    wx.onMenuShareWeibo(share_info);
+                    wx.onMenuShareAppMessage(share_info);
+                    wx.onMenuShareQQ(share_info);
+                    wx.onMenuShareTimeline(share_info);
+                });
             },
         }
 

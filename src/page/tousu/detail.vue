@@ -269,21 +269,6 @@
             fanhui(){
                 document.body.scrollTop=0;
             },
-            fx(){
-                let share_info = {
-                    title: this.detail.title+'-消费保',
-                    desc: this.detail.content,
-                    imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
-                    link: window.location.href,
-                };
-                console.log(share_info);
-                wx.ready(function(){
-                    wx.onMenuShareWeibo(share_info);
-                    wx.onMenuShareAppMessage(share_info);
-                    wx.onMenuShareQQ(share_info);
-                    wx.onMenuShareTimeline(share_info);
-                });
-            },
             fetchData () {
                 this.axios.get('/v4/complaint/detail?complaint_id='+this.$route.params.id+'')
                     .then(res =>{
@@ -305,7 +290,22 @@
 
                     });
                 console.log(this.$route.params.id);
-            }
+            },
+            fx(){
+                let share_info = {
+                    title: this.detail.title+'-消费保',
+                    desc: this.detail.content,
+                    imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
+                    link: window.location.href,
+                };
+                console.log(share_info);
+                wx.ready(function(){
+                    wx.onMenuShareWeibo(share_info);
+                    wx.onMenuShareAppMessage(share_info);
+                    wx.onMenuShareQQ(share_info);
+                    wx.onMenuShareTimeline(share_info);
+                });
+            },
         }
     }
 </script>

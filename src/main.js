@@ -60,7 +60,7 @@ Vue.prototype.getTimeWord = function (time){
 Vue.use(VueRouter);
 Vue.use(VueAxios,axios);
 Vue.use(VueAwesomeSwiper);
-Vue.use(vuePicturePreview)
+Vue.use(vuePicturePreview);
 
 const router = new VueRouter({
     mode: 'history',
