@@ -75,14 +75,6 @@ if (process.env.NODE_ENV == 'development') {
     axios.defaults.transformRequest = function (data) {
         return Qs.stringify(data);
     };
-    //POST传参序列化(添加请求拦截器)
-    /*axios.interceptors.request.use((config) => {
-        //在发送请求之前做某件事
-        if(config.method  === 'post'){
-            config.data = qs.stringify(config.data);
-        }
-        return config;
-    });*/
 }
 
 router.beforeEach((to, from, next) => {

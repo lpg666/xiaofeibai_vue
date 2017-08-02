@@ -272,17 +272,23 @@
             fetchData () {
                 this.axios.get('/v4/complaint/detail?complaint_id='+this.$route.params.id+'')
                     .then(res =>{
-                        this.detail=res.data.data;
-                        this.detail.content = this.escapeChars(this.detail.content);
-                        this.detail.title = this.escapeChars(this.detail.title);
-                        this.comment=res.data.data.comments;
-                        this.isgz = this.detail.is_collect;
-                        this.isdz = this.detail.is_favour;
-                        this.dzs = this.detail.stat.favours;
-                        this.fx();
-                        if(this.detail!=''){
-                            this.showLoad=false;
-                            this.fanhui();
+                        if(res.data.error){
+                            if(res.data.msg_type==2){
+                                this.$router.push({path:'/tousu/error/'+this.$route.params.id});
+                            }
+                        }else{
+                            this.detail=res.data.data;
+                            this.detail.content = this.escapeChars(this.detail.content);
+                            this.detail.title = this.escapeChars(this.detail.title);
+                            this.comment=res.data.data.comments;
+                            this.isgz = this.detail.is_collect;
+                            this.isdz = this.detail.is_favour;
+                            this.dzs = this.detail.stat.favours;
+                            this.fx();
+                            if(this.detail!=''){
+                                this.showLoad=false;
+                                this.fanhui();
+                            }
                         }
                         console.log(this.detail,this.isgz);
                     })

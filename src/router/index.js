@@ -33,7 +33,8 @@ const tousuDetailComment = r => require.ensure([], () => r(require('../page/tous
 const tousuCreate = r => require.ensure([], () => r(require('../page/tousu/create')), 'tousuCreate')
 const tousuCreate1 = r => require.ensure([], () => r(require('../page/tousu/create1')), 'tousuCreate1')
 const tousuSuccess = r => require.ensure([], () => r(require('../page/tousu/success')), 'tousuSuccess')
-const tousuError = r => require.ensure([], () => r(require('../page/member/error')), 'tousuError')
+const tousuErrormember = r => require.ensure([], () => r(require('../page/member/error')), 'tousuErrormember')
+const tousuError = r => require.ensure([], () => r(require('../page/tousu/error')), 'tousuError')
 const activity = r => require.ensure([], () => r(require('../page/activity/activity')), 'activity')
 const productRecommend = r => require.ensure([], () => r(require('../page/product/recommend')), 'productRecommend')
 const productIndex = r => require.ensure([], () => r(require('../page/product/index')), 'productIndex')
@@ -201,7 +202,7 @@ export default [{
         //我的投诉错误页
         {
             path: '/member/error',
-            component: tousuError
+            component: tousuErrormember
         },
         //关注的投诉页
         {
@@ -277,6 +278,11 @@ export default [{
         {
             path: '/tousu/detail/:id',
             component: tousuDetail
+        },
+        //投诉详情页
+        {
+            path: '/tousu/error/:id',
+            component: tousuError
         },
         //投诉评论列表
         {
