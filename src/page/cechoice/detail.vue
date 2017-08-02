@@ -57,16 +57,26 @@
                 str = str.replace(/&quot;/g,'"');
                 return str;
             },
+            escape(str) {
+                str = str.replace(/(\n)/g, "");
+                str = str.replace(/(\t)/g, "");
+                str = str.replace(/(\r)/g, "");
+                str = str.replace(/<\/?[^>]*>/g, "");
+                str = str.replace(/\s*/g, "");
+                str = str.replace(/&nbsp;/g,'');
+                str = str.replace(/&quot;/g,'"');
+                return str;
+            },
             fetchData () {
                 this.axios.get('/v4/cechoice_article/article_details?article_id='+this.$route.params.id+'')
                     .then(res =>{
                         this.detail=res.data.data;
+                        this.detail.content=this.escapeChars(this.detail.content);
+                        this.detail.title=this.escapeChars(this.detail.title);
+                        this.fx();
                         if(this.detail!=''){
-                            this.detail.content=this.escapeChars(this.detail.content);
-                            this.detail.title=this.escapeChars(this.detail.title);
                             this.showLoad=false;
                             this.fanhui();
-                            this.fx();
                         }
                         console.log(this.detail);
                     })
@@ -78,9 +88,9 @@
             fx(){
                 let share_info = {
                     title: this.detail.title+'-消费保',
-                    desc: this.detail.content,
+                    desc: this.escape(this.detail.content),
                     imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
-                    link: window.location.href,
+                    link: window.location.href.replace('#','?#'),
                 };
                 console.log(share_info);
                 wx.ready(function(){

@@ -1,6 +1,6 @@
 <template>
     <header id="headI">
-        <div id="head_go" @click="$router.go(-1)"></div>
+        <div id="head_go" @click="go"></div>
         <slot name="title_text"></slot>
         <slot name="head_a"></slot>
     </header>
@@ -11,6 +11,19 @@
         data(){
             return{
 
+            }
+        },
+        methods: {
+            go(){
+                if(this.$route.path.indexOf('tousu/detail')>0 || this.$route.path.indexOf('cechoice/detail')>0){
+                    if(window.history.length<=1){
+                        this.$router.push({path:'/home'});
+                    }else{
+                        this.$router.go(-1);
+                    }
+                }else{
+                    this.$router.go(-1);
+                }
             }
         }
     }

@@ -6,7 +6,7 @@ import routes from './router/index'
 import store from './store/'
 import FastClick from 'fastclick'
 import './config/rem'
-import './config/vconsole.min'
+//import './config/vconsole.min'
 import axios from 'axios'
 import Qs from 'qs'
 import VueAxios from 'vue-axios'
@@ -63,7 +63,7 @@ Vue.use(VueAwesomeSwiper);
 Vue.use(vuePicturePreview);
 
 const router = new VueRouter({
-    mode: 'history',
+    //mode: 'history',
     routes,
 });
 

@@ -1,7 +1,7 @@
 <template>
     <div id="wudi_detail" style="padding-top: 1rem; background: #F6F7F9;">
         <header id="headI">
-            <div id="head_go" @click="$router.go(-1)"></div>
+            <div id="head_go" @click="go"></div>
             <span class="head_title" v-if="detail">{{detail.title.substr(0,12)}}<span style="color: #37C078;" v-if="detail.title.length>12">...</span></span>
             <div v-if="userInfo" class="head_a" @click="sc"><i :class="collected?'hover':''"></i></div>
             <div v-else class="head_a" @click="dl"><i></i></div>
@@ -69,6 +69,13 @@
             ...mapMutations([
                 'AUTO_ROUTE'
             ]),
+            go(){
+                if(window.history.length<=1){
+                    this.$router.push({path:'/home'});
+                }else{
+                    this.$router.go(-1);
+                }
+            },
             dl(){
                 this.AUTO_ROUTE(this.$route.path);
                 this.$router.push({path:'/login?id=1'});
@@ -157,10 +164,10 @@
                         this.detail.content = this.escapeChars(this.detail.content);
                         this.detail.title = this.escapeChars(this.detail.title);
                         this.comment=res.data.data.comment;
+                        this.fx();
                         //this.srcm(this.detail.content);
                         if(this.detail!=''){
                             this.showLoad=false;
-                            this.fx();
                             this.fanhui();
                         }
                         console.log(this.detail);
@@ -182,7 +189,7 @@
                     title: this.detail.title,
                     desc: this.detail.content,
                     imgUrl: this.detail.thumb?this.detail.thumb:'http://m.xfb315.com/wap/img/share_icon.jpg',
-                    link: window.location.href,
+                    link: window.location.href.replace('#','?#'),
                 };
                 console.log(share_info);
                 wx.ready(function(){

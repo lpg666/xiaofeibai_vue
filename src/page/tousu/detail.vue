@@ -1,6 +1,6 @@
 <template>
     <div style="padding-top: 1rem; background: #F6F7F9;">
-        <head-i><span class="head_title" slot="title_text">投诉详情</span></head-i>
+        <head-i><span class="head_title" slot="title_text">投诉编号TS{{detail.id}}</span></head-i>
         <div class="main" v-if="detail">
             <div class="title">{{detail.title}}</div>
             <div class="name">
@@ -167,7 +167,7 @@
         },
         watch: {
             // 如果路由有变化，会再次执行该方法
-            '$route': ['fetchData']
+            '$route': ['fetchData','fx']
         },
         methods: {
             ...mapMutations([
@@ -279,10 +279,10 @@
                         this.isgz = this.detail.is_collect;
                         this.isdz = this.detail.is_favour;
                         this.dzs = this.detail.stat.favours;
+                        this.fx();
                         if(this.detail!=''){
                             this.showLoad=false;
                             this.fanhui();
-                            this.fx();
                         }
                         console.log(this.detail,this.isgz);
                     })
@@ -294,11 +294,10 @@
             fx(){
                 let share_info = {
                     title: this.detail.title+'-消费保',
-                    desc: this.detail.content,
+                    desc: this.detail.content.substring(0,40),
                     imgUrl: 'http://m.xfb315.com/wap/img/share_icon.jpg',
-                    link: window.location.href,
+                    link: window.location.href.replace('#','?#'),
                 };
-                console.log(share_info);
                 wx.ready(function(){
                     wx.onMenuShareWeibo(share_info);
                     wx.onMenuShareAppMessage(share_info);
