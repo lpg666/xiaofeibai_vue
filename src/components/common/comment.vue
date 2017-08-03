@@ -324,7 +324,7 @@
             margin: .22rem auto 0 auto;
             width: 2.6rem;
             height: .7rem;
-            line-height: .7rem;
+            line-height: calc(~'.7rem - 2px');
             border-radius: .1rem;
             border: 1px solid rgba(204,204,204,.5);
             font-size: .26rem;

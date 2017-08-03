@@ -29,6 +29,7 @@ Vue.prototype.getTimeWord = function (time){
     let tmp = (curr - times)/1000;
     let word = '';
     let month = '';
+    let date = '';
     if(tmp < 60){
         word = '刚刚';
     }else if(tmp < 3600){
@@ -38,23 +39,45 @@ Vue.prototype.getTimeWord = function (time){
     }else if(tmp < 86400*2){
         word = Math.floor(tmp/86400)+'天前';
     }else{
-        if(new Date(times).getFullYear() >= new Date(curr).getFullYear()){
-            if(new Date(times).getMonth()<9){
-                month = '0'+ (new Date(times).getMonth()+1) + '月';
-            }else{
-                month = (new Date(times).getMonth()+1) + '月';
-            }
-            word = month+new Date(times).getDate()+'日';
+        if(new Date(times).getMonth()<9){
+            month = '0'+ (new Date(times).getMonth()+1) + '月';
         }else{
-            if(new Date(times).getMonth()<9){
-                month = '0'+ (new Date(times).getMonth()+1) + '月';
-            }else{
-                month = (new Date(times).getMonth()+1) + '月';
-            }
-            word = new Date(times).getFullYear()+'年'+month+new Date(times).getDate()+'日';
+            month = (new Date(times).getMonth()+1) + '月';
+        }
+        if(new Date(times).getDate()<9){
+            date = '0' + (new Date(times).getDate()) + '日';
+        }else{
+            date = (new Date(times).getDate()) + '日';
+        }
+        //
+        if(new Date(times).getFullYear() >= new Date(curr).getFullYear()){
+            word = month + date;
+        }else{
+            word = new Date(times).getFullYear()+'年'+month + date;
         }
     }
     return word;
+}
+
+/*全局转化投诉详情时间*/
+Vue.prototype.getTousuTime = function (time) {
+    let times = time.replace(/\s/, 'T');
+    let month = '';
+    let date = '';
+    if(new Date(times).getMonth()<9){
+        month = '0'+ (new Date(times).getMonth()+1) + '月';
+    }else{
+        month = (new Date(times).getMonth()+1) + '月';
+    }
+    if(new Date(times).getDate()<9){
+        date = '0' + (new Date(times).getDate()) + '日';
+    }else{
+        date = (new Date(times).getDate()) + '日';
+    }
+
+    times = new Date(times).getFullYear()+'年'+month+date+' '+new Date(times).getHours()+':'+new Date(times).getMinutes()+':'+new Date(times).getSeconds();
+
+    return times;
 }
 
 Vue.use(VueRouter);
@@ -71,7 +94,7 @@ const router = new VueRouter({
 if (process.env.NODE_ENV == 'development') {
 
 }else if(process.env.NODE_ENV == 'production'){
-    axios.defaults.baseURL = 'http://api.test.xfb315.com';
+    axios.defaults.baseURL = 'http://api.xfb315.com';
     axios.defaults.transformRequest = function (data) {
         return Qs.stringify(data);
     };

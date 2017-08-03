@@ -5,7 +5,7 @@
             <div class="title">{{detail.title}}</div>
             <div class="name">
                 <div class="tx"><img :src="detail.member!=null?detail.member.avatar:require('../../images/default_portrait.png')"></div>
-                <div><span class="sp_name">{{detail.name}}</span> <span>发于&nbsp;&nbsp;{{detail.add_time}}</span></div>
+                <div><span class="sp_name">{{detail.name}}</span> <span>发于&nbsp;&nbsp;{{getTousuTime(detail.add_time)}}</span></div>
                 <div class="client">来自{{detail.client}}</div>
                 <div @click="gz(1)" class="guanzhu1" v-if="isgz">已关注</div>
                 <div @click="gz(0)" class="guanzhu" v-else>+关注</div>
@@ -21,7 +21,7 @@
                 <div class="c_text">
                     {{detail.content}}
                 </div>
-                <div v-if="detail.addons.length>0" class="c_neir" v-for="data in detail.addons">【补充{{data.created_at}}】<br/>{{data.content}}</div>
+                <div v-if="detail.addons.length>0" class="c_neir" v-for="data in detail.addons">【补充{{getTimeWord(data.created_at)}}】<br/>{{data.content}}</div>
                 <div class="c_pic" v-if="detail.pic.length>0">
                     <ul v-if="userInfo && userInfo.id==detail.member_id">
                         <li v-if="data.is_show==1" v-for="data in detail.pic" v-preview="data.pic" :key="data" :style="{backgroundImage:'url('+data.pic+'!/fh/230)'}"></li>
@@ -56,15 +56,6 @@
                     </ul>
                 </div>
                 <div class="c_dt" v-else-if="detail.status==1">
-                    <img src="../../images/deal_progress01.png">
-                    <ul style="margin: .38rem 7% 0 8%;">
-                        <li class="p-status">投诉受理</li>
-                        <li>企业处理</li>
-                        <li>结果审核</li>
-                        <li>完成</li>
-                    </ul>
-                </div>
-                <div class="c_dt" v-else-if="detail.status==2">
                     <img src="../../images/deal_progress02.png">
                     <ul>
                         <li class="p_gray">投诉受理</li>
@@ -73,7 +64,7 @@
                         <li>完成</li>
                     </ul>
                 </div>
-                <div class="c_dt" v-else-if="detail.status==3">
+                <div class="c_dt" v-else-if="detail.status==2">
                     <img src="../../images/deal_progress03.png">
                     <ul>
                         <li class="p_gray">投诉受理</li>
@@ -82,7 +73,7 @@
                         <li>完成</li>
                     </ul>
                 </div>
-                <div class="c_dt" v-else-if="detail.status==4">
+                <div class="c_dt" v-else-if="detail.status==3">
                     <img src="../../images/deal_progress04.png">
                     <ul style="margin: .38rem 9% 0 6%; width: 85%;">
                         <li class="p_gray">投诉受理</li>

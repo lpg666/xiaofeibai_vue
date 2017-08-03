@@ -9,7 +9,7 @@
         <div class="armain">
             <div class="title">{{detail.title}}</div>
             <div class="info">
-                <span v-if="detail.add_time">{{detail.add_time}}</span>
+                <span v-if="detail.add_time">{{getTimeWord(detail.add_time)}}</span>
                 <span v-if="detail.source">{{detail.source}}</span>
                 <span v-if="detail.editor">{{detail.editor}}</span>
             </div>
@@ -139,11 +139,6 @@
                 });
             },
             escapeChars(str) {
-                str = str.replace(/(\n)/g, "");
-                str = str.replace(/(\t)/g, "");
-                str = str.replace(/(\r)/g, "");
-                str = str.replace(/<\/?[^>]*>/g, "");
-                str = str.replace(/\s*/g, "");
                 str = str.replace(/&nbsp;/g,'');
                 str = str.replace(/&quot;/g,'"');
                 return str;

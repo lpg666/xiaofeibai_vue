@@ -2,7 +2,7 @@
     <div style="width: 100%; background: #fff;">
         <div class="title"><i></i>类似投诉</div>
         <ul>
-            <li v-for="data in detail.similars"><router-link :to="'/tousu/detail/'+data.id">{{data.title}}</router-link></li>
+            <li v-for="data in detail.similars"><router-link :to="'/tousu/detail/'+data.id">{{data.title}}</router-link><span v-if="data.keyword[0]">{{data.keyword[0].name}}</span></li>
         </ul>
     </div>
 </template>
@@ -47,8 +47,23 @@
             height: .78rem;
             line-height: .78rem;
             a{
+                max-width: 5.4rem;
                 display: block;
+                float: left;
                 overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;
+            }
+            span{
+                width: auto;
+                padding: 0 .1rem;
+                margin-left: .15rem;
+                margin-top: .25rem;
+                height: .32rem;
+                line-height: calc(~'.32rem - 2px');
+                border: 1px solid #2dc177;
+                float: left;
+                border-radius: .05rem;
+                font-size: .22rem;
+                color: #2dc177;
             }
         }
         li:last-child{

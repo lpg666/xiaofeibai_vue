@@ -34,7 +34,7 @@ export default {
     mounted(){
         let url = encodeURIComponent(window.location.href.split('#')[0]);
         //alert(url);
-        this.axios.get('/v4/weixin?url='+url)
+          this.axios.get('/v4/weixin?url='+url)
             .then(res =>{
                 console.log(res.data);
                 wx.config({

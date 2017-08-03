@@ -102,6 +102,7 @@ export default {
                             setTimeout(this.close,1500);
                             this.ajaxRe = false;
                         }else{
+                            alert(1);
                             this.RECORD_USERINFO(res.data.data);
                             this.EDIT_INFO(res.data.data);
                             this.showLoad=true;
@@ -135,11 +136,12 @@ export default {
                     'is_login':2
                 })
                 .then(res =>{
-                    this.loadType='alert';
                     if(res.data.error){
+                        this.loadType='alert';
                         this.loadText=res.data.msg;
                         this.ajaxRe = false;
                     }else{
+                        this.loadType='';
                         this.loadText='发送成功';
                         this.settime();
                     }

@@ -147,11 +147,12 @@
                         'isRegister':1
                     })
                         .then(res =>{
-                            this.loadType='alert';
                             if(res.data.error){
+                                this.loadType='alert';
                                 this.loadText=res.data.msg;
                                 this.ajaxRe = false;
                             }else{
+                                this.loadType='';
                                 this.loadText='发送成功';
                                 this.settime();
                             }

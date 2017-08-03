@@ -7,21 +7,21 @@
         <section class="recommend_list">
             <div class="list_h">
                 <router-link v-for="data in recommendData" :key="data" :to="'/article/detail/'+data.id" class="list">
-                    <div v-if="data.default_pics==null">
+                    <div>
                         <div class="list_left">
                             <p class="p1">{{data.title}}</p>
-                            <p class="p2">{{data.add_time}}</p>
+                            <p class="p2">{{getTimeWord(data.add_time)}}</p>
                         </div>
-                        <div class="list_right" :style="{backgroundImage:'url('+data.thumb+'!/fh/230)'}">
+                        <div class="list_right" :style="{backgroundImage:'url('+data.thumb+')'}">
                             <!--<img :src="data.thumb+'!/fh/230'">-->
                         </div>
                     </div>
-                    <div v-else>
+                    <!--<div v-else>
                         <p class="p3">{{data.title}}</p>
                         <ul class="pic">
-                            <li v-if="key<3" v-for="src,key in data.default_pics" :style="{backgroundImage:'url('+src.pic+'!/fh/230)'}"><!--<img :src="src.pic">--></li>
+                            <li v-if="key<3" v-for="src,key in data.default_pics" :style="{backgroundImage:'url('+src.pic+'!/fh/230)'}">&lt;!&ndash;<img :src="src.pic">&ndash;&gt;</li>
                         </ul>
-                    </div>
+                    </div>-->
                 </router-link>
                 <p v-if="showLoading" class="loading">正在加载更多数据...</p>
             </div>
@@ -133,7 +133,7 @@
     }
     }
     .list_left{
-        float: left;
+        float: right;
         width: 5.3rem;
     .p1{
         font-size: .32rem;
@@ -143,6 +143,9 @@
         overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     }
     .p2{
+        color: #999;
+        text-align: right;
+        margin-right: .22rem;
         font-size: .26rem;
     .hot{
         border: 1px solid #FC405B;
@@ -176,7 +179,7 @@
         width: 1.67rem;
         height: 1.4rem;
         margin-right: .22rem;
-        float: right;
+        float: left;
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center center;
