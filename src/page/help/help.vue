@@ -141,41 +141,7 @@
                     .catch(err =>{
 
                     })
-            },
-            getTimeWord(time){
-                var time = new Date(time).getTime();
-                var curr = Date.parse(new Date());
-                var tmp = (curr - time)/1000;
-                var word = '';
-                var month = '';
-                if(tmp < 60){
-                    word = '刚刚';
-                }else if(tmp < 3600){
-                    word = Math.floor(tmp/60)+'分钟前';
-                }else if(tmp < 86400){
-                    word = Math.floor(tmp/3600)+'小时前';
-                }else if(tmp < 86400*2){
-                    word = Math.floor(tmp/86400)+'天前';
-                }else{
-                    if(new Date(time).getFullYear() >= new Date(curr).getFullYear()){
-                        if(new Date(time).getMonth()<9){
-                            month = '0'+ (new Date(time).getMonth()+1) + '月';
-                        }else{
-                            month = (new Date(time).getMonth()+1) + '月';
-                        }
-                        word = month+new Date(time).getDate()+'日';
-                    }else{
-                        if(new Date(time).getMonth()<9){
-                            month = '0'+ (new Date(time).getMonth()+1) + '月';
-                        }else{
-                            month = (new Date(time).getMonth()+1) + '月';
-                        }
-                        word = new Date(time).getFullYear()+'年'+month+new Date(time).getDate()+'日';
-                    }
-                }
-                return word;
-            },
-
+            }
         }
     }
 </script>

@@ -4,9 +4,9 @@
         <div class="main">
             <div class="title">{{detail.title}}</div>
             <div class="info">
-                <span v-if="detail.add_time">{{detail.add_time}}</span>
-                <span v-if="detail.source">{{detail.source}}</span>
-                <span v-if="detail.editor">{{detail.editor}}</span>
+                <span v-if="detail.copyright">{{detail.copyright}}</span>
+                <span v-if="detail.author">{{detail.author}}</span>
+                <span v-if="detail.add_time">{{getTimeWord(detail.add_time)}}</span>
             </div>
             <div class="cent" v-html="detail.content"></div>
         </div>

@@ -23,8 +23,9 @@ if('addEventListener' in document){                           //document.addEven
 }
 /*全局转换时间方法*/
 Vue.prototype.getTimeWord = function (time){
-    let times = time.replace(/\s/, 'T');
-    times = new Date(times).getTime();
+    let t = time.replace(/-/g,"/");
+    //t = t.replace(/\s/, 'T');
+    let times = Date.parse(t);
     let curr = Date.parse(new Date());
     let tmp = (curr - times)/1000;
     let word = '';
@@ -63,19 +64,12 @@ Vue.prototype.getTimeWord = function (time){
 Vue.prototype.getTousuTime = function (time) {
     let times = time.replace(/\s/, 'T');
     let month = '';
-    let date = '';
     if(new Date(times).getMonth()<9){
         month = '0'+ (new Date(times).getMonth()+1) + '月';
     }else{
         month = (new Date(times).getMonth()+1) + '月';
     }
-    if(new Date(times).getDate()<9){
-        date = '0' + (new Date(times).getDate()) + '日';
-    }else{
-        date = (new Date(times).getDate()) + '日';
-    }
-
-    times = new Date(times).getFullYear()+'年'+month+date+' '+new Date(times).getHours()+':'+new Date(times).getMinutes()+':'+new Date(times).getSeconds();
+    times = new Date(times).getFullYear()+'年'+month+new Date(times).getDate()+'日'+' '+new Date(times).getHours()+':'+new Date(times).getMinutes()+':'+new Date(times).getSeconds();
 
     return times;
 }

@@ -156,7 +156,7 @@
                 this.axios.get('/v4/article/detail?article_id='+this.$route.params.id)
                     .then(res =>{
                         this.detail=res.data.data.detail;
-                        this.detail.content = this.escapeChars(this.detail.content);
+                        //this.detail.content = this.escapeChars(this.detail.content);
                         this.detail.title = this.escapeChars(this.detail.title);
                         this.comment=res.data.data.comment;
                         this.fx();
