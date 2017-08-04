@@ -237,6 +237,7 @@ export default [{
         {
             path: '/article',
             component: article,
+            meta: { keepAlive: true }
         },
         //文章详情页
         {
